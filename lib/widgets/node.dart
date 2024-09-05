@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:tree_view/models/person.dart';
+import 'package:flutter/material.dart';
 
 class Node extends StatelessWidget {
-  const Node(this.item, {super.key});
+  const Node(this.item, {this.onPressed, super.key});
 
+  final void Function()? onPressed;
   final Person item;
 
   @override
@@ -11,7 +12,7 @@ class Node extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          onPressed: () {},
+          onPressed: onPressed,
           icon: Icon(
             item.children.isEmpty || !item.expanded
                 ? Icons.keyboard_arrow_right_outlined

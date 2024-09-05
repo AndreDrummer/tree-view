@@ -3,30 +3,13 @@ import 'package:tree_view/models/person.dart';
 import 'package:tree_view/widgets/node.dart';
 import 'package:flutter/material.dart';
 
-class TreeView extends StatefulWidget {
-  const TreeView(this.node, {super.key});
-
+class TreeView extends StatelessWidget {
+  const TreeView(this.node, {super.key, this.toggleNodeView});
+  final void Function(Person node)? toggleNodeView;
   final Person node;
 
-  @override
-  State<TreeView> createState() => _TreeViewState();
-}
-
-class _TreeViewState extends State<TreeView> {
-  late final Person node;
-  late final List<Person> nodeChildren;
-  late final int nodeDescendents;
-
-  @override
-  void initState() {
-    node = widget.node;
-    nodeChildren = node.children;
-    nodeDescendents = node.descendents();
-    super.initState();
-  }
-
   int lineBreadCrumbHeight() {
-    int descendentsShowing = node.numberOfDescendentsShowingUp();
+    int descendentsShowing = node.numberOfDescendentsShowingUp;
 
     return (48 * descendentsShowing);
   }
@@ -36,7 +19,7 @@ class _TreeViewState extends State<TreeView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Node(node),
+        Node(node, onPressed: () => toggleNodeView?.call(node)),
         Visibility(
           visible: node.expanded,
           child: Row(
@@ -46,7 +29,8 @@ class _TreeViewState extends State<TreeView> {
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: node.children.map((child) {
-                    return TreeView(child);
+                    return TreeView(child,
+                        toggleNodeView: (node) => toggleNodeView?.call(node));
                   }).toList()),
             ],
           ),
