@@ -82,10 +82,10 @@ class Controller with ChangeNotifier {
   Person get root => _family;
 
   void toogleNodeView(Person node) {
-    final newNode = node.toogleNodeView();
-    final updatedFamily = _family.updateNode(newNode);
+    final newNode = node.expanded ? node.close() : node.open();
+    final updatedNode = _family.updateNode(newNode);
 
-    _family = updatedFamily ?? _family;
+    if (node.id == root.id) _family = updatedNode ?? _family;
 
     notifyListeners();
   }

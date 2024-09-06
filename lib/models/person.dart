@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 enum PeronGender { female, male }
 
 class Person {
@@ -72,7 +70,19 @@ class Person {
     return value;
   }
 
-  Person toogleNodeView() => _copyWith(expanded: !expanded);
+  Person close() {
+    return _copyWith(
+      children: children.map((c) => c.close()).toList(),
+      expanded: false,
+    );
+  }
+
+  Person open() {
+    return _copyWith(
+      children: children,
+      expanded: true,
+    );
+  }
 
   Person _copyWith({
     List<Person>? children,
@@ -94,32 +104,14 @@ class Person {
 
     // This is the condition that check if I'm on the root node
     if (parent != null && nodePath.isNotEmpty) {
-      removeNode(nodePath);
-      parent.children.add(newNode);
-      print('Added sibling: ${newNode.name} to parent ${parent.name}');
+      int nodeToBeRemovedID = nodePath.last;
+
+      parent.children[nodeToBeRemovedID] = newNode;
     } else {
-      print('Parent not found. Unable to add sibling.');
       return newNode;
     }
 
     return parent;
-  }
-
-  void removeNode(List<int> nodePath) {
-    int nodeToBeRemovedID = nodePath.last;
-
-    // Find the parent of the target family member
-    Person? parent = _findParent(nodePath);
-    print("nodePath $nodePath");
-
-    if (parent != null) {
-      // Add the new sibling to the parent's children list
-      parent.children.removeAt(nodeToBeRemovedID);
-      print(
-          'Node ${parent.children.elementAt(nodeToBeRemovedID)} son of ${parent.name} removed');
-    } else {
-      print('Parent not found. Unable to remove node.');
-    }
   }
 
   List<int> _nodePath(int id) {
@@ -176,8 +168,6 @@ class Person {
   List<int> _convertIDListToPosList(List<int> ids) {
     Person currentNode = this;
     List<int> pos = [];
-
-    print("IDS $ids");
 
     for (final id in ids) {
       currentNode = currentNode.children.where((el) {
