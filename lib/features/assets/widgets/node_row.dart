@@ -25,9 +25,12 @@ class NodeRow extends StatelessWidget {
             color: color,
           ),
         ),
-        Text(
-          item.data.name,
-          style: TextStyle(color: color, fontSize: 18),
+        TextButton(
+          onPressed: onPressed,
+          child: Text(
+            item.data.name,
+            style: TextStyle(color: color, fontSize: 18),
+          ),
         ),
       ],
     );
