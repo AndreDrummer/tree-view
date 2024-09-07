@@ -3,7 +3,7 @@ import 'package:tree_view/widgets/node_row.dart';
 import 'package:tree_view/models/person.dart';
 import 'package:tree_view/widgets/teste.dart';
 import 'package:flutter/material.dart';
-import '../models/node.dart';
+import '../core/node/node.dart';
 
 class TreeView extends StatelessWidget {
   const TreeView(
@@ -38,10 +38,12 @@ class TreeView extends StatelessWidget {
               LineBreadCrumb(lineBreadCrumbHeight()),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: node.children.map((child) {
+                children: node.children!.map((child) {
                   return TreeView(
                     child,
-                    toggleNodeView: (node) => toggleNodeView?.call(node),
+                    toggleNodeView: (node) {
+                      toggleNodeView?.call(node);
+                    },
                     allowHorizontalScrool: false,
                     allowVerticalScrool: false,
                   );

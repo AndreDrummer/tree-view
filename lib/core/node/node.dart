@@ -1,34 +1,52 @@
-import 'dart:collection';
+import 'package:tree_view/core/tree/utils.dart';
 
 typedef NodePath = List<int>;
 
-class Node<T> {
-  List<Node<T>> children;
+abstract class TOString {
+  @override
+  String toString();
+}
+
+class Node<T extends TOString> {
+  List<Node<T>>? children;
+  Node<T>? parent;
   bool expanded;
-  // Node parent;
   int id;
   T data;
 
   Node({
-    this.children = const [],
     this.expanded = false,
-    // required this.parent,
     required this.data,
     required this.id,
-  });
+    this.children,
+    this.parent,
+  }) {
+    children ??= [];
+  }
 
-  bool _findNodeByIdPredicate(Node currentNode, Node innerNode) {
+  @override
+  String toString() {
+    return '''
+      children: ${children!.map((e) => e.data.toString())}
+      parent: ${parent?.id}
+      data: ${data.toString()}
+      expanded: $expanded
+      id: $id
+    ''';
+  }
+
+  bool _findNodeByIdPredicate(Node innerNode, Node currentNode) {
     return innerNode.id == currentNode.id;
   }
 
-  bool get hasChildren => children.isNotEmpty;
-  int get numberOfChildren => children.length;
+  bool get hasChildren => children!.isNotEmpty;
+  int get numberOfChildren => children!.length;
 
   int get numberOfDescendentsShowingUp {
     int value = expanded ? numberOfChildren : 0;
 
     if (hasChildren) {
-      for (var child in children) {
+      for (var child in children!) {
         if (child.expanded) {
           value += child.numberOfDescendentsShowingUp;
         }
@@ -40,7 +58,7 @@ class Node<T> {
 
   Node<T> close() {
     return copyWith(
-      children: children.map((c) => c.close()).toList(),
+      children: children!.map((c) => c.close()).toList(),
       expanded: false,
     );
   }
@@ -57,25 +75,29 @@ class Node<T> {
     Node? current = this;
 
     // print("Start ${this.data}");
-    // print("Start ${this.parent.data}");
+    // print("Start ${this.parent?.data}");
 
-    // while (current?.parent != null) {
-    //   height++;
-    //   current = current?.parent;
-    // }
+    while (current?.parent != null) {
+      height++;
+      current = current?.parent;
+    }
 
     return height;
   }
 
   Node<T>? toggleNode(Node<T> updatedNode) {
-    List<int> nodePath =
-        _nodePath((node) => _findNodeByIdPredicate(this, node));
+    List<int> nodePath = _nodePath(
+      (node) {
+        return _findNodeByIdPredicate(node, updatedNode);
+      },
+    );
+
     Node<T>? parent = _findParent(nodePath);
 
     if (parent != null && nodePath.isNotEmpty) {
       int nodeIndex = nodePath.last;
 
-      parent.children[nodeIndex] = updatedNode;
+      parent.children![nodeIndex] = updatedNode;
     } else {
       return updatedNode;
     }
@@ -83,10 +105,10 @@ class Node<T> {
     return parent;
   }
 
-  Node<T>? buildTreeWithPredicate(bool Function(Node<T>) predicate) {
+  Node<T>? rebuildTree(bool Function(Node<T>) predicate) {
     List<Node<T>> nodes = [];
 
-    bfsTraversal(
+    TreeUtils.bfsTraversal<T>(
       process: (node) {
         if (predicate(node)) {
           nodes.add(node);
@@ -110,14 +132,14 @@ class Node<T> {
           final currentChildren = newTree.children;
           Node<T>? newChildren = _findNodeByPath(path);
 
-          newChildren ??= children.elementAt(path.last);
+          newChildren ??= children!.elementAt(path.last);
 
           newChildren = newChildren.copyWith(
             children: [],
             expanded: true,
           );
 
-          currentChildren.addChild(
+          currentChildren!.addChild(
             newChildren,
             position: path.last,
           );
@@ -141,7 +163,7 @@ class Node<T> {
       expanded: expanded ?? this.expanded,
       data: data ?? this.data,
       id: id ?? this.id,
-      // parent: parent,
+      parent: parent,
     );
   }
 
@@ -154,16 +176,16 @@ class Node<T> {
       final Node<T> node = _findNodeByPath(path.sublist(0, i + 1))!
           .copyWith(children: [], expanded: true);
 
-      if (childPosition < currentNode.children.length) {
-        currentNode.children.addChild(node, position: childPosition);
+      if (childPosition < currentNode.children!.length) {
+        currentNode.children!.addChild(node, position: childPosition);
 
-        currentNode = currentNode.children[childPosition];
+        currentNode = currentNode.children![childPosition];
       } else {
-        currentNode.children.addChild(node, position: childPosition);
-        if (childPosition < currentNode.children.length) {
-          currentNode = currentNode.children[childPosition];
-        } else if (childPosition <= currentNode.children.length) {
-          currentNode = currentNode.children[childPosition - 1];
+        currentNode.children!.addChild(node, position: childPosition);
+        if (childPosition < currentNode.children!.length) {
+          currentNode = currentNode.children![childPosition];
+        } else if (childPosition <= currentNode.children!.length) {
+          currentNode = currentNode.children![childPosition - 1];
         }
       }
     }
@@ -178,6 +200,12 @@ class Node<T> {
     return _convertIDListToPosList(idList.sublist(1));
   }
 
+  /// Why do not use the [parent] property?
+  ///
+  /// This property only holds the same data as the
+  /// current node parent. It does not carry the
+  /// state of the tree. So, if you use [parent]
+  /// instead, the tree will not get updated properly.
   Node<T>? _findParent(NodePath nodePath) {
     Node<T>? current = this;
 
@@ -185,10 +213,10 @@ class Node<T> {
     if (nodePath.isNotEmpty) {
       for (int i = 0; i < nodePath.length - 1; i++) {
         int id = nodePath[i];
-        if (current == null || id >= current.children.length) {
+        if (current == null || id >= current.children!.length) {
           return null; // Parent not found
         }
-        current = current.children[id];
+        current = current.children![id];
       }
 
       return current;
@@ -204,8 +232,8 @@ class Node<T> {
     for (int i = 0; i < ids.length; i++) {
       int id = ids[i];
 
-      if (id >= current.children.length) return null;
-      current = current.children[id];
+      if (id >= current.children!.length) return null;
+      current = current.children![id];
     }
 
     return current;
@@ -227,7 +255,7 @@ class Node<T> {
     }
 
     // Recursively search through each child
-    for (Node<T> child in (this).children) {
+    for (Node<T> child in (this).children!) {
       map.addIfAbsent(child.id);
       List<int>? result = child._findPath(predicate, map: map);
       if (result != null) {
@@ -246,9 +274,9 @@ class Node<T> {
     List<int> pos = [];
 
     for (final id in ids) {
-      currentNode = currentNode.children.where((el) {
+      currentNode = currentNode.children!.where((el) {
         if (el.id == id) {
-          pos.add(currentNode.children.indexOf(el));
+          pos.add(currentNode.children!.indexOf(el));
           return true;
         } else {
           return false;
@@ -257,29 +285,6 @@ class Node<T> {
     }
 
     return pos;
-  }
-
-  void bfsTraversal({
-    required dynamic Function(dynamic) process,
-    required Node<T> rootNode,
-  }) {
-    // Initialize a queue and add the root node
-    Queue<Node<T>> queue = Queue<Node<T>>();
-    queue.add(rootNode);
-
-    // Traverse while there are nodes in the queue
-    while (queue.isNotEmpty) {
-      // Dequeue the front node
-      Node<T> current = queue.removeFirst();
-
-      // Process the current node (e.g., print its value)
-      process(current);
-
-      // Enqueue all children of the current node
-      for (var child in current.children) {
-        queue.add(child);
-      }
-    }
   }
 }
 
@@ -291,8 +296,8 @@ extension ListInt on List<int> {
   }
 }
 
-extension ListNode on List<Node> {
-  void addChild(Node child, {int? position}) {
+extension ListNode<T extends TOString> on List<Node<T>> {
+  void addChild(Node<T> child, {int? position}) {
     final contains = containsChild(child);
 
     if (!contains.$1) {
@@ -302,8 +307,8 @@ extension ListNode on List<Node> {
     }
   }
 
-  (bool, Node?) containsChild(Node child) {
-    (bool, Node?) contains = (false, null);
+  (bool, Node<T>?) containsChild(Node<T> child) {
+    (bool, Node<T>?) contains = (false, null);
 
     for (final c in this) {
       if (c.id == child.id) return (true, c);

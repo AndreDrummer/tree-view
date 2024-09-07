@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:tree_view/data/person.dart';
-import 'package:tree_view/models/node.dart';
+import 'package:tree_view/data/mount_tree.dart';
 import 'package:tree_view/models/person.dart';
+import 'package:tree_view/core/node/node.dart';
+import 'package:flutter/material.dart';
 
 class Controller with ChangeNotifier {
-  static final Node<Person> _originalRoot = tree;
+  static final Node<Person> _originalRoot = nodeRoot();
 
   static Node<Person> _root = _originalRoot;
 
@@ -56,7 +56,7 @@ class Controller with ChangeNotifier {
   }
 
   void _filterByGender() {
-    final newNode = root.buildTreeWithPredicate(
+    final newNode = root.rebuildTree(
       (node) {
         return node.data.gender == genderTypeFilter;
       },

@@ -1,4 +1,4 @@
-import 'package:tree_view/models/node.dart';
+import 'package:tree_view/core/node/node.dart';
 import 'package:flutter/material.dart';
 import 'package:tree_view/models/person.dart';
 
@@ -15,7 +15,7 @@ class NodeRow extends StatelessWidget {
         IconButton(
           onPressed: onPressed,
           icon: Icon(
-            item.children.isEmpty || !item.expanded
+            item.children!.isEmpty || !item.expanded
                 ? Icons.keyboard_arrow_right_outlined
                 : Icons.keyboard_arrow_down,
             color: Colors.white,

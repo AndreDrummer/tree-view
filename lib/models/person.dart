@@ -1,7 +1,10 @@
+import 'package:tree_view/core/node/node.dart';
+
 enum PersonGender { female, male, none }
 
-class Person {
+class Person extends TOString {
   PersonGender gender;
+  int? parentId;
   String name;
   int id;
 
@@ -9,13 +12,15 @@ class Person {
     this.gender = PersonGender.male,
     required this.name,
     required this.id,
+    this.parentId,
   });
 
   @override
   String toString() {
     return ''''
-      name: $name
+      parentId: $parentId,
       gender: $gender
+      name: $name
       id: $id
     ''';
   }
