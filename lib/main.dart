@@ -61,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return const SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: VerticalView(),
       ),
     );
@@ -72,50 +73,52 @@ class VerticalView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return TreeView(
-    //   Provider.of<Controller>(context).root,
-    //   toggleNodeView: (node) {
-    //     Provider.of<Controller>(context).toogleNodeView(node);
+    // return Consumer<Controller>(
+    //   builder: (context, controller, _) {
+    //     return TreeView(
+    //       controller.root,
+    //       toggleNodeView: (node) {
+    //         controller.toogleNodeView(node);
+    //       },
+    //     );
     //   },
     // );
-    return ListView(
-      children: [
-        Consumer<Controller>(
-          builder: (context, controller, _) {
-            return Column(
-              children: [
-                CheckboxListTile(
-                  value: controller.genderTypeFilter == controller.male,
-                  onChanged: (value) {
-                    controller.filterByMaleGender();
-                  },
-                  title: const Text(
-                    "Male",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
+
+    return Consumer<Controller>(
+      builder: (context, controller, _) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              CheckboxListTile(
+                value: controller.genderTypeFilter == controller.male,
+                onChanged: (value) {
+                  controller.filterByMaleGender();
+                },
+                title: const Text(
+                  "Male",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
-                CheckboxListTile(
-                  value: controller.genderTypeFilter == controller.female,
-                  onChanged: (value) {
-                    controller.filterByFemaleGender();
-                  },
-                  title: const Text(
-                    "Female",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
+              ),
+              CheckboxListTile(
+                value: controller.genderTypeFilter == controller.female,
+                onChanged: (value) {
+                  controller.filterByFemaleGender();
+                },
+                title: const Text(
+                  "Female",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
-                TreeView(
-                  controller.root,
-                  toggleNodeView: (node) {
-                    controller.toogleNodeView(node);
-                  },
-                ),
-              ],
-            );
-          },
-        ),
-        const SizedBox(height: 16),
-      ],
+              ),
+              TreeView(
+                controller.root,
+                toggleNodeView: (node) {
+                  controller.toogleNodeView(node);
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

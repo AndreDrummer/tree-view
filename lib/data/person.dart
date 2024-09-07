@@ -225,6 +225,231 @@ final tree = Node<Person>(
             gender: PersonGender.male,
           ),
         ),
+        Node<Person>(
+          id: 50,
+          data: Person(
+            id: 50,
+            name: "Ricardo Jesus",
+            gender: PersonGender.male,
+          ),
+          children: [
+            Node<Person>(
+              id: 51,
+              data: Person(
+                id: 51,
+                name: "Child 1 of Ricardo",
+                gender: PersonGender.male,
+              ),
+              children: [
+                Node<Person>(
+                  id: 52,
+                  data: Person(
+                    id: 52,
+                    name: "Child 2 of Ricardo",
+                    gender: PersonGender.female,
+                  ),
+                  children: [
+                    Node<Person>(
+                      id: 53,
+                      data: Person(
+                        id: 53,
+                        name: "Child 3 of Ricardo",
+                        gender: PersonGender.male,
+                      ),
+                      children: [
+                        Node<Person>(
+                          id: 54,
+                          data: Person(
+                            id: 54,
+                            name: "Child 4 of Ricardo",
+                            gender: PersonGender.female,
+                          ),
+                          children: [
+                            Node<Person>(
+                              id: 55,
+                              data: Person(
+                                id: 55,
+                                name: "Child 5 of Ricardo",
+                                gender: PersonGender.male,
+                              ),
+                              children: [
+                                Node<Person>(
+                                  id: 56,
+                                  data: Person(
+                                    id: 56,
+                                    name: "Child 6 of Ricardo",
+                                    gender: PersonGender.female,
+                                  ),
+                                  children: [
+                                    Node<Person>(
+                                      id: 57,
+                                      data: Person(
+                                        id: 57,
+                                        name: "Child 7 of Ricardo",
+                                        gender: PersonGender.male,
+                                      ),
+                                      children: [
+                                        Node<Person>(
+                                          id: 58,
+                                          data: Person(
+                                            id: 58,
+                                            name: "Child 8 of Ricardo",
+                                            gender: PersonGender.female,
+                                          ),
+                                          children: [
+                                            Node<Person>(
+                                              id: 59,
+                                              data: Person(
+                                                id: 59,
+                                                name: "Child 9 of Ricardo",
+                                                gender: PersonGender.male,
+                                              ),
+                                              children: [
+                                                Node<Person>(
+                                                  id: 60,
+                                                  data: Person(
+                                                    id: 60,
+                                                    name: "Child 10 of Ricardo",
+                                                    gender: PersonGender.female,
+                                                  ),
+                                                  children: [
+                                                    Node<Person>(
+                                                      id: 61,
+                                                      data: Person(
+                                                        id: 61,
+                                                        name:
+                                                            "Child 11 of Ricardo",
+                                                        gender:
+                                                            PersonGender.male,
+                                                      ),
+                                                      children: [
+                                                        Node<Person>(
+                                                          id: 62,
+                                                          data: Person(
+                                                            id: 62,
+                                                            name:
+                                                                "Child 12 of Ricardo",
+                                                            gender: PersonGender
+                                                                .female,
+                                                          ),
+                                                          children: [
+                                                            Node<Person>(
+                                                              id: 63,
+                                                              data: Person(
+                                                                id: 63,
+                                                                name:
+                                                                    "Child 13 of Ricardo",
+                                                                gender:
+                                                                    PersonGender
+                                                                        .male,
+                                                              ),
+                                                              children: [
+                                                                Node<Person>(
+                                                                  id: 64,
+                                                                  data: Person(
+                                                                    id: 64,
+                                                                    name:
+                                                                        "Child 14 of Ricardo",
+                                                                    gender: PersonGender
+                                                                        .female,
+                                                                  ),
+                                                                  children: [
+                                                                    Node<
+                                                                        Person>(
+                                                                      id: 65,
+                                                                      data:
+                                                                          Person(
+                                                                        id: 65,
+                                                                        name:
+                                                                            "Child 15 of Ricardo",
+                                                                        gender:
+                                                                            PersonGender.male,
+                                                                      ),
+                                                                      children: [
+                                                                        Node<
+                                                                            Person>(
+                                                                          id: 66,
+                                                                          data:
+                                                                              Person(
+                                                                            id: 66,
+                                                                            name:
+                                                                                "Child 16 of Ricardo",
+                                                                            gender:
+                                                                                PersonGender.female,
+                                                                          ),
+                                                                          children: [
+                                                                            Node<Person>(
+                                                                              id: 67,
+                                                                              data: Person(
+                                                                                id: 67,
+                                                                                name: "Child 17 of Ricardo",
+                                                                                gender: PersonGender.male,
+                                                                              ),
+                                                                              children: [
+                                                                                Node<Person>(
+                                                                                  id: 68,
+                                                                                  data: Person(
+                                                                                    id: 68,
+                                                                                    name: "Child 18 of Ricardo",
+                                                                                    gender: PersonGender.female,
+                                                                                  ),
+                                                                                  children: [
+                                                                                    Node<Person>(
+                                                                                      id: 69,
+                                                                                      data: Person(
+                                                                                        id: 69,
+                                                                                        name: "Child 19 of Ricardo",
+                                                                                        gender: PersonGender.male,
+                                                                                      ),
+                                                                                      children: [
+                                                                                        Node<Person>(
+                                                                                          id: 70,
+                                                                                          data: Person(
+                                                                                            id: 70,
+                                                                                            name: "Child 20 of Ricardo",
+                                                                                            gender: PersonGender.female,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ],
     ),
   ],

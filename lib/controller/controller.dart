@@ -22,11 +22,7 @@ class Controller with ChangeNotifier {
   void toogleNodeView(Node<Person> node) {
     final updatedNode = node.expanded ? node.close() : node.open();
 
-    bool nodeWithIdPredicate(Node<Person> innerNode) {
-      return innerNode.id == node.id;
-    }
-
-    final newNode = root.toggleNode(updatedNode, nodeWithIdPredicate);
+    final newNode = root.toggleNode(updatedNode);
 
     if (node.id == root.id) _setRoot(newNode ?? root);
 

@@ -2,22 +2,24 @@ import 'dart:collection';
 
 typedef NodePath = List<int>;
 
-abstract class NodeCompliance {
-  abstract String name;
-}
-
-class Node<T extends NodeCompliance> {
+class Node<T> {
   List<Node<T>> children;
   bool expanded;
+  // Node parent;
   int id;
   T data;
 
   Node({
     this.children = const [],
     this.expanded = false,
+    // required this.parent,
     required this.data,
     required this.id,
   });
+
+  bool _findNodeByIdPredicate(Node currentNode, Node innerNode) {
+    return innerNode.id == currentNode.id;
+  }
 
   bool get hasChildren => children.isNotEmpty;
   int get numberOfChildren => children.length;
@@ -50,8 +52,24 @@ class Node<T extends NodeCompliance> {
     );
   }
 
-  Node<T>? toggleNode(Node<T> updatedNode, bool Function(Node<T>) predicate) {
-    List<int> nodePath = _nodePath(predicate);
+  int get getHeightUntilRoot {
+    int height = 0;
+    Node? current = this;
+
+    // print("Start ${this.data}");
+    // print("Start ${this.parent.data}");
+
+    // while (current?.parent != null) {
+    //   height++;
+    //   current = current?.parent;
+    // }
+
+    return height;
+  }
+
+  Node<T>? toggleNode(Node<T> updatedNode) {
+    List<int> nodePath =
+        _nodePath((node) => _findNodeByIdPredicate(this, node));
     Node<T>? parent = _findParent(nodePath);
 
     if (parent != null && nodePath.isNotEmpty) {
@@ -80,9 +98,6 @@ class Node<T extends NodeCompliance> {
     List<List<int>> pathsToEachNode = nodes
         .map((node) => _nodePath((innerNode) => innerNode.id == node.id))
         .toList();
-
-    // print("NODE ${nodes.length} $nodes");
-    print("NODE PATHS ${pathsToEachNode.length} $pathsToEachNode");
 
     Node<T> newTree = copyWith(
       expanded: true,
@@ -126,16 +141,11 @@ class Node<T extends NodeCompliance> {
       expanded: expanded ?? this.expanded,
       data: data ?? this.data,
       id: id ?? this.id,
+      // parent: parent,
     );
   }
 
   Node<T> _addNestedNodes(Node<T> rootNode, NodePath path) {
-    // [1, 1, 0, 2]
-    // root.children[1] =
-    // root.children[1].children[1] =
-    // root.children[1].children[1].children[0] =
-    // root.children[1].children[1].children[0].children[2] =
-
     Node<T> currentNode = rootNode;
 
     for (int i = 0; i < path.length; i++) {
@@ -144,10 +154,6 @@ class Node<T extends NodeCompliance> {
       final Node<T> node = _findNodeByPath(path.sublist(0, i + 1))!
           .copyWith(children: [], expanded: true);
 
-      print(currentNode.data.name);
-
-      print(
-          "${node.data.name} $childPosition ${currentNode.children.length} Path $path $i PathLength: ${path.length}");
       if (childPosition < currentNode.children.length) {
         currentNode.children.addChild(node, position: childPosition);
 
@@ -165,26 +171,30 @@ class Node<T extends NodeCompliance> {
     return rootNode;
   }
 
-  List<int> _nodePath(bool Function(Node<T>) predicate, {Node<T>? node}) {
-    List<int> idList =
-        _convertMapPathToIDListPath(_findPath(predicate, root: node) ?? {});
+  List<int> _nodePath(bool Function(Node<T>) predicate) {
+    List<int> idList = _findPath(predicate) ?? [];
 
-    return _convertIDListToPosList(idList, rootNode: node);
+    // skip the root node
+    return _convertIDListToPosList(idList.sublist(1));
   }
 
-  Node<T>? _findParent(NodePath ids, {Node<T>? rootNode}) {
-    Node<T>? current = rootNode ?? this;
+  Node<T>? _findParent(NodePath nodePath) {
+    Node<T>? current = this;
 
     // Traverse until the second-to-last id to find the parent
-    for (int i = 0; i < ids.length - 1; i++) {
-      int id = ids[i];
-      if (current == null || id >= current.children.length) {
-        return null; // Parent not found
+    if (nodePath.isNotEmpty) {
+      for (int i = 0; i < nodePath.length - 1; i++) {
+        int id = nodePath[i];
+        if (current == null || id >= current.children.length) {
+          return null; // Parent not found
+        }
+        current = current.children[id];
       }
-      current = current.children[id];
+
+      return current;
     }
 
-    return current;
+    return null;
   }
 
   Node<T>? _findNodeByPath(NodePath ids, {Node<T>? rootNode}) {
@@ -201,22 +211,15 @@ class Node<T extends NodeCompliance> {
     return current;
   }
 
-  NodePath _convertMapPathToIDListPath(Map<String, int> map) {
-    return map.entries.skip(1).toList().map((entry) {
-      return entry.value;
-    }).toList();
-  }
-
 // DFS function to find the path from start to target
-  Map<String, int>? _findPath(
+  List<int>? _findPath(
     bool Function(Node<T>) predicate, {
-    Node<T>? root,
-    Map<String, int>? map,
+    List<int>? map,
   }) {
-    Node<T> startNode = root ?? this;
+    Node<T> startNode = this;
 
     // Initialize the path if not set
-    map ??= {startNode.data.name: startNode.id};
+    map ??= [startNode.id];
 
     // If the current Node<T> is the target, return the path
     if (predicate(startNode)) {
@@ -225,20 +228,20 @@ class Node<T extends NodeCompliance> {
 
     // Recursively search through each child
     for (Node<T> child in (this).children) {
-      map.putIfAbsent(child.data.name, () => child.id);
-      Map<String, int>? result = child._findPath(predicate, map: map);
+      map.addIfAbsent(child.id);
+      List<int>? result = child._findPath(predicate, map: map);
       if (result != null) {
         return result; // Return if the path is found
       }
 
       // Backtrack if not found in the current branch
-      map.removeWhere((k, v) => v == child.id);
+      map.remove(child.id);
     }
 
     return null; // Return null if no path found
   }
 
-  List<int> _convertIDListToPosList(List<int> ids, {Node<T>? rootNode}) {
+  List<int> _convertIDListToPosList(List<int> ids) {
     Node<T> currentNode = this;
     List<int> pos = [];
 
@@ -276,6 +279,14 @@ class Node<T extends NodeCompliance> {
       for (var child in current.children) {
         queue.add(child);
       }
+    }
+  }
+}
+
+extension ListInt on List<int> {
+  void addIfAbsent(int intValue) {
+    if (!contains(intValue)) {
+      add(intValue);
     }
   }
 }

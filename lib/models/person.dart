@@ -1,10 +1,7 @@
-import 'node.dart';
-
 enum PersonGender { female, male, none }
 
-class Person implements NodeCompliance {
+class Person {
   PersonGender gender;
-  @override
   String name;
   int id;
 

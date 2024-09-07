@@ -23,6 +23,7 @@ class NodeRow extends StatelessWidget {
         ),
         Text(
           item.data.name,
+          // item.getHeightUntilRoot.toString(),
           style: const TextStyle(color: Colors.white, fontSize: 18),
         ),
       ],
