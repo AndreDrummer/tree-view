@@ -1,6 +1,5 @@
+import 'package:tree_view/core/tree/node.dart';
 import 'dart:collection';
-
-import 'package:tree_view/core/node/node.dart';
 
 class TreeUtils {
   static Node<T>? bfsTraversal<T extends TOString>({

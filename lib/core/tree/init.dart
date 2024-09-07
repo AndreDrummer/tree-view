@@ -1,7 +1,7 @@
+import 'package:tree_view/core/models/person.dart';
+import 'package:tree_view/core/data/person.dart';
 import 'package:tree_view/core/tree/utils.dart';
-import 'package:tree_view/data/person.dart';
-import 'package:tree_view/core/node/node.dart';
-import 'package:tree_view/models/person.dart';
+import 'package:tree_view/core/tree/node.dart';
 
 final _rootData = data.first;
 

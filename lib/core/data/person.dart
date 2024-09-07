@@ -1,4 +1,4 @@
-import 'package:tree_view/models/person.dart';
+import 'package:tree_view/core/models/person.dart';
 
 // The assembly of this data should be made programmatically instead.
 

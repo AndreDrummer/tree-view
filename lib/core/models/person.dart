@@ -1,4 +1,4 @@
-import 'package:tree_view/core/node/node.dart';
+import 'package:tree_view/core/tree/node.dart';
 
 enum PersonGender { female, male, none }
 
