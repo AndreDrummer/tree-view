@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class BidirectionalCarousel extends StatefulWidget {
+class HorizontalScroll extends StatefulWidget {
   final bool allowHorizontalScrool;
   final bool allowVerticalScrool;
   final double viewHeight;
   final double viewWidth;
   final Widget child;
 
-  const BidirectionalCarousel({
+  const HorizontalScroll({
     this.allowHorizontalScrool = true,
     this.allowVerticalScrool = true,
     required this.viewHeight,
@@ -17,13 +17,11 @@ class BidirectionalCarousel extends StatefulWidget {
   });
 
   @override
-  State<BidirectionalCarousel> createState() => _BidirectionalCarouselState();
+  State<HorizontalScroll> createState() => _HorizontalScrollState();
 }
 
-class _BidirectionalCarouselState extends State<BidirectionalCarousel> {
-  // Scroll controllers for both directions
+class _HorizontalScrollState extends State<HorizontalScroll> {
   final ScrollController horizontalController = ScrollController();
-  final ScrollController verticalController = ScrollController();
 
   @override
   Widget build(BuildContext context) {

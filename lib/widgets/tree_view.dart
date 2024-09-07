@@ -1,7 +1,7 @@
 import 'package:tree_view/widgets/line_bread_crumb.dart';
 import 'package:tree_view/widgets/node_row.dart';
 import 'package:tree_view/models/person.dart';
-import 'package:tree_view/widgets/teste.dart';
+import 'package:tree_view/widgets/horizontal_scroll.dart';
 import 'package:flutter/material.dart';
 import '../core/node/node.dart';
 
@@ -28,40 +28,38 @@ class TreeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final sizeOfContext = MediaQuery.sizeOf(context);
 
-    final abcd = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        NodeRow(node, onPressed: () => toggleNodeView?.call(node)),
-        Visibility(
-          visible: node.expanded,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              LineBreadCrumb(lineBreadCrumbHeight()),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: node.children!.map((child) {
-                  return TreeView(
-                    child,
-                    toggleNodeView: (node) {
-                      toggleNodeView?.call(node);
-                    },
-                    allowHorizontalScrool: false,
-                    allowVerticalScrool: false,
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-
-    return BidirectionalCarousel(
-      viewWidth: sizeOfContext.width * (node.getHeightUntilRoot + 1),
+    return HorizontalScroll(
+      viewWidth: (sizeOfContext.width * (node.getHeightUntilRoot + 1)),
       viewHeight: lineBreadCrumbHeight().toDouble() + 50,
       allowHorizontalScrool: allowHorizontalScrool,
-      child: abcd,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          NodeRow(node, onPressed: () => toggleNodeView?.call(node)),
+          Visibility(
+            visible: node.expanded,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                LineBreadCrumb(lineBreadCrumbHeight()),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: node.children!.map((child) {
+                    return TreeView(
+                      child,
+                      toggleNodeView: (node) {
+                        toggleNodeView?.call(node);
+                      },
+                      allowHorizontalScrool: false,
+                      allowVerticalScrool: false,
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
