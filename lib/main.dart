@@ -1,5 +1,6 @@
+import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 import 'package:tree_view/controller/controller.dart';
-import 'package:tree_view/widgets/tree_view.dart';
+import 'package:tree_view/widgets/tree_view.dart' as local;
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -88,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    TreeView(
+                    local.TreeView(
                       controller.root,
                       toggleNodeView: (node) {
                         controller.toogleNodeView(node);

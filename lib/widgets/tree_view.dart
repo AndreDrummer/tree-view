@@ -27,11 +27,12 @@ class TreeView extends StatelessWidget {
             children: [
               LineBreadCrumb(lineBreadCrumbHeight()),
               Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: node.children.map((child) {
-                    return TreeView(child,
-                        toggleNodeView: (node) => toggleNodeView?.call(node));
-                  }).toList()),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: node.children.map((child) {
+                  return TreeView(child,
+                      toggleNodeView: (node) => toggleNodeView?.call(node));
+                }).toList(),
+              ),
             ],
           ),
         ),

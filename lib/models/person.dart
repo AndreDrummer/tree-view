@@ -22,30 +22,6 @@ class Person {
   bool get hasChildren => children.isNotEmpty;
   int get numberOfChildren => children.length;
 
-  int get descendents {
-    int value = children.length;
-
-    if (children.isNotEmpty) {
-      for (var c in children) {
-        int a = c.descendents;
-
-        value += a;
-      }
-    }
-
-    return value;
-  }
-
-  bool get hasExpandedChildren {
-    for (var c in children) {
-      if (c.expanded) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   int get numberOfDescendentsShowingUp {
     int value = expanded ? numberOfChildren : 0;
 
@@ -53,20 +29,6 @@ class Person {
       for (var child in children) {
         if (child.expanded) {
           value += child.numberOfDescendentsShowingUp;
-        }
-      }
-    }
-
-    return value;
-  }
-
-  int get numberOfDescendentsShowingUpOfDescendents {
-    int value = 0;
-
-    if (children.isNotEmpty) {
-      for (var c in children) {
-        if (c.expanded) {
-          value += c.numberOfDescendentsShowingUp;
         }
       }
     }
@@ -88,18 +50,16 @@ class Person {
     );
   }
 
-  Person? toggleNode(Person node, bool Function(Person) predicate) {
-    // Find the parent of the target family member
+  Person? toggleNode(Person updatedNode, bool Function(Person) predicate) {
     List<int> nodePath = _nodePath(predicate);
     Person? parent = _findParent(nodePath);
 
-    // This is the condition that check if I'm on the root node
     if (parent != null && nodePath.isNotEmpty) {
-      int nodeToBeRemovedID = nodePath.last;
+      int nodeIndex = nodePath.last;
 
-      parent.children[nodeToBeRemovedID] = node;
+      parent.children[nodeIndex] = updatedNode;
     } else {
-      return node;
+      return updatedNode;
     }
 
     return parent;
