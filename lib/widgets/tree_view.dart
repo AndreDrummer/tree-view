@@ -26,6 +26,8 @@ class TreeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sizeOfContext = MediaQuery.sizeOf(context);
+
     final abcd = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -56,9 +58,9 @@ class TreeView extends StatelessWidget {
     );
 
     return BidirectionalCarousel(
+      viewWidth: sizeOfContext.width * (node.getHeightUntilRoot + 1),
       viewHeight: lineBreadCrumbHeight().toDouble() + 50,
       allowHorizontalScrool: allowHorizontalScrool,
-      viewWidth: MediaQuery.sizeOf(context).width,
       child: abcd,
     );
   }

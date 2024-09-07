@@ -74,9 +74,6 @@ class Node<T extends TOString> {
     int height = 0;
     Node? current = this;
 
-    // print("Start ${this.data}");
-    // print("Start ${this.parent?.data}");
-
     while (current?.parent != null) {
       height++;
       current = current?.parent;
