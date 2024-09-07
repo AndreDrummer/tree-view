@@ -1,6 +1,8 @@
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:tree_view/features/assets/widgets/inline_checkbox.dart';
+import 'package:tree_view/features/assets/widgets/input_search.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
 
 class SearchHeader extends StatelessWidget {
@@ -17,29 +19,26 @@ class SearchHeader extends StatelessWidget {
           builder: (context, controller, _) {
             return Column(
               children: [
-                CheckboxListTile(
-                  activeColor: Colors.blue,
-                  side: BorderSide(color: color),
-                  value: controller.genderTypeFilter == controller.male,
-                  onChanged: (value) {
-                    controller.filterByMaleGender();
-                  },
-                  title: Text(
-                    "Male",
-                    style: TextStyle(color: color, fontSize: 18),
-                  ),
-                ),
-                CheckboxListTile(
-                  activeColor: Colors.pink,
-                  side: BorderSide(color: color),
-                  value: controller.genderTypeFilter == controller.female,
-                  onChanged: (value) {
-                    controller.filterByFemaleGender();
-                  },
-                  title: Text(
-                    "Female",
-                    style: TextStyle(color: color, fontSize: 18),
-                  ),
+                InputSearch(color: color, onSubmitted: controller.searchByText),
+                Row(
+                  children: [
+                    InlineCheckbox(
+                      value: controller.genderTypeFilter == controller.male,
+                      onPressed: controller.filterByMaleGender,
+                      activeColor: Colors.blue,
+                      borderColor: color,
+                      textColor: color,
+                      text: "Male",
+                    ),
+                    InlineCheckbox(
+                      value: controller.genderTypeFilter == controller.female,
+                      onPressed: controller.filterByFemaleGender,
+                      activeColor: Colors.pink,
+                      borderColor: color,
+                      textColor: color,
+                      text: "Female",
+                    ),
+                  ],
                 ),
               ],
             );

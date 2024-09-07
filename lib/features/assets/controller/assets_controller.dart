@@ -29,6 +29,12 @@ class AssetsController with ChangeNotifier {
     notifyListeners();
   }
 
+  void searchByText(String text) {
+    debugPrint(text);
+
+    notifyListeners();
+  }
+
   void filterByMaleGender() {
     _setRoot(_originalRoot);
 
