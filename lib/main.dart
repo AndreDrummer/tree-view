@@ -38,6 +38,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool called = false;
+
+  void callOnce(VoidCallback call) {
+    if (!called) {
+      call();
+      setState(() {
+        called = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    // callOnce(() {
+    //   Provider.of<Controller>(context, listen: false).filterByMaleGender();
+    // });
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -47,11 +66,35 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Consumer<Controller>(
               builder: (context, controller, _) {
-                return TreeView(
-                  controller.root,
-                  toggleNodeView: (node) {
-                    controller.toogleNodeView(node);
-                  },
+                return Column(
+                  children: [
+                    CheckboxListTile(
+                      value: controller.genderTypeFilter == controller.male,
+                      onChanged: (value) {
+                        controller.filterByMaleGender();
+                      },
+                      title: const Text(
+                        "Male",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                    CheckboxListTile(
+                      value: controller.genderTypeFilter == controller.female,
+                      onChanged: (value) {
+                        controller.filterByFemaleGender();
+                      },
+                      title: const Text(
+                        "Female",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                    TreeView(
+                      controller.root,
+                      toggleNodeView: (node) {
+                        controller.toogleNodeView(node);
+                      },
+                    ),
+                  ],
                 );
               },
             ),
