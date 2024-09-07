@@ -1,11 +1,12 @@
-import 'package:tree_view/models/person.dart';
+import 'package:tree_view/models/node.dart';
 import 'package:flutter/material.dart';
+import 'package:tree_view/models/person.dart';
 
-class Node extends StatelessWidget {
-  const Node(this.item, {this.onPressed, super.key});
+class NodeRow extends StatelessWidget {
+  const NodeRow(this.item, {this.onPressed, super.key});
 
   final void Function()? onPressed;
-  final Person item;
+  final Node<Person> item;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class Node extends StatelessWidget {
           ),
         ),
         Text(
-          item.name,
+          item.data.name,
           style: const TextStyle(color: Colors.white, fontSize: 18),
         ),
       ],

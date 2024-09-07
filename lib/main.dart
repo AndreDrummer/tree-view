@@ -1,6 +1,5 @@
-import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
+import 'package:tree_view/widgets/tree_view.dart';
 import 'package:tree_view/controller/controller.dart';
-import 'package:tree_view/widgets/tree_view.dart' as local;
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -60,49 +59,63 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.black,
-        body: ListView(
-          children: [
-            Consumer<Controller>(
-              builder: (context, controller, _) {
-                return Column(
-                  children: [
-                    CheckboxListTile(
-                      value: controller.genderTypeFilter == controller.male,
-                      onChanged: (value) {
-                        controller.filterByMaleGender();
-                      },
-                      title: const Text(
-                        "Male",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-                    CheckboxListTile(
-                      value: controller.genderTypeFilter == controller.female,
-                      onChanged: (value) {
-                        controller.filterByFemaleGender();
-                      },
-                      title: const Text(
-                        "Female",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-                    local.TreeView(
-                      controller.root,
-                      toggleNodeView: (node) {
-                        controller.toogleNodeView(node);
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
+        body: VerticalView(),
       ),
+    );
+  }
+}
+
+class VerticalView extends StatelessWidget {
+  const VerticalView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // return TreeView(
+    //   Provider.of<Controller>(context).root,
+    //   toggleNodeView: (node) {
+    //     Provider.of<Controller>(context).toogleNodeView(node);
+    //   },
+    // );
+    return ListView(
+      children: [
+        Consumer<Controller>(
+          builder: (context, controller, _) {
+            return Column(
+              children: [
+                CheckboxListTile(
+                  value: controller.genderTypeFilter == controller.male,
+                  onChanged: (value) {
+                    controller.filterByMaleGender();
+                  },
+                  title: const Text(
+                    "Male",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+                CheckboxListTile(
+                  value: controller.genderTypeFilter == controller.female,
+                  onChanged: (value) {
+                    controller.filterByFemaleGender();
+                  },
+                  title: const Text(
+                    "Female",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+                TreeView(
+                  controller.root,
+                  toggleNodeView: (node) {
+                    controller.toogleNodeView(node);
+                  },
+                ),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 }

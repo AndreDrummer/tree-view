@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tree_view/data/person.dart';
+import 'package:tree_view/models/node.dart';
 import 'package:tree_view/models/person.dart';
 
 class Controller with ChangeNotifier {
-  static final Person _originalRoot = tree;
+  static final Node<Person> _originalRoot = tree;
 
-  static Person _root = _originalRoot;
+  static Node<Person> _root = _originalRoot;
 
-  Person get root => _root;
+  Node<Person> get root => _root;
 
-  void _setRoot(Person node) {
+  void _setRoot(Node<Person> node) {
     _root = node;
   }
 
@@ -18,10 +19,10 @@ class Controller with ChangeNotifier {
   PersonGender get male => PersonGender.male;
   PersonGender get none => PersonGender.none;
 
-  void toogleNodeView(Person node) {
+  void toogleNodeView(Node<Person> node) {
     final updatedNode = node.expanded ? node.close() : node.open();
 
-    bool nodeWithIdPredicate(Person innerNode) {
+    bool nodeWithIdPredicate(Node<Person> innerNode) {
       return innerNode.id == node.id;
     }
 
@@ -60,8 +61,8 @@ class Controller with ChangeNotifier {
 
   void _filterByGender() {
     final newNode = root.buildTreeWithPredicate(
-      (person) {
-        return person.gender == genderTypeFilter;
+      (node) {
+        return node.data.gender == genderTypeFilter;
       },
     );
     _setRoot(newNode ?? root);
