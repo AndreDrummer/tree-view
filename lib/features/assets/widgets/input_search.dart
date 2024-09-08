@@ -54,10 +54,9 @@ class _InputSearchState extends State<InputSearch> {
         decoration: InputDecoration(
           hintStyle: TextStyle(color: widget.hintTextColor),
           hintText: widget.hintText,
-          prefixIcon: Visibility(
-            visible: _textEditingController.text.isEmpty,
-            child: const Icon(Icons.search),
-          ),
+          prefixIcon: _textEditingController.text.isEmpty
+              ? const Icon(Icons.search)
+              : null,
           suffixIcon: Visibility(
             visible: _textEditingController.text.isNotEmpty,
             child: IconButton(

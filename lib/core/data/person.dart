@@ -1,7 +1,5 @@
 import 'package:tree_view/core/models/person.dart';
 
-// The assembly of this data should be made programmatically instead.
-
 final data = [
   Person(
     id: 1,

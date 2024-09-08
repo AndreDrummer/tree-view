@@ -1,5 +1,3 @@
-import 'package:tree_view/core/tree/utils.dart';
-
 typedef NodePath = List<int>;
 
 abstract class TOString {
@@ -24,21 +22,6 @@ class Node<T extends TOString> {
     children ??= [];
   }
 
-  @override
-  String toString() {
-    return '''
-      children: ${children!.map((e) => e.data.toString())}
-      parent: ${parent?.id}
-      data: ${data.toString()}
-      expanded: $expanded
-      id: $id
-    ''';
-  }
-
-  bool _findNodeByIdPredicate(Node innerNode, Node currentNode) {
-    return innerNode.id == currentNode.id;
-  }
-
   bool get hasChildren => children!.isNotEmpty;
   int get numberOfChildren => children!.length;
 
@@ -54,20 +37,6 @@ class Node<T extends TOString> {
     }
 
     return value;
-  }
-
-  Node<T> close() {
-    return copyWith(
-      children: children!.map((c) => c.close()).toList(),
-      expanded: false,
-    );
-  }
-
-  Node<T> open() {
-    return copyWith(
-      children: children,
-      expanded: true,
-    );
   }
 
   int get getHeightFromNodeToRoot {
@@ -97,22 +66,41 @@ class Node<T extends TOString> {
           maxHeight = childHeight;
         }
       }
-      // The height of the current node is 1 (for the edge to its highest child) plus the height of the highest child.
+      // The height of the current node is 1 (for the edge to its highest child)
+      // plus the height of the highest child.
       return maxHeight + 1;
     }
   }
 
+  bool _findNodeByIdPredicate(Node innerNode, Node currentNode) {
+    return innerNode.id == currentNode.id;
+  }
+
+  Node<T> close() {
+    return copyWith(
+      children: children!.map((c) => c.close()).toList(),
+      expanded: false,
+    );
+  }
+
+  Node<T> open() {
+    return copyWith(
+      children: children,
+      expanded: true,
+    );
+  }
+
   Node<T>? toggleNode(Node<T> updatedNode) {
-    List<int> nodePath = _nodePath(
+    List<int> pathToNode = nodePath(
       (node) {
         return _findNodeByIdPredicate(node, updatedNode);
       },
     );
 
-    Node<T>? parent = _findParent(nodePath);
+    Node<T>? parent = _findParent(pathToNode);
 
-    if (parent != null && nodePath.isNotEmpty) {
-      int nodeIndex = nodePath.last;
+    if (parent != null && pathToNode.isNotEmpty) {
+      int nodeIndex = pathToNode.last;
 
       parent.children![nodeIndex] = updatedNode;
     } else {
@@ -120,56 +108,6 @@ class Node<T extends TOString> {
     }
 
     return parent;
-  }
-
-  Node<T>? rebuildTree(bool Function(Node<T>) predicate) {
-    List<Node<T>> nodes = [];
-
-    TreeUtils.bfsTraversal<T>(
-      process: (node) {
-        if (predicate(node)) {
-          nodes.add(node);
-        }
-      },
-      rootNode: this,
-    );
-
-    List<List<int>> pathsToEachNode = nodes
-        .map((node) => _nodePath((innerNode) => innerNode.id == node.id))
-        .toList();
-
-    if (pathsToEachNode.isEmpty) return null;
-
-    Node<T> newTree = copyWith(
-      expanded: true,
-      children: [],
-    );
-
-    for (final path in pathsToEachNode) {
-      if (path.isNotEmpty) {
-        if (path.length == 1) {
-          final currentChildren = newTree.children;
-          Node<T>? newChildren = _findNodeByPath(path);
-
-          newChildren ??= children!.elementAt(path.last);
-
-          newChildren = newChildren.copyWith(
-            children: [],
-            expanded: true,
-          );
-
-          currentChildren!.addChild(
-            newChildren,
-            position: path.last,
-          );
-          newTree.copyWith(children: currentChildren);
-        } else {
-          newTree = _addNestedNodes(newTree, path);
-        }
-      }
-    }
-
-    return newTree;
   }
 
   Node<T> copyWith({
@@ -187,37 +125,8 @@ class Node<T extends TOString> {
     );
   }
 
-  Node<T> _addNestedNodes(Node<T> rootNode, NodePath path) {
-    Node<T> currentNode = rootNode;
-
-    for (int i = 0; i < path.length; i++) {
-      final childPosition = path[i];
-
-      final Node<T> node = _findNodeByPath(path.sublist(0, i + 1))!
-          .copyWith(children: [], expanded: true);
-
-      if (node.parent?.id == currentNode.id) {
-        currentNode.children!.addChild(node, position: childPosition);
-
-        if (childPosition < currentNode.children!.length) {
-          currentNode = currentNode.children![childPosition];
-        } else {
-          final containsRecord = currentNode.children!.containsChild(node);
-          final indexInserted = containsRecord.$3;
-          final inserted = containsRecord.$1;
-
-          if (inserted) {
-            currentNode = currentNode.children![indexInserted!];
-          }
-        }
-      }
-    }
-
-    return rootNode;
-  }
-
-  List<int> _nodePath(bool Function(Node<T>) predicate) {
-    List<int> idList = _findPath(predicate) ?? [];
+  List<int> nodePath(bool Function(Node<T>) predicate) {
+    List<int> idList = findPath(predicate) ?? [];
 
     // skip the root node
     return _convertIDListToPosList(idList.sublist(1));
@@ -248,22 +157,8 @@ class Node<T extends TOString> {
     return null;
   }
 
-  Node<T>? _findNodeByPath(NodePath ids, {Node<T>? rootNode}) {
-    Node<T> current = rootNode ?? this;
-
-    // Traverse until the second-to-last id to find the parent
-    for (int i = 0; i < ids.length; i++) {
-      int id = ids[i];
-
-      if (id >= current.children!.length) return null;
-      current = current.children![id];
-    }
-
-    return current;
-  }
-
 // DFS function to find the path from start to target
-  List<int>? _findPath(
+  List<int>? findPath(
     bool Function(Node<T>) predicate, {
     List<int>? map,
   }) {
@@ -280,7 +175,7 @@ class Node<T extends TOString> {
     // Recursively search through each child
     for (Node<T> child in (this).children!) {
       map.addIfAbsent(child.id);
-      List<int>? result = child._findPath(predicate, map: map);
+      List<int>? result = child.findPath(predicate, map: map);
       if (result != null) {
         return result; // Return if the path is found
       }
@@ -308,6 +203,17 @@ class Node<T extends TOString> {
     }
 
     return pos;
+  }
+
+  @override
+  String toString() {
+    return '''
+      children: ${children!.map((e) => e.data.toString())}
+      parent: ${parent?.id}
+      data: ${data.toString()}
+      expanded: $expanded
+      id: $id
+    ''';
   }
 }
 

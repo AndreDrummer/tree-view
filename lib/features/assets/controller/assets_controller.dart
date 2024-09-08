@@ -2,6 +2,7 @@ import 'package:tree_view/core/models/person.dart';
 import 'package:tree_view/core/tree/init.dart';
 import 'package:tree_view/core/tree/node.dart';
 import 'package:flutter/material.dart';
+import 'package:tree_view/core/tree/utils.dart';
 import 'package:tree_view/core/utils/extensions.dart';
 
 class AssetsController with ChangeNotifier {
@@ -15,6 +16,7 @@ class AssetsController with ChangeNotifier {
   static Node<Person> _root = _originalRoot;
 
   Node<Person> get root => _root;
+  TreeUtils<Person> get _tree => TreeUtils.instance<Person>(root);
 
   bool get hasData => root.id != -1;
 
@@ -51,7 +53,8 @@ class AssetsController with ChangeNotifier {
 
     if (textToSearch.length >= 3) {
       _isFilteringByText = true;
-      final newNode = root.rebuildTree(
+
+      final newNode = _tree.rebuild(
         (node) {
           final nodeDataNameToCompare =
               node.data?.name.removeAccents().trim().toLowerCase();
@@ -100,7 +103,7 @@ class AssetsController with ChangeNotifier {
   void _filterByGender() {
     _scrollToTheEndOfData = true;
 
-    final newNode = root.rebuildTree(
+    final newNode = _tree.rebuild(
       (node) {
         return node.data?.gender == genderTypeFilter;
       },

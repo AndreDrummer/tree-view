@@ -11,21 +11,24 @@ final Node<Person> _nodeRoot = Node<Person>(
 );
 
 Node<Person> nodeRoot() {
+  final TreeUtils<Person> treeInstance = TreeUtils.instance<Person>(_nodeRoot);
   for (final d in data) {
     Node<Person> node = Node<Person>(
       id: d.id,
       data: d,
     );
 
-    Node<Person>? nodeParent = TreeUtils.bfsTraversal<Person>(
+    Node<Person>? nodeParent = treeInstance.bfsTraversal(
       rootNode: _nodeRoot,
       predicate: (innerNode) {
         return innerNode.id == d.parentId;
       },
     );
 
-    if (nodeParent != null) node.parent = nodeParent;
-    nodeParent?.children!.addChild(node);
+    if (nodeParent != null) {
+      nodeParent.children!.addChild(node);
+      node.parent = nodeParent;
+    }
   }
 
   return _nodeRoot;
