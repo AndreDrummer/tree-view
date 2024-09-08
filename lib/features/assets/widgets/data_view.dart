@@ -32,22 +32,30 @@ class _DataViewState extends State<DataView> {
     int rootHeight = 0,
   }) {
     if (isToScroll) {
-      Future.delayed(
-        const Duration(milliseconds: 500),
-        () {
-          verticalScrollController.animateTo(
-            duration: const Duration(seconds: 5),
-            verticalJumpTo * rootHeight,
-            curve: Curves.easeIn,
-          );
-          horizontalScrollController.animateTo(
-            horizontalJumpTo,
-            duration: const Duration(seconds: 1),
-            curve: Curves.easeIn,
-          );
-        },
+      verticalScrollController.animateTo(
+        duration: const Duration(seconds: 5),
+        verticalJumpTo * rootHeight,
+        curve: Curves.easeIn,
+      );
+      horizontalScrollController.animateTo(
+        horizontalJumpTo,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeIn,
       );
     }
+  }
+
+  void scrollToTheBeginningOfData() {
+    verticalScrollController.animateTo(
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeIn,
+      0,
+    );
+    horizontalScrollController.animateTo(
+      0,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeIn,
+    );
   }
 
   @override
@@ -104,6 +112,14 @@ class _DataViewState extends State<DataView> {
                     horizontalController: horizontalScrollController,
                   ),
                 ],
+              ),
+              floatingActionButton: AnimatedOpacity(
+                duration: Durations.extralong4,
+                opacity: controller.isFilteringByAny ? 1 : 0,
+                child: FloatingActionButton(
+                  onPressed: scrollToTheBeginningOfData,
+                  child: const Icon(Icons.arrow_upward_rounded),
+                ),
               ),
             ),
           );
