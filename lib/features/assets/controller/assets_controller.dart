@@ -19,7 +19,11 @@ class AssetsController with ChangeNotifier {
   PersonGender get male => PersonGender.male;
   PersonGender get none => PersonGender.none;
 
+  bool _isFilteringByText = false;
+
   void toogleNodeView(Node<Person> node) {
+    if (_isFilteringByText) _setRoot(_originalRoot);
+
     final updatedNode = node.expanded ? node.close() : node.open();
 
     final newNode = root.toggleNode(updatedNode);
@@ -32,7 +36,18 @@ class AssetsController with ChangeNotifier {
   void searchByText(String text) {
     debugPrint(text);
 
-    notifyListeners();
+    if (text.isNotEmpty) {
+      _isFilteringByText = true;
+      final newNode = root.rebuildTree(
+        (node) {
+          return node.data.name.toLowerCase().contains(text.toLowerCase());
+        },
+      );
+      _setRoot(newNode ?? root);
+    } else {
+      _isFilteringByText = false;
+      _setRoot(_originalRoot);
+    }
   }
 
   void filterByMaleGender() {

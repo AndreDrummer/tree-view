@@ -118,6 +118,7 @@ class Node<T extends TOString> {
         .map((node) => _nodePath((innerNode) => innerNode.id == node.id))
         .toList();
 
+    print("pathsToEachNode $pathsToEachNode");
     Node<T> newTree = copyWith(
       expanded: true,
       children: [],

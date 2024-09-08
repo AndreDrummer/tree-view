@@ -13,22 +13,11 @@ class DataView extends StatefulWidget {
 }
 
 class _DataViewState extends State<DataView> {
-  bool called = false;
-
-  void callOnce(VoidCallback call) {
-    if (!called) {
-      call();
-      setState(() {
-        called = true;
-      });
-    }
-  }
-
   @override
   void didChangeDependencies() {
-    // callOnce(() {
-    //   Provider.of<Controller>(context, listen: false).filterByMaleGender();
-    // });
+    Provider.of<AssetsController>(context, listen: false)
+        .searchByText("Mariah");
+    // .filterByFemaleGender();
     super.didChangeDependencies();
   }
 
