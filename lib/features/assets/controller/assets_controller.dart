@@ -4,6 +4,7 @@ import 'package:tree_view/core/tree/node.dart';
 import 'package:flutter/material.dart';
 
 class AssetsController with ChangeNotifier {
+  static final Node<Person> _emptyNode = Node<Person>(id: -1);
   static final Node<Person> _originalRoot = nodeRoot();
 
   static Node<Person> _root = _originalRoot;
@@ -28,7 +29,7 @@ class AssetsController with ChangeNotifier {
 
     final newNode = root.toggleNode(updatedNode);
 
-    if (node.id == root.id) _setRoot(newNode ?? root);
+    if (node.id == root.id) _setRoot(newNode ?? _emptyNode);
 
     notifyListeners();
   }
@@ -40,10 +41,11 @@ class AssetsController with ChangeNotifier {
       _isFilteringByText = true;
       final newNode = root.rebuildTree(
         (node) {
-          return node.data.name.toLowerCase().contains(text.toLowerCase());
+          return node.data?.name.toLowerCase().contains(text.toLowerCase()) ??
+              false;
         },
       );
-      _setRoot(newNode ?? root);
+      _setRoot(newNode ?? _emptyNode);
     } else {
       _isFilteringByText = false;
       _setRoot(_originalRoot);
@@ -79,10 +81,10 @@ class AssetsController with ChangeNotifier {
   void _filterByGender() {
     final newNode = root.rebuildTree(
       (node) {
-        return node.data.gender == genderTypeFilter;
+        return node.data?.gender == genderTypeFilter;
       },
     );
-    _setRoot(newNode ?? root);
+    _setRoot(newNode ?? _emptyNode);
 
     notifyListeners();
   }

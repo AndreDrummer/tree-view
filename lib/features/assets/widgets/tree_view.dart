@@ -1,11 +1,11 @@
+import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/assets/widgets/horizontal_scroll.dart';
 import 'package:tree_view/features/assets/widgets/line_bread_crumb.dart';
-import 'package:tree_view/features/assets/controller/assets_controller.dart';
+import 'package:tree_view/features/home/controller/home_controller.dart';
 import 'package:tree_view/features/assets/widgets/node_row.dart';
 import 'package:tree_view/core/models/person.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:tree_view/features/home/controller/home_controller.dart';
 import '../../../core/tree/node.dart';
 
 class TreeView extends StatelessWidget {
@@ -37,47 +37,50 @@ class TreeView extends StatelessWidget {
       builder: (context, homeController, _) {
         return Consumer<AssetsController>(
           builder: (context, controller, _) {
-            return HorizontalScroll(
-              viewWidth: (sizeOfContext.width * (node.getHeightUntilRoot + 1)),
-              viewHeight: lineBreadCrumbHeight().toDouble() + 50,
-              allowHorizontalScrool: allowHorizontalScrool,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  NodeRow(
-                    node,
-                    onPressed: () => toggleNodeView?.call(node),
-                    darkModeIsON: darkModeIsON,
-                  ),
-                  Visibility(
-                    visible: node.expanded,
-                    child: Row(
+            return node.id == -1
+                ? const SizedBox.shrink()
+                : HorizontalScroll(
+                    viewWidth:
+                        (sizeOfContext.width * (node.getHeightUntilRoot + 1)),
+                    viewHeight: lineBreadCrumbHeight().toDouble() + 50,
+                    allowHorizontalScrool: allowHorizontalScrool,
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        LineBreadCrumb(
-                          lineBreadCrumbHeight(),
+                        NodeRow(
+                          node,
+                          onPressed: () => toggleNodeView?.call(node),
                           darkModeIsON: darkModeIsON,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: node.children!.map((child) {
-                            return TreeView(
-                              child,
-                              toggleNodeView: (node) {
-                                toggleNodeView?.call(node);
-                              },
-                              allowHorizontalScrool: false,
-                              darkModeIsON: darkModeIsON,
-                              allowVerticalScrool: false,
-                            );
-                          }).toList(),
+                        Visibility(
+                          visible: node.expanded,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              LineBreadCrumb(
+                                lineBreadCrumbHeight(),
+                                darkModeIsON: darkModeIsON,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: node.children!.map((child) {
+                                  return TreeView(
+                                    child,
+                                    toggleNodeView: (node) {
+                                      toggleNodeView?.call(node);
+                                    },
+                                    allowHorizontalScrool: false,
+                                    darkModeIsON: darkModeIsON,
+                                    allowVerticalScrool: false,
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            );
+                  );
           },
         );
       },

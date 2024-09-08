@@ -15,7 +15,7 @@ class DataView extends StatefulWidget {
 class _DataViewState extends State<DataView> {
   @override
   void didChangeDependencies() {
-    Provider.of<AssetsController>(context, listen: false).searchByText("Bruno");
+    Provider.of<AssetsController>(context, listen: false).searchByText("Lucas");
     // .filterByFemaleGender();
     super.didChangeDependencies();
   }

@@ -12,14 +12,14 @@ class Node<T extends TOString> {
   Node<T>? parent;
   bool expanded;
   int id;
-  T data;
+  T? data;
 
   Node({
     this.expanded = false,
-    required this.data,
     required this.id,
     this.children,
     this.parent,
+    this.data,
   }) {
     children ??= [];
   }
@@ -118,7 +118,10 @@ class Node<T extends TOString> {
         .map((node) => _nodePath((innerNode) => innerNode.id == node.id))
         .toList();
 
-    print("pathsToEachNode $pathsToEachNode");
+    print("pathsToEachNode $pathsToEachNode ${pathsToEachNode.isEmpty}");
+
+    if (pathsToEachNode.isEmpty) return null;
+
     Node<T> newTree = copyWith(
       expanded: true,
       children: [],
@@ -147,6 +150,7 @@ class Node<T extends TOString> {
         }
       }
     }
+
     return newTree;
   }
 
