@@ -63,11 +63,22 @@ class _DataViewState extends State<DataView> {
     // Provider.of<AssetsController>(context, listen: false)
     // .searchByText("Mariah");
     //  // .filterByMaleGender();
+
+    verticalScrollController.addListener(() {
+      setState(() {});
+    });
     super.didChangeDependencies();
   }
 
   double calculatesHorizontalScrolling(int treeHeight) {
     return (treeHeight * treeHeight).toDouble();
+  }
+
+  double showBackToTopButton(bool isFilteringAndHasData) {
+    final bool logic =
+        isFilteringAndHasData && verticalScrollController.offset > 0;
+
+    return (logic ? 1 : 0).toDouble();
   }
 
   @override
@@ -115,8 +126,9 @@ class _DataViewState extends State<DataView> {
               ),
               floatingActionButton: AnimatedOpacity(
                 duration: Durations.extralong4,
-                opacity:
-                    controller.isFilteringByAny && controller.hasData ? 1 : 0,
+                opacity: showBackToTopButton(
+                  controller.isFilteringByAny && controller.hasData,
+                ),
                 child: FloatingActionButton(
                   onPressed: scrollToTheBeginningOfData,
                   child: const Icon(Icons.arrow_upward_rounded),
