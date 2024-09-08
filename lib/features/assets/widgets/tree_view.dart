@@ -13,12 +13,17 @@ class TreeView extends StatelessWidget {
     this.node, {
     super.key,
     this.toggleNodeView,
+    required this.horizontalController,
     this.allowHorizontalScrool = true,
+    this.scrollToTheEndOfData = true,
     this.allowVerticalScrool = true,
     this.darkModeIsON = true,
   });
+
   final void Function(Node<Person> node)? toggleNodeView;
+  final ScrollController horizontalController;
   final bool allowHorizontalScrool;
+  final bool scrollToTheEndOfData;
   final bool allowVerticalScrool;
   final bool darkModeIsON;
   final Node<Person> node;
@@ -40,10 +45,14 @@ class TreeView extends StatelessWidget {
             return node.id == -1
                 ? const SizedBox.shrink()
                 : HorizontalScroll(
-                    viewWidth:
-                        (sizeOfContext.width * (node.getHeightUntilRoot + 1)),
+                    horizontalController: horizontalController,
+                    viewWidth: (sizeOfContext.width *
+                        (node.getHeightFromNodeToRoot + 1)),
                     viewHeight: lineBreadCrumbHeight().toDouble() + 50,
                     allowHorizontalScrool: allowHorizontalScrool,
+                    scrollToTheEndOfData:
+                        scrollToTheEndOfData && controller.isFilteringByAny,
+                    jumpTo: node.getHeight.toDouble(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -69,7 +78,9 @@ class TreeView extends StatelessWidget {
                                     toggleNodeView: (node) {
                                       toggleNodeView?.call(node);
                                     },
+                                    horizontalController: ScrollController(),
                                     allowHorizontalScrool: false,
+                                    scrollToTheEndOfData: false,
                                     darkModeIsON: darkModeIsON,
                                     allowVerticalScrool: false,
                                   );

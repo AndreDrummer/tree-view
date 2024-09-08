@@ -33,9 +33,7 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: MyHomePage(
-            controller: controller,
-          ),
+          home: const MyHomePage(),
         );
       },
     );
@@ -43,40 +41,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.controller});
-
-  final HomeController controller;
+  const MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bool darkModeIsON = controller.isDarkModeON;
-    final backgroundColor = darkModeIsON ? Colors.black : Colors.white;
-
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: backgroundColor,
-        appBar: AppBar(
-          elevation: 8,
-          title: Text(
-            "TreeView - App",
-            style: TextStyle(
-              color: darkModeIsON ? Colors.white : Colors.black,
-              fontSize: 18,
-            ),
-          ),
-          backgroundColor: backgroundColor,
-          actions: [
-            IconButton(
-              onPressed: controller.toggleAppearenceMode,
-              icon: Icon(
-                darkModeIsON ? Icons.light_mode : Icons.dark_mode,
-                color: darkModeIsON ? Colors.white : Colors.black,
-              ),
-            )
-          ],
-        ),
-        body: DataView(darkModeIsON: controller.isDarkModeON),
-      ),
-    );
+    return const DataView();
   }
 }

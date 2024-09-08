@@ -70,7 +70,7 @@ class Node<T extends TOString> {
     );
   }
 
-  int get getHeightUntilRoot {
+  int get getHeightFromNodeToRoot {
     int height = 0;
     Node? current = this;
 
@@ -80,6 +80,26 @@ class Node<T extends TOString> {
     }
 
     return height;
+  }
+
+  int get getHeight {
+    final Node rootNode = this;
+
+    if (rootNode.children!.isEmpty) {
+      // If a node has no children, it's a leaf node, so its height is 0.
+      return 0;
+    } else {
+      // Compute the height of each child node and find the maximum.
+      int maxHeight = 0;
+      for (var child in rootNode.children!) {
+        int childHeight = child.getHeight;
+        if (childHeight > maxHeight) {
+          maxHeight = childHeight;
+        }
+      }
+      // The height of the current node is 1 (for the edge to its highest child) plus the height of the highest child.
+      return maxHeight + 1;
+    }
   }
 
   Node<T>? toggleNode(Node<T> updatedNode) {
@@ -117,8 +137,6 @@ class Node<T extends TOString> {
     List<List<int>> pathsToEachNode = nodes
         .map((node) => _nodePath((innerNode) => innerNode.id == node.id))
         .toList();
-
-    print("pathsToEachNode $pathsToEachNode ${pathsToEachNode.isEmpty}");
 
     if (pathsToEachNode.isEmpty) return null;
 

@@ -2,10 +2,15 @@ import 'package:tree_view/core/models/person.dart';
 import 'package:tree_view/core/tree/init.dart';
 import 'package:tree_view/core/tree/node.dart';
 import 'package:flutter/material.dart';
+import 'package:tree_view/core/utils/extensions.dart';
 
 class AssetsController with ChangeNotifier {
   static final Node<Person> _emptyNode = Node<Person>(id: -1);
   static final Node<Person> _originalRoot = nodeRoot();
+
+  bool _scrollToTheEndOfData = false;
+
+  bool get scrollToTheEndOfData => _scrollToTheEndOfData;
 
   static Node<Person> _root = _originalRoot;
 
@@ -22,6 +27,10 @@ class AssetsController with ChangeNotifier {
 
   bool _isFilteringByText = false;
 
+  bool get isFilteringByAny {
+    return genderTypeFilter != none || _isFilteringByText;
+  }
+
   void toogleNodeView(Node<Person> node) {
     if (_isFilteringByText) _setRoot(_originalRoot);
 
@@ -35,14 +44,16 @@ class AssetsController with ChangeNotifier {
   }
 
   void searchByText(String text) {
-    debugPrint(text);
+    final String textToSearch = text.removeAccents().trim().toLowerCase();
+    debugPrint(textToSearch);
 
-    if (text.isNotEmpty) {
+    if (textToSearch.length >= 3) {
       _isFilteringByText = true;
       final newNode = root.rebuildTree(
         (node) {
-          return node.data?.name.toLowerCase().contains(text.toLowerCase()) ??
-              false;
+          final nodeDataNameToCompare =
+              node.data?.name.removeAccents().trim().toLowerCase();
+          return nodeDataNameToCompare?.contains(textToSearch) ?? false;
         },
       );
       _setRoot(newNode ?? _emptyNode);
@@ -50,16 +61,20 @@ class AssetsController with ChangeNotifier {
       _isFilteringByText = false;
       _setRoot(_originalRoot);
     }
+
+    notifyListeners();
   }
 
   void filterByMaleGender() {
     _setRoot(_originalRoot);
 
     if (genderTypeFilter == male) {
+      _scrollToTheEndOfData = false;
       genderTypeFilter = none;
 
       notifyListeners();
     } else {
+      _scrollToTheEndOfData = true;
       genderTypeFilter = male;
       _filterByGender();
     }
@@ -69,16 +84,20 @@ class AssetsController with ChangeNotifier {
     _setRoot(_originalRoot);
 
     if (genderTypeFilter == female) {
+      _scrollToTheEndOfData = false;
       genderTypeFilter = none;
 
       notifyListeners();
     } else {
+      _scrollToTheEndOfData = true;
       genderTypeFilter = female;
       _filterByGender();
     }
   }
 
   void _filterByGender() {
+    _scrollToTheEndOfData = true;
+
     final newNode = root.rebuildTree(
       (node) {
         return node.data?.gender == genderTypeFilter;

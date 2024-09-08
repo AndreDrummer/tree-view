@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class InputSearch extends StatefulWidget {
-  const InputSearch({super.key, required this.color, this.onSubmitted});
+  const InputSearch({super.key, required this.color, this.search});
 
-  final Function(String)? onSubmitted;
+  final Function(String)? search;
   final Color color;
 
   @override
@@ -24,7 +24,7 @@ class _InputSearchState extends State<InputSearch> {
       setState(() {
         _textEditingController.clear();
       });
-      widget.onSubmitted?.call("");
+      widget.search?.call("");
     }
   }
 
@@ -38,9 +38,11 @@ class _InputSearchState extends State<InputSearch> {
           setState(() {
             _textEditingController.text = value;
           });
+
+          widget.search?.call(_textEditingController.text);
         },
         style: TextStyle(color: widget.color),
-        onSubmitted: widget.onSubmitted,
+        onSubmitted: widget.search,
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
