@@ -174,16 +174,19 @@ class Node<T extends TOString> {
       final Node<T> node = _findNodeByPath(path.sublist(0, i + 1))!
           .copyWith(children: [], expanded: true);
 
-      if (childPosition < currentNode.children!.length) {
+      if (node.parent?.id == currentNode.id) {
         currentNode.children!.addChild(node, position: childPosition);
 
-        currentNode = currentNode.children![childPosition];
-      } else {
-        currentNode.children!.addChild(node, position: childPosition);
         if (childPosition < currentNode.children!.length) {
           currentNode = currentNode.children![childPosition];
-        } else if (childPosition <= currentNode.children!.length) {
-          currentNode = currentNode.children![childPosition - 1];
+        } else {
+          final containsRecord = currentNode.children!.containsChild(node);
+          final indexInserted = containsRecord.$3;
+          final inserted = containsRecord.$1;
+
+          if (inserted) {
+            currentNode = currentNode.children![indexInserted!];
+          }
         }
       }
     }
@@ -305,11 +308,11 @@ extension ListNode<T extends TOString> on List<Node<T>> {
     }
   }
 
-  (bool, Node<T>?) containsChild(Node<T> child) {
-    (bool, Node<T>?) contains = (false, null);
+  (bool, Node<T>?, int? index) containsChild(Node<T> child) {
+    (bool, Node<T>?, int? index) contains = (false, null, -1);
 
     for (final c in this) {
-      if (c.id == child.id) return (true, c);
+      if (c.id == child.id) return (true, c, indexOf(c));
     }
 
     return contains;
