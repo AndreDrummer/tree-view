@@ -115,7 +115,8 @@ class _DataViewState extends State<DataView> {
               ),
               floatingActionButton: AnimatedOpacity(
                 duration: Durations.extralong4,
-                opacity: controller.isFilteringByAny ? 1 : 0,
+                opacity:
+                    controller.isFilteringByAny && controller.hasData ? 1 : 0,
                 child: FloatingActionButton(
                   onPressed: scrollToTheBeginningOfData,
                   child: const Icon(Icons.arrow_upward_rounded),

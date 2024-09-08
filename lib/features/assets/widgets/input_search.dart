@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 
 class InputSearch extends StatefulWidget {
-  const InputSearch({super.key, required this.color, this.search});
+  const InputSearch({
+    super.key,
+    required this.color,
+    this.hintTextColor,
+    this.hintText,
+    this.search,
+  });
 
   final Function(String)? search;
+  final Color? hintTextColor;
+  final String? hintText;
   final Color color;
 
   @override
@@ -19,13 +27,11 @@ class _InputSearchState extends State<InputSearch> {
     super.initState();
   }
 
-  void onInputIconPressed() {
-    if (_textEditingController.text.isNotEmpty) {
-      setState(() {
-        _textEditingController.clear();
-      });
-      widget.search?.call("");
-    }
+  void clear() {
+    setState(() {
+      _textEditingController.clear();
+    });
+    widget.search?.call("");
   }
 
   @override
@@ -46,11 +52,17 @@ class _InputSearchState extends State<InputSearch> {
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
-          suffixIcon: IconButton(
-            onPressed: onInputIconPressed,
-            icon: Icon(
-              _textEditingController.text.isEmpty ? Icons.search : Icons.close,
-              color: widget.color,
+          hintStyle: TextStyle(color: widget.hintTextColor),
+          hintText: widget.hintText,
+          prefixIcon: Visibility(
+            visible: _textEditingController.text.isEmpty,
+            child: const Icon(Icons.search),
+          ),
+          suffixIcon: Visibility(
+            visible: _textEditingController.text.isNotEmpty,
+            child: IconButton(
+              onPressed: clear,
+              icon: const Icon(Icons.close),
             ),
           ),
           border: OutlineInputBorder(

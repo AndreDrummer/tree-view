@@ -16,6 +16,8 @@ class AssetsController with ChangeNotifier {
 
   Node<Person> get root => _root;
 
+  bool get hasData => root.id != -1;
+
   void _setRoot(Node<Person> node) {
     _root = node;
   }

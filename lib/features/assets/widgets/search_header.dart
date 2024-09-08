@@ -13,8 +13,8 @@ class SearchHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final elementsColor = darkModeIsON ? Colors.white : Colors.black;
     final headerBackgroundColor = darkModeIsON ? Colors.black : Colors.white;
+    final elementsColor = darkModeIsON ? Colors.white : Colors.black;
 
     return Consumer<HomeController>(
       builder: (context, homeController, _) {
@@ -26,6 +26,7 @@ class SearchHeader extends StatelessWidget {
                 children: [
                   InputSearch(
                     search: controller.searchByText,
+                    hintText: 'Buscar pessoa ou funcão',
                     color: elementsColor,
                   ),
                   Row(

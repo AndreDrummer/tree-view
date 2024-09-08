@@ -42,7 +42,7 @@ class TreeView extends StatelessWidget {
       builder: (context, homeController, _) {
         return Consumer<AssetsController>(
           builder: (context, controller, _) {
-            return node.id == -1
+            return !controller.hasData
                 ? const SizedBox.shrink()
                 : HorizontalScroll(
                     horizontalController: horizontalController,
