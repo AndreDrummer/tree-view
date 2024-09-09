@@ -1,12 +1,14 @@
-import 'package:tree_view/core/tree/node.dart';
+import 'package:tree_view/shared/simple_tree/models/parent.dart';
 
 enum PersonGender { female, male, none }
 
-class Person extends TOString {
+class Person extends Parent {
   PersonGender gender;
+  @override
   int? parentId;
   String name;
   bool fat;
+  @override
   int id;
 
   Person({

@@ -1,23 +1,18 @@
 typedef NodePath = List<int>;
 
-abstract class TOString {
-  @override
-  String toString();
-}
-
-class Node<T extends TOString> {
+class Node<T> {
   List<Node<T>>? children;
   Node<T>? parent;
   bool expanded;
+  T? value;
   int id;
-  T? data;
 
   Node({
     this.expanded = false,
     required this.id,
     this.children,
     this.parent,
-    this.data,
+    this.value,
   }) {
     children ??= [];
   }
@@ -113,13 +108,13 @@ class Node<T extends TOString> {
   Node<T> copyWith({
     List<Node<T>>? children,
     bool? expanded,
+    T? value,
     int? id,
-    T? data,
   }) {
     return Node<T>(
       children: children ?? this.children,
       expanded: expanded ?? this.expanded,
-      data: data ?? this.data,
+      value: value ?? this.value,
       id: id ?? this.id,
       parent: parent,
     );
@@ -208,9 +203,9 @@ class Node<T extends TOString> {
   @override
   String toString() {
     return '''
-      children: ${children!.map((e) => e.data.toString())}
+      children: ${children!.map((e) => e.value.toString())}
+      data: ${value.toString()}
       parent: ${parent?.id}
-      data: ${data.toString()}
       expanded: $expanded
       id: $id
     ''';
@@ -225,7 +220,7 @@ extension ListInt on List<int> {
   }
 }
 
-extension ListNode<T extends TOString> on List<Node<T>> {
+extension ListNode<T> on List<Node<T>> {
   void addChild(Node<T> child, {int? position}) {
     final contains = containsChild(child);
 

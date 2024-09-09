@@ -1,25 +1,39 @@
-import 'package:tree_view/core/widgets/custom_app_bar.dart';
 import 'package:tree_view/core/widgets/custom_scroll_with_fixed_widget.dart';
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
+import 'package:tree_view/features/home/controller/home_controller.dart';
 import 'package:tree_view/features/assets/widgets/search_header.dart';
-import 'package:tree_view/features/assets/widgets/tree_view.dart';
+import 'package:tree_view/shared/simple_tree/models/parent.dart';
+import 'package:tree_view/shared/simple_tree/tree_manager.dart';
+import 'package:tree_view/shared/simple_tree/widgets/tree.dart';
+import 'package:tree_view/core/widgets/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:tree_view/features/home/controller/home_controller.dart';
 
-class DataView extends StatefulWidget {
-  const DataView({super.key});
+class DataView<T> extends StatefulWidget {
+  const DataView({
+    super.key,
+    required this.nodeRowTitle,
+    required this.onItemTap,
+    required this.dataList,
+  });
+
+  final String Function(T data) nodeRowTitle;
+  final Function()? onItemTap;
+
+  final List<Parent> dataList;
 
   @override
-  State<DataView> createState() => _DataViewState();
+  State<DataView<T>> createState() => _DataViewState<T>();
 }
 
-class _DataViewState extends State<DataView> {
+class _DataViewState<T> extends State<DataView<T>> {
+  late final TreeManager _treeInstance;
   late final ScrollController horizontalScrollController;
   late final ScrollController verticalScrollController;
 
   @override
   void initState() {
+    _treeInstance = TreeManager.instance(widget.dataList);
     horizontalScrollController = ScrollController();
     verticalScrollController = ScrollController();
     super.initState();
@@ -103,22 +117,27 @@ class _DataViewState extends State<DataView> {
                     darkModeIsON: darkModeIsON,
                     scrollFunction: (isToScroll) {
                       final horizontalJumpTo = calculatesHorizontalScrolling(
-                        controller.root.getHeight,
+                        _treeInstance.treeRoot.getHeight,
                       );
 
                       scrollToTheEndOfData(
-                        rootHeight: controller.root.getHeight,
+                        rootHeight: _treeInstance.treeRoot.getHeight,
                         horizontalJumpTo: horizontalJumpTo,
                         verticalJumpTo: sizeOf.height,
                         isToScroll,
                       );
                     },
                   ),
-                  TreeView(
-                    controller.root,
+                  Tree(
                     darkModeIsON: darkModeIsON,
+                    nodeRowTitle: (data) {
+                      return widget.nodeRowTitle(data as T);
+                    },
+                    _treeInstance.treeRoot,
                     toggleNodeView: (node) {
-                      controller.toogleNodeView(node);
+                      setState(() {
+                        _treeInstance.toogleNodeView(node);
+                      });
                     },
                     horizontalController: horizontalScrollController,
                   ),
@@ -126,9 +145,7 @@ class _DataViewState extends State<DataView> {
               ),
               floatingActionButton: AnimatedOpacity(
                 duration: Durations.extralong4,
-                opacity: showBackToTopButton(
-                  controller.isFilteringByAny && controller.hasData,
-                ),
+                opacity: showBackToTopButton(controller.isFilteringByAny),
                 child: FloatingActionButton(
                   onPressed: scrollToTheBeginningOfData,
                   child: const Icon(Icons.arrow_upward_rounded),

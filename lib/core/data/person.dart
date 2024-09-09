@@ -1,8 +1,8 @@
 import 'package:tree_view/core/models/person.dart';
 
-final data = [
+final dataPerson = [
   Person(
-    id: 1,
+    id: 0,
     name: "José Francisco e Maria de Jesus",
     gender: PersonGender.male,
     fat: false,
@@ -11,7 +11,7 @@ final data = [
     id: 2,
     name: "Edna Jesus",
     gender: PersonGender.female,
-    parentId: 1,
+    parentId: 0,
     fat: false,
   ),
   Person(
@@ -59,7 +59,7 @@ final data = [
   Person(
     gender: PersonGender.female,
     name: "Erika Jesus",
-    parentId: 1,
+    parentId: 0,
     id: 3,
     fat: false,
   ),
@@ -129,7 +129,7 @@ final data = [
   Person(
     gender: PersonGender.male,
     name: "Edson Jesus",
-    parentId: 1,
+    parentId: 0,
     id: 4,
     fat: true,
   ),
@@ -157,14 +157,14 @@ final data = [
   Person(
     gender: PersonGender.male,
     name: "Eudes Jesus",
-    parentId: 1,
+    parentId: 0,
     id: 5,
     fat: false,
   ),
   Person(
     gender: PersonGender.female,
     name: "Hélida Jesus",
-    parentId: 1,
+    parentId: 0,
     id: 6,
     fat: true,
   ),
@@ -185,7 +185,7 @@ final data = [
   Person(
     gender: PersonGender.male,
     name: "Ricardo Jesus",
-    parentId: 1,
+    parentId: 0,
     id: 50,
     fat: false,
   ),
@@ -325,3 +325,19 @@ final data = [
     fat: true,
   ),
 ];
+
+// TODO: delete this...
+final test = Person(
+  name: "José Francisco e Maria de Jesus",
+  gender: PersonGender.male,
+  fat: false,
+  id: 1,
+);
+
+final test2 = Person(
+  gender: PersonGender.female,
+  name: "Edna Jesus",
+  parentId: 0,
+  fat: false,
+  id: 2,
+);
