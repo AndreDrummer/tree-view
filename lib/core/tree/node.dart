@@ -126,10 +126,28 @@ class Node<T extends TOString> {
   }
 
   List<int> nodePath(bool Function(Node<T>) predicate) {
-    List<int> idList = findPath(predicate) ?? [];
+    List<int> idList = _findPath(predicate) ?? [];
 
     // skip the root node
     return _convertIDListToPosList(idList.sublist(1));
+  }
+
+  List<int> _convertIDListToPosList(List<int> ids) {
+    Node<T> currentNode = this;
+    List<int> pos = [];
+
+    for (final id in ids) {
+      currentNode = currentNode.children!.where((el) {
+        if (el.id == id) {
+          pos.add(currentNode.children!.indexOf(el));
+          return true;
+        } else {
+          return false;
+        }
+      }).toList()[0];
+    }
+
+    return pos;
   }
 
   /// Why do not use the [parent] property?
@@ -158,7 +176,7 @@ class Node<T extends TOString> {
   }
 
 // DFS function to find the path from start to target
-  List<int>? findPath(
+  List<int>? _findPath(
     bool Function(Node<T>) predicate, {
     List<int>? map,
   }) {
@@ -175,7 +193,7 @@ class Node<T extends TOString> {
     // Recursively search through each child
     for (Node<T> child in (this).children!) {
       map.addIfAbsent(child.id);
-      List<int>? result = child.findPath(predicate, map: map);
+      List<int>? result = child._findPath(predicate, map: map);
       if (result != null) {
         return result; // Return if the path is found
       }
@@ -185,24 +203,6 @@ class Node<T extends TOString> {
     }
 
     return null; // Return null if no path found
-  }
-
-  List<int> _convertIDListToPosList(List<int> ids) {
-    Node<T> currentNode = this;
-    List<int> pos = [];
-
-    for (final id in ids) {
-      currentNode = currentNode.children!.where((el) {
-        if (el.id == id) {
-          pos.add(currentNode.children!.indexOf(el));
-          return true;
-        } else {
-          return false;
-        }
-      }).toList()[0];
-    }
-
-    return pos;
   }
 
   @override

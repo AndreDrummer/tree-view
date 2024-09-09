@@ -41,6 +41,40 @@ class TreeUtils<T extends TOString> {
     return null;
   }
 
+  Node<T>? rebuild(bool Function(Node<T>) predicate) {
+    List<Node<T>> nodes = [];
+
+    bfsTraversal(
+      process: (node) {
+        if (predicate(node)) {
+          nodes.add(node);
+        }
+      },
+      rootNode: _root,
+    );
+
+    List<NodePath> pathsToEachNode = _nodePathList(nodes);
+
+    if (pathsToEachNode.isEmpty) return null;
+
+    Node<T> newTree = _root.copyWith(
+      expanded: true,
+      children: [],
+    );
+
+    for (final path in pathsToEachNode) {
+      if (path.isNotEmpty) {
+        if (path.length == 1) {
+          newTree = _addNodeImmediateChildren(newTree, path);
+        } else {
+          newTree = _addNestedNodes(newTree, path);
+        }
+      }
+    }
+
+    return newTree;
+  }
+
   Node<T>? _findNodeByPath(NodePath ids) {
     Node<T> current = _root;
 
@@ -55,54 +89,29 @@ class TreeUtils<T extends TOString> {
     return current;
   }
 
-  Node<T>? rebuild(bool Function(Node<T>) predicate) {
-    List<Node<T>> nodes = [];
-
-    bfsTraversal(
-      process: (node) {
-        if (predicate(node)) {
-          nodes.add(node);
-        }
-      },
-      rootNode: _root,
-    );
-
-    List<List<int>> pathsToEachNode = nodes
+  List<NodePath> _nodePathList(List<Node<T>> nodes) {
+    return nodes
         .map((node) => _root.nodePath((innerNode) => innerNode.id == node.id))
         .toList();
+  }
 
-    if (pathsToEachNode.isEmpty) return null;
+  Node<T> _addNodeImmediateChildren(Node<T> rootNode, NodePath path) {
+    final currentChildren = rootNode.children;
+    Node<T>? newChildren = _findNodeByPath(path);
 
-    Node<T> newTree = _root.copyWith(
-      expanded: true,
+    newChildren ??= _root.children!.elementAt(path.last);
+
+    newChildren = newChildren.copyWith(
       children: [],
+      expanded: true,
     );
 
-    for (final path in pathsToEachNode) {
-      if (path.isNotEmpty) {
-        if (path.length == 1) {
-          final currentChildren = newTree.children;
-          Node<T>? newChildren = _findNodeByPath(path);
-
-          newChildren ??= _root.children!.elementAt(path.last);
-
-          newChildren = newChildren.copyWith(
-            children: [],
-            expanded: true,
-          );
-
-          currentChildren!.addChild(
-            newChildren,
-            position: path.last,
-          );
-          newTree.copyWith(children: currentChildren);
-        } else {
-          newTree = _addNestedNodes(newTree, path);
-        }
-      }
-    }
-
-    return newTree;
+    currentChildren!.addChild(
+      newChildren,
+      position: path.last,
+    );
+    rootNode.copyWith(children: currentChildren);
+    return rootNode;
   }
 
   Node<T> _addNestedNodes(Node<T> rootNode, NodePath path) {
