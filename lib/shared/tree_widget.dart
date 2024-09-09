@@ -1,41 +1,57 @@
-import 'package:tree_view/core/widgets/custom_scroll_with_fixed_widget.dart';
+import 'package:tree_view/shared/simple_tree/widgets/custom_scroll_with_fixed_widget.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
+import 'package:tree_view/shared/simple_tree/builder/tree_manager.dart';
+import 'package:tree_view/shared/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/shared/simple_tree/models/parent.dart';
-import 'package:tree_view/shared/simple_tree/tree_manager.dart';
 import 'package:tree_view/shared/simple_tree/widgets/tree.dart';
 import 'package:tree_view/core/widgets/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-class DataView<T> extends StatefulWidget {
-  const DataView({
+class TreeWidget<T> extends StatefulWidget {
+  const TreeWidget({
     super.key,
+    this.alwaysScrollToTheEndOfData = true,
     required this.breadCrumbLinesColor,
-    this.scrollToTheEndOfData = true,
     required this.elementsColor,
-    required this.nodeRowTitle,
+    required this.nodeConfig,
     required this.dataList,
     this.backgroundColor,
     this.backToTopButton,
   });
 
-  final String Function(T data) nodeRowTitle;
+  final List<Parent> dataList;
+
+  final bool alwaysScrollToTheEndOfData;
   final Color breadCrumbLinesColor;
-  final bool scrollToTheEndOfData;
   final Widget? backToTopButton;
   final Color? backgroundColor;
-  final List<Parent> dataList;
   final Color elementsColor;
 
+  // Properties related to the row
+  final NodeRowConfig Function(T data) nodeConfig;
+
   @override
-  State<DataView<T>> createState() => _DataViewState<T>();
+  State<TreeWidget<T>> createState() => _TreeWidgetState<T>();
 }
 
-class _DataViewState<T> extends State<DataView<T>> {
-  late final TreeManager _treeInstance;
+class _TreeWidgetState<T> extends State<TreeWidget<T>> {
   late final ScrollController horizontalScrollController;
   late final ScrollController verticalScrollController;
+  late final TreeManager _treeInstance;
+
   double backToTopButtonOpacity = 0;
+
+  Widget backToTopWidget() {
+    if (widget.backToTopButton == null) {
+      return FloatingActionButton(
+        onPressed: scrollToTheBeginningOfData,
+        child: const Icon(Icons.arrow_upward_rounded),
+      );
+    } else {
+      return widget.backToTopButton!;
+    }
+  }
 
   @override
   void initState() {
@@ -52,6 +68,50 @@ class _DataViewState<T> extends State<DataView<T>> {
     });
 
     super.initState();
+  }
+
+  NodeRowConfig nodeConfig(data) {
+    return widget.nodeConfig(data as T);
+  }
+
+  void onNodeToggled(node) {
+    setState(() {
+      _treeInstance.toogleNodeView(node);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<HomeController>(builder: (context, homeController, _) {
+      final sizeOf = MediaQuery.sizeOf(context);
+
+      return SafeArea(
+        child: Scaffold(
+          backgroundColor: widget.backgroundColor,
+          body: CustomScrollWithFixedWidget(
+            scrollToTheEndOfData: widget.alwaysScrollToTheEndOfData,
+            scrollController: verticalScrollController,
+            jumpToWhenScrolling: sizeOf.height,
+            fixedWidget: const CustomAppBar(),
+            scrollables: [
+              Tree(
+                _treeInstance.treeRoot,
+                breadCrumbLinesColor: widget.breadCrumbLinesColor,
+                horizontalController: horizontalScrollController,
+                elementsColor: widget.elementsColor,
+                toggleNodeView: onNodeToggled,
+                nodeRowConfig: nodeConfig,
+              ),
+            ],
+          ),
+          floatingActionButton: AnimatedOpacity(
+            duration: Durations.medium2,
+            opacity: backToTopButtonOpacity,
+            child: backToTopWidget(),
+          ),
+        ),
+      );
+    });
   }
 
   void scrollToTheEndOfData(
@@ -91,7 +151,7 @@ class _DataViewState<T> extends State<DataView<T>> {
     return (treeHeight * treeHeight).toDouble();
   }
 
-  void lepo(bool isToScroll, double verticalJumpTo) {
+  void scrollWhenFilter(bool isToScroll, double verticalJumpTo) {
     final horizontalJumpTo = calculatesHorizontalScrolling(
       _treeInstance.treeRoot.getHeight,
     );
@@ -102,53 +162,5 @@ class _DataViewState<T> extends State<DataView<T>> {
       verticalJumpTo: verticalJumpTo,
       isToScroll,
     );
-  }
-
-  Widget backToTopWidget() {
-    return widget.backToTopButton ??
-        FloatingActionButton(
-          onPressed: scrollToTheBeginningOfData,
-          child: const Icon(Icons.arrow_upward_rounded),
-        );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<HomeController>(builder: (context, homeController, _) {
-      final sizeOf = MediaQuery.sizeOf(context);
-
-      return SafeArea(
-        child: Scaffold(
-          backgroundColor: widget.backgroundColor,
-          body: CustomScrollWithFixedWidget(
-            scrollToTheEndOfData: widget.scrollToTheEndOfData,
-            scrollController: verticalScrollController,
-            jumpToWhenScrolling: sizeOf.height,
-            fixedWidget: const CustomAppBar(),
-            scrollables: [
-              Tree(
-                nodeRowTitle: (data) {
-                  return widget.nodeRowTitle(data as T);
-                },
-                _treeInstance.treeRoot,
-                toggleNodeView: (node) {
-                  setState(() {
-                    _treeInstance.toogleNodeView(node);
-                  });
-                },
-                breadCrumbLinesColor: widget.breadCrumbLinesColor,
-                horizontalController: horizontalScrollController,
-                elementsColor: widget.elementsColor,
-              ),
-            ],
-          ),
-          floatingActionButton: AnimatedOpacity(
-            duration: Durations.medium2,
-            opacity: backToTopButtonOpacity,
-            child: backToTopWidget(),
-          ),
-        ),
-      );
-    });
   }
 }

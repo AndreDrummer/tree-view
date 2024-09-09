@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:tree_view/shared/simple_tree/models/node_data.dart';
 import 'package:tree_view/shared/simple_tree/models/parent.dart';
-import 'package:tree_view/shared/simple_tree/node.dart';
+import 'package:tree_view/shared/simple_tree/builder/node.dart';
 import 'dart:collection';
 
 import 'package:tree_view/shared/simple_tree/utils/extensions.dart';

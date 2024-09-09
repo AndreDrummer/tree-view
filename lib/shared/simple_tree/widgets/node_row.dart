@@ -1,38 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:tree_view/shared/simple_tree/models/node_data.dart';
-import 'package:tree_view/shared/simple_tree/node.dart';
+import 'package:tree_view/shared/simple_tree/builder/node.dart';
+import 'package:tree_view/shared/simple_tree/models/node_row_dto.dart';
 
 class NodeRow<T> extends StatelessWidget {
   const NodeRow(
     this.node, {
     required this.breadCrumbLineColor,
     required this.elementsColor,
-    this.prefixIconColor,
-    this.suffixIconColor,
-    this.prefixIconSize,
-    this.suffixIconSize,
-    required this.title,
-    this.prefixIcon,
-    this.suffixIcon,
+    required this.nodeRowConfig,
     this.onPressed,
     super.key,
   });
 
+  final NodeRowConfig Function(T data) nodeRowConfig;
   final Node<NodeData<T>> node;
 
   final void Function()? onPressed;
   final Color breadCrumbLineColor;
-  final Color? prefixIconColor;
-  final double? prefixIconSize;
-  final double? suffixIconSize;
-  final Color? suffixIconColor;
-  final IconData? prefixIcon;
-  final IconData? suffixIcon;
   final Color elementsColor;
-  final String title;
 
   @override
   Widget build(BuildContext context) {
+    final nodeConfig = nodeRowConfig(node.value!.data!);
+
     return Row(
       children: [
         Visibility(
@@ -52,35 +43,37 @@ class NodeRow<T> extends StatelessWidget {
             ),
           ),
         ),
-        _prefixIcon(context),
+        _prefixIcon(context, nodeConfig),
         TextButton(
           onPressed: onPressed,
           child: Text(
-            title,
+            nodeConfig.title,
             style: TextStyle(color: elementsColor, fontSize: 18),
           ),
         ),
-        _suffixIcon(context),
+        _suffixIcon(context, nodeConfig),
       ],
     );
   }
 
-  Widget _suffixIcon(BuildContext context) {
-    if (suffixIcon != null) {
+  Widget _suffixIcon(BuildContext context, NodeRowConfig nodeConfig) {
+    if (nodeConfig.suffixIcon != null) {
       final Color? iconColor =
-          suffixIconColor ?? Theme.of(context).iconTheme.color;
+          nodeConfig.suffixIconColor ?? Theme.of(context).iconTheme.color;
 
-      return Icon(suffixIcon!, color: iconColor, size: suffixIconSize);
+      return Icon(nodeConfig.suffixIcon!,
+          color: iconColor, size: nodeConfig.suffixIconSize);
     }
     return Container();
   }
 
-  Widget _prefixIcon(BuildContext context) {
-    if (prefixIcon != null) {
+  Widget _prefixIcon(BuildContext context, NodeRowConfig nodeConfig) {
+    if (nodeConfig.prefixIcon != null) {
       final Color? iconColor =
-          prefixIconColor ?? Theme.of(context).iconTheme.color;
+          nodeConfig.prefixIconColor ?? Theme.of(context).iconTheme.color;
 
-      return Icon(prefixIcon!, color: iconColor, size: prefixIconSize);
+      return Icon(nodeConfig.prefixIcon!,
+          color: iconColor, size: nodeConfig.prefixIconSize);
     }
     return Container();
   }
