@@ -13,22 +13,24 @@ class Tree<T> extends StatelessWidget {
     this.node, {
     super.key,
     required this.horizontalController,
+    required this.breadCrumbLinesColor,
     this.allowHorizontalScrool = true,
     this.scrollToTheEndOfData = true,
     this.allowVerticalScrool = true,
+    required this.elementsColor,
     required this.nodeRowTitle,
-    this.darkModeIsON = true,
     this.toggleNodeView,
   });
 
   final void Function(Node<NodeData<T>> node)? toggleNodeView;
   final ScrollController horizontalController;
   final String Function(T data) nodeRowTitle;
+  final Color breadCrumbLinesColor;
   final bool allowHorizontalScrool;
   final bool scrollToTheEndOfData;
   final bool allowVerticalScrool;
   final Node<NodeData<T>> node;
-  final bool darkModeIsON;
+  final Color elementsColor;
 
   int lineBreadCrumbHeight() {
     int descendentsShowing = node.numberOfDescendentsShowingUp;
@@ -59,8 +61,9 @@ class Tree<T> extends StatelessWidget {
                   NodeRow(
                     node,
                     onPressed: () => toggleNodeView?.call(node),
+                    breadCrumbLineColor: breadCrumbLinesColor,
                     title: nodeRowTitle(node.value!.data),
-                    darkModeIsON: darkModeIsON,
+                    elementsColor: elementsColor,
                   ),
                   Visibility(
                     visible: node.expanded,
@@ -69,7 +72,7 @@ class Tree<T> extends StatelessWidget {
                       children: [
                         LineBreadCrumb(
                           lineBreadCrumbHeight(),
-                          darkModeIsON: darkModeIsON,
+                          elementColor: breadCrumbLinesColor,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,10 +82,11 @@ class Tree<T> extends StatelessWidget {
                               toggleNodeView: (node) {
                                 toggleNodeView?.call(node);
                               },
+                              breadCrumbLinesColor: breadCrumbLinesColor,
                               horizontalController: ScrollController(),
                               allowHorizontalScrool: false,
+                              elementsColor: elementsColor,
                               scrollToTheEndOfData: false,
-                              darkModeIsON: darkModeIsON,
                               allowVerticalScrool: false,
                               nodeRowTitle: nodeRowTitle,
                             );

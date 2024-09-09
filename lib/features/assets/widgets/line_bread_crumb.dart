@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class LineBreadCrumb extends StatelessWidget {
-  const LineBreadCrumb(this.lineHeight,
-      {super.key, required this.darkModeIsON});
+  const LineBreadCrumb(this.lineHeight, {super.key, this.elementColor});
 
-  final bool darkModeIsON;
+  final Color? elementColor;
   final int lineHeight;
 
   @override
@@ -13,7 +12,7 @@ class LineBreadCrumb extends StatelessWidget {
       margin: const EdgeInsets.only(left: 24),
       width: 1,
       height: lineHeight.toDouble(),
-      color: darkModeIsON ? Colors.white24 : Colors.black12,
+      color: elementColor,
     );
   }
 }

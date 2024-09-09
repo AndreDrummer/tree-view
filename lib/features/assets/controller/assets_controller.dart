@@ -44,8 +44,6 @@ class AssetsController with ChangeNotifier {
     if (genderTypeFilter == male) {
       _scrollToTheEndOfData = false;
       genderTypeFilter = none;
-
-      notifyListeners();
     } else {
       _scrollToTheEndOfData = true;
       genderTypeFilter = male;
@@ -57,8 +55,6 @@ class AssetsController with ChangeNotifier {
     if (genderTypeFilter == female) {
       _scrollToTheEndOfData = false;
       genderTypeFilter = none;
-
-      notifyListeners();
     } else {
       _scrollToTheEndOfData = true;
       genderTypeFilter = female;
@@ -72,9 +68,5 @@ class AssetsController with ChangeNotifier {
     bool predicate(Person person) {
       return person.gender == genderTypeFilter;
     }
-
-    // _treeInstance.rebuild(predicate, shouldResetTree: true);
-
-    notifyListeners();
   }
 }

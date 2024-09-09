@@ -5,7 +5,8 @@ import 'package:tree_view/shared/simple_tree/node.dart';
 class NodeRow<T> extends StatelessWidget {
   const NodeRow(
     this.node, {
-    this.darkModeIsON = true,
+    required this.breadCrumbLineColor,
+    required this.elementsColor,
     this.prefixIconColor,
     this.suffixIconColor,
     this.prefixIconSize,
@@ -20,25 +21,24 @@ class NodeRow<T> extends StatelessWidget {
   final Node<NodeData<T>> node;
 
   final void Function()? onPressed;
+  final Color breadCrumbLineColor;
   final Color? prefixIconColor;
   final double? prefixIconSize;
   final double? suffixIconSize;
   final Color? suffixIconColor;
   final IconData? prefixIcon;
   final IconData? suffixIcon;
-  final bool darkModeIsON;
+  final Color elementsColor;
   final String title;
 
   @override
   Widget build(BuildContext context) {
-    final color = darkModeIsON ? Colors.white : Colors.black;
-
     return Row(
       children: [
         Visibility(
           visible: node.hasChildren,
           replacement: Container(
-            color: darkModeIsON ? Colors.white24 : Colors.black12,
+            color: breadCrumbLineColor,
             height: 1,
             width: 49,
           ),
@@ -48,7 +48,7 @@ class NodeRow<T> extends StatelessWidget {
               !node.hasChildren || !node.expanded
                   ? Icons.keyboard_arrow_right_outlined
                   : Icons.keyboard_arrow_down,
-              color: color,
+              color: elementsColor,
             ),
           ),
         ),
@@ -57,7 +57,7 @@ class NodeRow<T> extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             title,
-            style: TextStyle(color: color, fontSize: 18),
+            style: TextStyle(color: elementsColor, fontSize: 18),
           ),
         ),
         _suffixIcon(context),

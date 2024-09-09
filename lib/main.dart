@@ -1,7 +1,7 @@
-import 'package:tree_view/core/models/person.dart';
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
 import 'package:tree_view/features/assets/widgets/data_view.dart';
+import 'package:tree_view/core/models/person.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -46,13 +46,24 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AssetsController>(
-      builder: (context, controller, _) {
-        return DataView<Person>(
-          dataList: controller.data,
-          onItemTap: () {},
-          nodeRowTitle: (Person data) {
-            return data.name;
+    return Consumer<HomeController>(
+      builder: (context, homeController, _) {
+        final bool darkMode = homeController.isDarkModeON;
+        final Color breadCrumbLinesColor =
+            darkMode ? Colors.white12 : Colors.black12;
+        final Color elementsColor = darkMode ? Colors.white : Colors.black;
+
+        return Consumer<AssetsController>(
+          builder: (context, controller, _) {
+            return DataView<Person>(
+              dataList: controller.data,
+              nodeRowTitle: (Person data) {
+                return data.name;
+              },
+              backgroundColor: darkMode ? Colors.black : Colors.white,
+              breadCrumbLinesColor: breadCrumbLinesColor,
+              elementsColor: elementsColor,
+            );
           },
         );
       },
