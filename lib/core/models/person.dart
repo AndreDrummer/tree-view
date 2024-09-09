@@ -1,4 +1,4 @@
-import 'package:tree_view/shared/simple_tree/models/parent.dart';
+import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 
 enum PersonGender { female, male, none }
 

@@ -1,9 +1,9 @@
-import 'package:tree_view/shared/simple_tree/widgets/custom_scroll_with_fixed_widget.dart';
+import 'package:tree_view/simple_tree/widgets/custom_scroll_with_fixed_widget.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
-import 'package:tree_view/shared/simple_tree/builder/tree_manager.dart';
-import 'package:tree_view/shared/simple_tree/models/node_row_dto.dart';
-import 'package:tree_view/shared/simple_tree/models/parent.dart';
-import 'package:tree_view/shared/simple_tree/widgets/tree.dart';
+import 'package:tree_view/simple_tree/builder/tree_manager.dart';
+import 'package:tree_view/simple_tree/models/node_row_dto.dart';
+import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
+import 'package:tree_view/simple_tree/widgets/tree.dart';
 import 'package:tree_view/core/widgets/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +89,7 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
         child: Scaffold(
           backgroundColor: widget.backgroundColor,
           body: CustomScrollWithFixedWidget(
-            scrollToTheEndOfData: widget.alwaysScrollToTheEndOfData,
+            scrollToTheEnd: widget.alwaysScrollToTheEndOfData,
             scrollController: verticalScrollController,
             jumpToWhenScrolling: sizeOf.height,
             fixedWidget: const CustomAppBar(),

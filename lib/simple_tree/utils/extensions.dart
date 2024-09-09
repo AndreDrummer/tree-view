@@ -1,4 +1,4 @@
-import 'package:tree_view/shared/simple_tree/models/node_data.dart';
+import 'package:tree_view/simple_tree/models/node_data.dart';
 
 extension DataToNodeData<T> on T {
   NodeData<T> toNodeData(int id) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tree_view/shared/simple_tree/models/node_data.dart';
-import 'package:tree_view/shared/simple_tree/builder/node.dart';
-import 'package:tree_view/shared/simple_tree/models/node_row_dto.dart';
+import 'package:tree_view/simple_tree/models/node_data.dart';
+import 'package:tree_view/simple_tree/builder/node.dart';
+import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 
 class NodeRow<T> extends StatelessWidget {
   const NodeRow(

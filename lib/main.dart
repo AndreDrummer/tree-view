@@ -1,8 +1,8 @@
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
-import 'package:tree_view/shared/simple_tree/models/node_row_dto.dart';
+import 'package:tree_view/simple_tree/models/node_row_dto.dart';
+import 'package:tree_view/simple_tree/widget_tree.dart';
 import 'package:tree_view/core/models/person.dart';
-import 'package:tree_view/shared/tree_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -45,6 +45,18 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
+  Widget treeWidget(List<Person> seedData, bool darkMode) {
+    return WidgetTree<Person>(
+      dataList: seedData,
+      nodeConfig: (Person data) {
+        return nodeRow(data, darkMode);
+      },
+      breadCrumbLinesColor: darkMode ? Colors.white12 : Colors.black12,
+      backgroundColor: darkMode ? Colors.black : Colors.white,
+      elementsColor: darkMode ? Colors.white : Colors.black,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeController>(
@@ -53,15 +65,7 @@ class MyHomePage extends StatelessWidget {
 
         return Consumer<AssetsController>(
           builder: (context, controller, _) {
-            return TreeWidget<Person>(
-              dataList: controller.data,
-              nodeConfig: (Person data) {
-                return nodeRow(data, darkMode);
-              },
-              breadCrumbLinesColor: darkMode ? Colors.white12 : Colors.black12,
-              backgroundColor: darkMode ? Colors.black : Colors.white,
-              elementsColor: darkMode ? Colors.white : Colors.black,
-            );
+            return treeWidget(controller.data, darkMode);
           },
         );
       },

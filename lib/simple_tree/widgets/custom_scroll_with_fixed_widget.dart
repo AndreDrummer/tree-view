@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomScrollWithFixedWidget extends StatefulWidget {
   const CustomScrollWithFixedWidget({
     super.key,
-    this.scrollToTheEndOfData = false,
+    this.scrollToTheEnd = false,
     required this.scrollController,
     this.jumpToWhenScrolling = 0,
     required this.fixedWidget,
@@ -12,7 +12,7 @@ class CustomScrollWithFixedWidget extends StatefulWidget {
 
   final ScrollController scrollController;
   final double jumpToWhenScrolling;
-  final bool scrollToTheEndOfData;
+  final bool scrollToTheEnd;
   final List<Widget> scrollables;
   final Widget fixedWidget;
 
@@ -30,7 +30,7 @@ class _CustomScrollWithFixedWidgetState
     super.initState();
     scrollController = widget.scrollController;
 
-    if (widget.scrollToTheEndOfData) {
+    if (widget.scrollToTheEnd) {
       Future.delayed(
         const Duration(seconds: 1),
         () => scrollController.animateTo(

@@ -1,10 +1,10 @@
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
-import 'package:tree_view/shared/simple_tree/models/node_row_dto.dart';
-import 'package:tree_view/shared/simple_tree/widgets/horizontal_scroll.dart';
-import 'package:tree_view/shared/simple_tree/widgets/line_bread_crumb.dart';
+import 'package:tree_view/simple_tree/models/node_row_dto.dart';
+import 'package:tree_view/simple_tree/widgets/horizontal_scroll.dart';
+import 'package:tree_view/simple_tree/widgets/line_bread_crumb.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
-import 'package:tree_view/shared/simple_tree/models/node_data.dart';
-import 'package:tree_view/shared/simple_tree/widgets/node_row.dart';
+import 'package:tree_view/simple_tree/models/node_data.dart';
+import 'package:tree_view/simple_tree/widgets/node_row.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../builder/node.dart';
