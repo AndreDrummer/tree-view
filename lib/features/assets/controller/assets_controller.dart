@@ -1,7 +1,7 @@
 import 'package:tree_view/core/utils/extensions.dart';
 import 'package:tree_view/core/models/person.dart';
 import 'package:tree_view/core/data/person.dart';
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 typedef Predicate<Person> = bool Function(Person item);
 
@@ -10,29 +10,29 @@ enum FilterType {
   text,
 }
 
-class AssetsController with ChangeNotifier {
-  final List<Person> _data = dataPerson;
+class AssetsController extends GetxController {
+  Rx<PersonGender> genderTypeFilter = PersonGender.none.obs;
+  final RxList<Person> _data = dataPerson.obs;
+  final RxString _textToSearch = "".obs;
 
-  List<Person> get data => _data;
-
-  String _textToSearch = "";
-
-  String get textToSearch => _textToSearch;
-  bool get resetDataOnFilter => false;
-
-  PersonGender genderTypeFilter = PersonGender.none;
+  // Getters
+  bool get isFilteringByFemale => genderTypeFilter.value == female;
+  bool get isFilteringByMale => genderTypeFilter.value == male;
+  bool get isFilteringByAny => _predicateMap.isNotEmpty;
+  String get textToSearch => _textToSearch.value;
   PersonGender get female => PersonGender.female;
   PersonGender get male => PersonGender.male;
   PersonGender get none => PersonGender.none;
+  bool get resetDataOnFilter => false;
+  List<Person> get data => _data;
 
-  bool get isFilteringByAny => _predicateList.isNotEmpty;
-
-  Map<FilterType, Predicate<Person>> _predicateList = {};
+  final RxMap<FilterType, Predicate<Person>> _predicateMap =
+      <FilterType, Predicate<Person>>{}.obs;
 
   bool Function(Person) get filterPredicate {
     return (Person item) {
       // Combine all predicates using AND logic
-      for (var predicate in _predicateList.entries) {
+      for (var predicate in _predicateMap.entries) {
         if (!predicate.value(item)) {
           return false; // If any predicate returns false, the result is false
         }
@@ -41,20 +41,20 @@ class AssetsController with ChangeNotifier {
     };
   }
 
-  void _resetPredicates() => _predicateList = {};
+  void _resetPredicates() => _predicateMap.clear();
 
   void setSearchText(String text) {
-    _textToSearch = text;
+    _textToSearch(text);
     searchByText();
   }
 
   void _clearSearchText() {
-    _textToSearch = "";
+    _textToSearch("");
   }
 
   void searchByText() {
     final String finalText = textToSearch.removeAccents().trim().toLowerCase();
-    _predicateList.removeWhere((k, v) => k == FilterType.text);
+    _predicateMap.value = {..._predicateMap}..remove(FilterType.text);
 
     if (finalText.length >= 3) {
       bool predicate(Person person) {
@@ -62,41 +62,38 @@ class AssetsController with ChangeNotifier {
         return nameToCompare.contains(finalText);
       }
 
-      _predicateList.putIfAbsent(FilterType.text, () => predicate);
-      notifyListeners();
+      _predicateMap.value = {..._predicateMap, FilterType.text: predicate};
     }
-
-    if (finalText.isEmpty) notifyListeners();
   }
 
   void _filterByGender() {
     _clearSearchText();
 
-    if (genderTypeFilter == none) {
+    if (genderTypeFilter.value == none) {
       _resetPredicates();
     } else {
-      bool predicate(Person person) => person.gender == genderTypeFilter;
-      _predicateList.putIfAbsent(FilterType.gender, () => predicate);
-      _predicateList.removeWhere((k, v) => k == FilterType.text);
-    }
+      bool predicate(Person person) => person.gender == genderTypeFilter.value;
 
-    notifyListeners();
+      _predicateMap.putIfAbsent(FilterType.gender, () => predicate);
+
+      _predicateMap.removeWhere((k, v) => k == FilterType.text);
+    }
   }
 
   void filterByMaleGender() {
-    if (genderTypeFilter == male) {
-      genderTypeFilter = none;
+    if (genderTypeFilter.value == male) {
+      genderTypeFilter(none);
     } else {
-      genderTypeFilter = male;
+      genderTypeFilter(male);
     }
     _filterByGender();
   }
 
   void filterByFemaleGender() {
-    if (genderTypeFilter == female) {
-      genderTypeFilter = none;
+    if (genderTypeFilter.value == female) {
+      genderTypeFilter(none);
     } else {
-      genderTypeFilter = female;
+      genderTypeFilter(female);
     }
     _filterByGender();
   }

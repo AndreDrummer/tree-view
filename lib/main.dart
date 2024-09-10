@@ -1,19 +1,13 @@
-import 'package:tree_view/features/assets/controller/assets_controller.dart';
-import 'package:tree_view/features/home/controller/home_controller.dart';
+import 'package:tree_view/core/appearence/controller/appearence_controller.dart';
+import 'package:tree_view/core/system/initializers.dart';
 import 'package:tree_view/features/home/views/home.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => AssetsController()),
-        ChangeNotifierProvider(create: (context) => HomeController()),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  SystemInitializer.initDependencies();
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -30,16 +24,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeController>(
-      builder: (context, controller, _) {
-        final bool darkModeIsON = controller.isDarkModeON;
+    final AppearenceController appearence = Get.find();
 
-        return MaterialApp(
-          home: Home(darkMode: darkModeIsON),
-          debugShowCheckedModeBanner: false,
-          theme: _themeData(darkModeIsON),
-        );
-      },
+    return GetMaterialApp(
+      home: Home(darkMode: appearence.isDarkModeON),
+      debugShowCheckedModeBanner: false,
+      theme: _themeData(appearence.isDarkModeON),
     );
   }
 }

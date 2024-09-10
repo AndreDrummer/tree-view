@@ -95,6 +95,7 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
         _treeInstance.treeRoot,
         breadCrumbLinesColor: widget.breadCrumbLinesColor,
         horizontalController: horizontalScrollController,
+        verticalController: verticalScrollController,
         elementsColor: widget.elementsColor,
         toggleNodeView: onNodeToggled,
         nodeRowConfig: nodeConfig,

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:tree_view/core/models/person.dart';
-import 'package:tree_view/core/widgets/custom_app_bar.dart';
-import 'package:tree_view/core/widgets/custom_scroll_bar.dart';
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/assets/widgets/search_header.dart';
-import 'package:tree_view/features/home/controller/home_controller.dart';
+import 'package:tree_view/core/appearence/controller/appearence_controller.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/widget_tree.dart';
 
@@ -36,11 +34,12 @@ class _AssetsViewState extends State<AssetsView> {
     super.dispose();
   }
 
-  Widget searchHeader(AssetsController controller, bool darkMode) {
-    final isFilteringByFemale =
-        controller.genderTypeFilter == controller.female;
+  Widget searchHeader() {
+    final AppearenceController appearence = Get.find();
+    final AssetsController controller = Get.find();
 
-    final isFilteringByMale = controller.genderTypeFilter == controller.male;
+    final isFilteringByFemale = controller.isFilteringByFemale;
+    final isFilteringByMale = controller.isFilteringByMale;
 
     return SearchHeader(
       textInitialValue: controller.textToSearch,
@@ -53,26 +52,24 @@ class _AssetsViewState extends State<AssetsView> {
       onFilterByFemale: () {
         controller.filterByFemaleGender();
       },
-      darkMode: darkMode,
+      darkMode: appearence.isDarkModeON,
     );
   }
 
-  Widget tree(
-    List<Person> seedData,
-    bool darkMode, {
-    required bool Function(Person) filterPredicate,
-  }) {
-    bool predicate(data) => filterPredicate(data);
+  Widget tree() {
+    final AssetsController assetsController = Get.find();
+    final AppearenceController appearence = Get.find();
+    final bool darkMode = appearence.isDarkModeON;
+
+    bool predicate(data) => assetsController.filterPredicate(data);
 
     return WidgetTree<Person>(
-      dataList: seedData,
-      nodeConfig: (Person data) {
-        return nodeRow(data, darkMode);
-      },
+      dataList: assetsController.data,
       breadCrumbLinesColor: darkMode ? Colors.white12 : Colors.black12,
       backgroundColor: darkMode ? Colors.black : Colors.white,
       elementsColor: darkMode ? Colors.white : Colors.black,
       horizontalScrollController: horizontalScrollController,
+      nodeConfig: (Person data) => nodeRow(data, darkMode),
       verticalScrollController: verticalScrollController,
       filterPredicate: predicate,
       initializeExpanded: true,
@@ -85,6 +82,7 @@ class _AssetsViewState extends State<AssetsView> {
 
     final suffixIcon =
         person.fat ? Icons.fastfood_outlined : Icons.flash_on_rounded;
+
     final Color suffixIconColor =
         person.fat ? Colors.redAccent : Colors.greenAccent;
 
@@ -100,26 +98,13 @@ class _AssetsViewState extends State<AssetsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeController>(
-      builder: (context, homeController, _) {
-        final bool darkMode = homeController.isDarkModeON;
-
-        return Consumer<AssetsController>(
-          builder: (context, assetsController, _) {
-            return CustomScrollBar(
-              fixedWidget: const CustomAppBar(),
-              scrollables: [
-                searchHeader(assetsController, darkMode),
-                tree(
-                  filterPredicate: assetsController.filterPredicate,
-                  assetsController.data,
-                  darkMode,
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
+    return Obx(() {
+      return Column(
+        children: [
+          searchHeader(),
+          tree(),
+        ],
+      );
+    });
   }
 }
