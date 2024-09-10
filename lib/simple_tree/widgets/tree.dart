@@ -2,7 +2,6 @@ import 'package:tree_view/simple_tree/widgets/tree_builder.dart';
 import 'package:tree_view/simple_tree/widgets/tree_scroller.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/models/node_data.dart';
-import 'package:get/get.dart' hide Node;
 import 'package:flutter/material.dart';
 import '../builder/node.dart';
 
@@ -42,9 +41,9 @@ class Tree<T> extends StatelessWidget {
     return (48 * descendentsShowing);
   }
 
-  double verticalHeight() {
+  double verticalHeight(double height) {
     if (allowVerticalScrool) {
-      return Get.height * .725;
+      return height * .725;
     } else {
       return lineBreadCrumbHeight().toDouble() + 50;
     }
@@ -52,16 +51,19 @@ class Tree<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.sizeOf(context).height;
+    final width = MediaQuery.sizeOf(context).width;
+
     return TreeScroller(
-      viewWidth: (Get.width * (node.getHeightFromNodeToRoot + 1)),
-      allowHorizontalScrool: allowHorizontalScrool,
+      viewWidth: (width * (node.getHeightFromNodeToRoot + 1)),
       alwaysScrollToTheEndOfTree: alwaysScrollToTheEndOfTree,
+      allowHorizontalScrool: allowHorizontalScrool,
       horizontalController: horizontalController,
       allowVerticalScrool: allowVerticalScrool,
       verticalController: verticalController,
       showBackTopButton: showBackTopButton,
+      viewHeight: verticalHeight(height),
       nodeHeight: node.getHeight,
-      viewHeight: verticalHeight(),
       child: TreeBuilder(
         node,
         allowHorizontalScrool: allowHorizontalScrool,

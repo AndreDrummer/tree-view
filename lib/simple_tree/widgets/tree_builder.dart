@@ -73,11 +73,11 @@ class TreeBuilder<T> extends StatelessWidget {
                     horizontalController: horizontalController,
                     verticalController: verticalController,
                     showBackTopButton: showBackTopButton,
+                    alwaysScrollToTheEndOfTree: false,
                     toggleNodeView: toggleNodeView,
                     nodeRowConfig: nodeRowConfig,
                     allowHorizontalScrool: false,
                     elementsColor: elementsColor,
-                    alwaysScrollToTheEndOfTree: false,
                     allowVerticalScrool: false,
                   );
                 }).toList(),
