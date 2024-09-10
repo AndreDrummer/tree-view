@@ -68,8 +68,8 @@ class TreeBuilder<T> extends StatelessWidget {
                   return Tree(
                     nodeChild,
                     breadCrumbLinesColor: breadCrumbLinesColor,
-                    horizontalController: ScrollController(),
-                    verticalController: ScrollController(),
+                    horizontalController: horizontalController,
+                    verticalController: verticalController,
                     toggleNodeView: toggleNodeView,
                     nodeRowConfig: nodeRowConfig,
                     allowHorizontalScrool: false,

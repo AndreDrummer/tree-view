@@ -69,14 +69,6 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
     super.didUpdateWidget(oldWidget);
   }
 
-  @override
-  void dispose() {
-    horizontalScrollController.dispose();
-    verticalScrollController.dispose();
-
-    super.dispose();
-  }
-
   NodeRowConfig nodeConfig(data) {
     return widget.nodeConfig(data as T);
   }
