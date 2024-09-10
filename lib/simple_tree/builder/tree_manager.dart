@@ -62,7 +62,7 @@ class TreeManager<T extends Parent> {
       );
 
       Node<NodeData<T>>? nodeParent = bfsTraversal(
-        rootNode: nodeRoot,
+        startNoode: nodeRoot,
         predicate: (innerNode) {
           return innerNode.value?.data?.id == nodeData.data?.parentId;
         },
@@ -89,14 +89,13 @@ class TreeManager<T extends Parent> {
 
   Node<NodeData<T>>? bfsTraversal({
     bool Function(Node<NodeData<T>>)? predicate,
-    // TODO: Verify the necesity of this param.
-    required Node<NodeData<T>> rootNode,
+    required Node<NodeData<T>> startNoode,
     void Function(Node<NodeData<T>>)? process,
   }) {
     // Initialize a queue and add the root node
     Queue<Node<NodeData<T>>> queue = Queue<Node<NodeData<T>>>();
-    Node<NodeData<T>> currentNode = rootNode;
-    queue.add(rootNode);
+    Node<NodeData<T>> currentNode = startNoode;
+    queue.add(startNoode);
 
     // Traverse while there are nodes in the queue
     while (queue.isNotEmpty) {
@@ -132,7 +131,7 @@ class TreeManager<T extends Parent> {
           nodes.add(node);
         }
       },
-      rootNode: _treeRoot,
+      startNoode: _treeRoot,
     );
 
     List<NodePath> pathsToEachNode = _nodePathList(nodes);
