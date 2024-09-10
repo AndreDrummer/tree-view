@@ -15,11 +15,12 @@ class TreeBuilder<T> extends StatelessWidget {
     required this.breadCrumbLinesColor,
     required this.horizontalController,
     required this.allowHorizontalScrool,
-    required this.scrollToTheEndOfData,
+    required this.alwaysScrollToTheEndOfTree,
     required this.allowVerticalScrool,
     required this.verticalController,
-    required this.elementsColor,
+    required this.showBackTopButton,
     required this.nodeRowConfig,
+    required this.elementsColor,
   });
 
   final void Function(Node<NodeData<T>> node)? toggleNodeView;
@@ -27,9 +28,10 @@ class TreeBuilder<T> extends StatelessWidget {
   final ScrollController verticalController;
   final Color breadCrumbLinesColor;
   final bool allowHorizontalScrool;
-  final bool scrollToTheEndOfData;
+  final bool alwaysScrollToTheEndOfTree;
   final bool allowVerticalScrool;
   final Node<NodeData<T>> node;
+  final bool showBackTopButton;
   final Color elementsColor;
 
   // Properties related to the row
@@ -70,11 +72,12 @@ class TreeBuilder<T> extends StatelessWidget {
                     breadCrumbLinesColor: breadCrumbLinesColor,
                     horizontalController: horizontalController,
                     verticalController: verticalController,
+                    showBackTopButton: showBackTopButton,
                     toggleNodeView: toggleNodeView,
                     nodeRowConfig: nodeRowConfig,
                     allowHorizontalScrool: false,
                     elementsColor: elementsColor,
-                    scrollToTheEndOfData: false,
+                    alwaysScrollToTheEndOfTree: false,
                     allowVerticalScrool: false,
                   );
                 }).toList(),

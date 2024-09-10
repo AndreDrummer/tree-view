@@ -71,8 +71,10 @@ class _AssetsViewState extends State<AssetsView> {
       horizontalScrollController: horizontalScrollController,
       nodeConfig: (Person data) => nodeRow(data, darkMode),
       verticalScrollController: verticalScrollController,
+      alwaysScrollToTheEndOfTree: false,
       filterPredicate: predicate,
       initializeExpanded: true,
+      showBackTopButton: true,
     );
   }
 

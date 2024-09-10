@@ -4,8 +4,9 @@ class TreeScroller extends StatefulWidget {
   final ScrollController horizontalController;
   final ScrollController verticalController;
   final bool allowHorizontalScrool;
-  final bool scrollToTheEndOfData;
+  final bool alwaysScrollToTheEndOfTree;
   final bool allowVerticalScrool;
+  final bool showBackTopButton;
   final double viewHeight;
   final double viewWidth;
   final int nodeHeight;
@@ -15,8 +16,9 @@ class TreeScroller extends StatefulWidget {
     required this.horizontalController,
     required this.verticalController,
     this.allowHorizontalScrool = true,
-    this.scrollToTheEndOfData = true,
+    this.alwaysScrollToTheEndOfTree = true,
     this.allowVerticalScrool = true,
+    this.showBackTopButton = true,
     required this.nodeHeight,
     required this.viewHeight,
     required this.viewWidth,
@@ -31,6 +33,7 @@ class TreeScroller extends StatefulWidget {
 class _HorizontalScrollState extends State<TreeScroller> {
   late ScrollController horizontalController;
   late ScrollController verticalController;
+  double backToTopButtonOpacity = 0.0;
 
   @override
   void initState() {
@@ -40,8 +43,8 @@ class _HorizontalScrollState extends State<TreeScroller> {
     super.initState();
   }
 
-  void scrollToTheEndOfData() {
-    if (widget.scrollToTheEndOfData) {
+  void alwaysScrollToTheEndOfTree() {
+    if (widget.alwaysScrollToTheEndOfTree) {
       verticalController.animateTo(
         verticalController.position.maxScrollExtent,
         duration: const Duration(seconds: 1),
@@ -72,25 +75,21 @@ class _HorizontalScrollState extends State<TreeScroller> {
   @override
   void didChangeDependencies() {
     verticalController.addListener(() {
-      setState(() {});
+      setState(() {
+        backToTopButtonOpacity = verticalController.offset > 0 ? 1.0 : 0.0;
+      });
     });
 
-    Future.delayed(const Duration(seconds: 1), scrollToTheEndOfData);
+    Future.delayed(const Duration(seconds: 1), alwaysScrollToTheEndOfTree);
 
     super.didChangeDependencies();
   }
 
   @override
   void didUpdateWidget(covariant TreeScroller oldWidget) {
-    scrollToTheEndOfData();
+    alwaysScrollToTheEndOfTree();
 
     super.didUpdateWidget(oldWidget);
-  }
-
-  double showBackToTopButton(bool isFilteringAndHasData) {
-    final bool logic = isFilteringAndHasData && verticalController.offset > 0;
-
-    return (logic ? 1 : 0).toDouble();
   }
 
   @override
@@ -107,7 +106,22 @@ class _HorizontalScrollState extends State<TreeScroller> {
             width: widget.viewWidth,
             child: widget.child,
           ),
-        )
+        ),
+        Positioned(
+          bottom: 16,
+          right: 16,
+          child: Visibility(
+            visible: (widget.showBackTopButton && widget.allowVerticalScrool),
+            child: AnimatedOpacity(
+              duration: Durations.extralong4,
+              opacity: backToTopButtonOpacity,
+              child: FloatingActionButton(
+                onPressed: scrollToTheBeginningOfData,
+                child: const Icon(Icons.arrow_upward_rounded),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

@@ -14,8 +14,9 @@ class Tree<T> extends StatelessWidget {
     required this.breadCrumbLinesColor,
     this.allowHorizontalScrool = true,
     required this.verticalController,
-    this.scrollToTheEndOfData = true,
+    this.alwaysScrollToTheEndOfTree = true,
     this.allowVerticalScrool = true,
+    this.showBackTopButton = true,
     required this.elementsColor,
     required this.nodeRowConfig,
     this.toggleNodeView,
@@ -26,8 +27,9 @@ class Tree<T> extends StatelessWidget {
   final ScrollController verticalController;
   final Color breadCrumbLinesColor;
   final bool allowHorizontalScrool;
-  final bool scrollToTheEndOfData;
+  final bool alwaysScrollToTheEndOfTree;
   final bool allowVerticalScrool;
+  final bool showBackTopButton;
   final Node<NodeData<T>> node;
   final Color elementsColor;
 
@@ -53,20 +55,22 @@ class Tree<T> extends StatelessWidget {
     return TreeScroller(
       viewWidth: (Get.width * (node.getHeightFromNodeToRoot + 1)),
       allowHorizontalScrool: allowHorizontalScrool,
-      scrollToTheEndOfData: scrollToTheEndOfData,
+      alwaysScrollToTheEndOfTree: alwaysScrollToTheEndOfTree,
       horizontalController: horizontalController,
       allowVerticalScrool: allowVerticalScrool,
       verticalController: verticalController,
+      showBackTopButton: showBackTopButton,
       nodeHeight: node.getHeight,
       viewHeight: verticalHeight(),
       child: TreeBuilder(
         node,
         allowHorizontalScrool: allowHorizontalScrool,
         breadCrumbLinesColor: breadCrumbLinesColor,
-        scrollToTheEndOfData: scrollToTheEndOfData,
+        alwaysScrollToTheEndOfTree: alwaysScrollToTheEndOfTree,
         allowVerticalScrool: allowVerticalScrool,
         horizontalController: ScrollController(),
         verticalController: ScrollController(),
+        showBackTopButton: showBackTopButton,
         toggleNodeView: toggleNodeView,
         elementsColor: elementsColor,
         nodeRowConfig: nodeRowConfig,
