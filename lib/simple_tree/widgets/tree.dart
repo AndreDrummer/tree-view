@@ -33,7 +33,7 @@ class Tree<T> extends StatelessWidget {
   final Color elementsColor;
 
   // Properties related to the row
-  final NodeRowConfig Function(T data) nodeRowConfig;
+  final NodeRowConfig Function(T? data) nodeRowConfig;
 
   int lineBreadCrumbHeight() {
     int descendentsShowing = node.numberOfDescendentsShowingUp;

@@ -1,45 +1,26 @@
 import 'package:flutter/material.dart';
 
-class CustomScrollWithFixedWidget extends StatefulWidget {
-  const CustomScrollWithFixedWidget({
+class CustomScrollBar extends StatefulWidget {
+  const CustomScrollBar({
     super.key,
-    this.scrollToTheEnd = false,
-    required this.scrollController,
-    this.jumpToWhenScrolling = 0,
     required this.fixedWidget,
     required this.scrollables,
   });
 
-  final ScrollController scrollController;
-  final double jumpToWhenScrolling;
   final List<Widget> scrollables;
-  final bool scrollToTheEnd;
   final Widget fixedWidget;
 
   @override
-  State<CustomScrollWithFixedWidget> createState() =>
-      _CustomScrollWithFixedWidgetState();
+  State<CustomScrollBar> createState() => _CustomScrollBarState();
 }
 
-class _CustomScrollWithFixedWidgetState
-    extends State<CustomScrollWithFixedWidget> {
+class _CustomScrollBarState extends State<CustomScrollBar> {
   late final ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
-    scrollController = widget.scrollController;
-
-    if (widget.scrollToTheEnd) {
-      Future.delayed(
-        const Duration(seconds: 1),
-        () => scrollController.animateTo(
-          duration: const Duration(seconds: 1),
-          widget.jumpToWhenScrolling,
-          curve: Curves.easeIn,
-        ),
-      );
-    }
+    scrollController = ScrollController();
   }
 
   @override

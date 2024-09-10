@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 import 'package:tree_view/simple_tree/builder/node.dart';
@@ -8,8 +7,11 @@ import 'package:tree_view/simple_tree/utils/extensions.dart';
 
 class TreeManager<T extends Parent> {
   TreeManager._(this._dataList) {
-    _treeRoot = _referenceTree();
-    debugPrint("Init the tree... $_treeRoot");
+    if (_dataList.isNotEmpty) {
+      _treeRoot = _referenceTree();
+    } else {
+      _treeRoot = _emptyTree;
+    }
   }
 
   // Is is changed constantly to reflect the data dynamicity.
@@ -20,7 +22,10 @@ class TreeManager<T extends Parent> {
   }
 
   /// This is representation of a empty tree.
-  final Node<NodeData<T>> _emptyTree = Node<NodeData<T>>(id: -1);
+  final Node<NodeData<T>> _emptyTree = Node<NodeData<T>>(
+    value: NodeData(id: -1),
+    id: -1,
+  );
 
   late Node<NodeData<T>> _treeRoot;
 
@@ -40,8 +45,6 @@ class TreeManager<T extends Parent> {
   Node<NodeData<T>> _referenceTree() {
     final List<NodeData<T>> nodeDataList = _dataList.toNodeDataList();
 
-    print(nodeDataList);
-
     final Node<NodeData<T>> nodeRoot = Node(
       value: NodeData<T>(data: _dataList.first, id: 0),
       id: 0,
@@ -56,7 +59,7 @@ class TreeManager<T extends Parent> {
       Node<NodeData<T>>? nodeParent = bfsTraversal(
         rootNode: nodeRoot,
         predicate: (innerNode) {
-          return innerNode.value?.data.id == nodeData.data.parentId;
+          return innerNode.value?.data?.id == nodeData.data?.parentId;
         },
       );
 
@@ -113,6 +116,8 @@ class TreeManager<T extends Parent> {
 
   void rebuild(bool Function(T) predicate, {bool shouldResetTree = false}) {
     List<Node<NodeData<T>>> nodes = [];
+
+    if (shouldResetTree) _resetTree();
 
     bfsTraversal(
       process: (node) {

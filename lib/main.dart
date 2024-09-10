@@ -1,6 +1,9 @@
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
+import 'package:tree_view/features/assets/widgets/search_header.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
+import 'package:tree_view/core/widgets/custom_scroll_bar.dart';
+import 'package:tree_view/core/widgets/custom_app_bar.dart';
 import 'package:tree_view/simple_tree/widget_tree.dart';
 import 'package:tree_view/core/models/person.dart';
 import 'package:provider/provider.dart';
@@ -42,10 +45,40 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
-  Widget treeWidget(List<Person> seedData, bool darkMode) {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  late final ScrollController horizontalScrollController;
+  late final ScrollController verticalScrollController;
+
+  @override
+  void initState() {
+    horizontalScrollController = ScrollController();
+    verticalScrollController = ScrollController();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    horizontalScrollController.dispose();
+    verticalScrollController.dispose();
+
+    super.dispose();
+  }
+
+  Widget treeWidget(
+    List<Person> seedData,
+    bool darkMode, {
+    required bool Function(Person) filterPredicate,
+  }) {
+    bool predicate(data) => filterPredicate(data);
+
     return WidgetTree<Person>(
       dataList: seedData,
       nodeConfig: (Person data) {
@@ -54,6 +87,9 @@ class MyHomePage extends StatelessWidget {
       breadCrumbLinesColor: darkMode ? Colors.white12 : Colors.black12,
       backgroundColor: darkMode ? Colors.black : Colors.white,
       elementsColor: darkMode ? Colors.white : Colors.black,
+      horizontalScrollController: horizontalScrollController,
+      verticalScrollController: verticalScrollController,
+      filterPredicate: predicate,
     );
   }
 
@@ -63,10 +99,43 @@ class MyHomePage extends StatelessWidget {
       builder: (context, homeController, _) {
         final bool darkMode = homeController.isDarkModeON;
 
-        return Consumer<AssetsController>(
-          builder: (context, controller, _) {
-            return treeWidget(controller.data, darkMode);
-          },
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: darkMode ? Colors.black : Colors.white,
+            body: Consumer<AssetsController>(
+              builder: (context, controller, _) {
+                final isFilteringByFemale =
+                    controller.genderTypeFilter == controller.female;
+
+                final isFilteringByMale =
+                    controller.genderTypeFilter == controller.male;
+
+                return CustomScrollBar(
+                  fixedWidget: const CustomAppBar(),
+                  scrollables: [
+                    SearchHeader(
+                      textInitialValue: controller.textToSearch,
+                      isFilteringByFemale: isFilteringByFemale,
+                      onFilterByText: controller.setSearchText,
+                      isFilteringByMale: isFilteringByMale,
+                      onFilterByMale: () {
+                        controller.filterByMaleGender();
+                      },
+                      onFilterByFemale: () {
+                        controller.filterByFemaleGender();
+                      },
+                      darkMode: darkMode,
+                    ),
+                    treeWidget(
+                      filterPredicate: controller.filterPredicate,
+                      controller.data,
+                      darkMode,
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
         );
       },
     );

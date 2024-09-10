@@ -5,45 +5,52 @@ import 'package:flutter/material.dart';
 class SearchHeader extends StatelessWidget {
   const SearchHeader({
     super.key,
-    this.darkModeIsON = true,
+    this.darkMode = true,
     this.scrollFunction,
+    this.onFilterByText,
+    this.onFilterByFemale,
+    this.onFilterByMale,
+    this.isFilteringByFemale = false,
+    this.isFilteringByMale = false,
+    required this.textInitialValue,
   });
+  final Function(String text)? onFilterByText;
   final Function(bool)? scrollFunction;
-  final bool darkModeIsON;
+  final Function()? onFilterByFemale;
+  final Function()? onFilterByMale;
+  final bool isFilteringByFemale;
+  final String textInitialValue;
+  final bool isFilteringByMale;
+  final bool darkMode;
 
   @override
   Widget build(BuildContext context) {
-    final headerBackgroundColor = darkModeIsON ? Colors.black : Colors.white;
-    final elementsColor = darkModeIsON ? Colors.white : Colors.black;
+    final headerBackgroundColor = darkMode ? Colors.black : Colors.white;
+    final elementsColor = darkMode ? Colors.white : Colors.black;
 
     return Container(
       color: headerBackgroundColor,
       child: Column(
         children: [
           InputSearch(
-            search: (text) {},
             hintText: 'Buscar pessoa ou funcão',
+            initialValue: textInitialValue,
+            search: onFilterByText,
             color: elementsColor,
           ),
           Row(
             children: [
               InlineCheckbox(
-                value: false,
-                onPressed: () {
-                  // controller.filterByMaleGender();
-                  // scrollFunction?.call(controller.isFilteringByAny);
-                },
                 activeColor: Colors.blue,
                 borderColor: elementsColor,
+                onPressed: onFilterByMale,
                 textColor: elementsColor,
+                value: isFilteringByMale,
                 text: "Male",
               ),
               InlineCheckbox(
-                value: false,
-                onPressed: () {
-                  // controller.filterByFemaleGender();
-                  // scrollFunction?.call(controller.isFilteringByAny);
-                },
+                value: isFilteringByFemale,
+                onPressed: onFilterByFemale,
                 activeColor: Colors.pink,
                 borderColor: elementsColor,
                 textColor: elementsColor,

@@ -22,7 +22,11 @@ class NodeRow<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nodeConfig = nodeRowConfig(node.value!.data!);
+    NodeRowConfig? nodeConfig;
+
+    if (node.value?.data != null) {
+      nodeConfig = nodeRowConfig(node.value!.data as T);
+    }
 
     return Row(
       children: [
@@ -47,7 +51,7 @@ class NodeRow<T> extends StatelessWidget {
         TextButton(
           onPressed: onPressed,
           child: Text(
-            nodeConfig.title,
+            "${nodeConfig?.title}",
             style: TextStyle(color: elementsColor, fontSize: 18),
           ),
         ),
@@ -56,24 +60,24 @@ class NodeRow<T> extends StatelessWidget {
     );
   }
 
-  Widget _suffixIcon(BuildContext context, NodeRowConfig nodeConfig) {
-    if (nodeConfig.suffixIcon != null) {
+  Widget _suffixIcon(BuildContext context, NodeRowConfig? nodeConfig) {
+    if (nodeConfig?.suffixIcon != null) {
       final Color? iconColor =
-          nodeConfig.suffixIconColor ?? Theme.of(context).iconTheme.color;
+          nodeConfig?.suffixIconColor ?? Theme.of(context).iconTheme.color;
 
-      return Icon(nodeConfig.suffixIcon!,
-          color: iconColor, size: nodeConfig.suffixIconSize);
+      return Icon(nodeConfig?.suffixIcon!,
+          color: iconColor, size: nodeConfig?.suffixIconSize);
     }
     return Container();
   }
 
-  Widget _prefixIcon(BuildContext context, NodeRowConfig nodeConfig) {
-    if (nodeConfig.prefixIcon != null) {
+  Widget _prefixIcon(BuildContext context, NodeRowConfig? nodeConfig) {
+    if (nodeConfig?.prefixIcon != null) {
       final Color? iconColor =
-          nodeConfig.prefixIconColor ?? Theme.of(context).iconTheme.color;
+          nodeConfig?.prefixIconColor ?? Theme.of(context).iconTheme.color;
 
-      return Icon(nodeConfig.prefixIcon!,
-          color: iconColor, size: nodeConfig.prefixIconSize);
+      return Icon(nodeConfig?.prefixIcon!,
+          color: iconColor, size: nodeConfig?.prefixIconSize);
     }
     return Container();
   }

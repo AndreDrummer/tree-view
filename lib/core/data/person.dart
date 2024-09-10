@@ -325,19 +325,3 @@ final dataPerson = [
     fat: true,
   ),
 ];
-
-// TODO: delete this...
-final test = Person(
-  name: "José Francisco e Maria de Jesus",
-  gender: PersonGender.male,
-  fat: false,
-  id: 1,
-);
-
-final test2 = Person(
-  gender: PersonGender.female,
-  name: "Edna Jesus",
-  parentId: 0,
-  fat: false,
-  id: 2,
-);

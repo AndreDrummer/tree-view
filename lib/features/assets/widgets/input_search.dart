@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class InputSearch extends StatefulWidget {
   const InputSearch({
     super.key,
+    required this.initialValue,
     required this.color,
     this.hintTextColor,
     this.hintText,
@@ -11,6 +12,7 @@ class InputSearch extends StatefulWidget {
 
   final Function(String)? search;
   final Color? hintTextColor;
+  final String initialValue;
   final String? hintText;
   final Color color;
 
@@ -23,8 +25,27 @@ class _InputSearchState extends State<InputSearch> {
 
   @override
   void initState() {
-    _textEditingController = TextEditingController();
+    _textEditingController = TextEditingController(text: widget.initialValue);
+    _textEditingController.addListener(() {
+      if (_textEditingController.text.isEmpty) {
+        FocusScope.of(context).unfocus();
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(InputSearch oldWidget) {
+    _textEditingController.text = widget.initialValue;
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+
+    super.dispose();
   }
 
   void clear() {

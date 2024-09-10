@@ -1,9 +1,11 @@
+import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
+
 class NodeData<T> {
-  final T data;
+  final T? data;
   final int id;
 
   NodeData({
-    required this.data,
+    this.data,
     required this.id,
   });
 
@@ -11,4 +13,12 @@ class NodeData<T> {
   String toString() {
     return 'id: $id -> ${data.toString()}\n';
   }
+}
+
+class EmptyNodeData extends Parent {
+  @override
+  get id => 0;
+
+  @override
+  get parentId => 0;
 }

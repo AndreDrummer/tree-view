@@ -8,7 +8,7 @@ class Node<T> {
   int id;
 
   Node({
-    this.expanded = false,
+    this.expanded = true,
     required this.id,
     this.children,
     this.parent,
