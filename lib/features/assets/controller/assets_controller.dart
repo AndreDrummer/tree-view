@@ -11,19 +11,13 @@ enum FilterType {
 }
 
 class AssetsController with ChangeNotifier {
-  static List<Person> _data = dataPerson;
+  final List<Person> _data = dataPerson;
 
   List<Person> get data => _data;
 
-  void resetData() {
-    _data = dataPerson;
-    notifyListeners();
-  }
-
-  bool _isFilteringByText = false;
   String _textToSearch = "";
-  String get textToSearch => _textToSearch;
 
+  String get textToSearch => _textToSearch;
   bool get resetDataOnFilter => false;
 
   PersonGender genderTypeFilter = PersonGender.none;
@@ -31,9 +25,7 @@ class AssetsController with ChangeNotifier {
   PersonGender get male => PersonGender.male;
   PersonGender get none => PersonGender.none;
 
-  bool get isFilteringByAny {
-    return genderTypeFilter != none || _isFilteringByText;
-  }
+  bool get isFilteringByAny => _predicateList.isNotEmpty;
 
   Map<FilterType, Predicate<Person>> _predicateList = {};
 
@@ -49,9 +41,7 @@ class AssetsController with ChangeNotifier {
     };
   }
 
-  void _resetPredicates() {
-    _predicateList = {};
-  }
+  void _resetPredicates() => _predicateList = {};
 
   void setSearchText(String text) {
     _textToSearch = text;
@@ -64,32 +54,30 @@ class AssetsController with ChangeNotifier {
 
   void searchByText() {
     final String finalText = textToSearch.removeAccents().trim().toLowerCase();
+    _predicateList.removeWhere((k, v) => k == FilterType.text);
 
     if (finalText.length >= 3) {
-      _isFilteringByText = true;
-
       bool predicate(Person person) {
         final nameToCompare = person.name.removeAccents().trim().toLowerCase();
         return nameToCompare.contains(finalText);
       }
 
       _predicateList.putIfAbsent(FilterType.text, () => predicate);
-    } else {
-      _isFilteringByText = false;
-      _predicateList.removeWhere((k, v) => k == FilterType.text);
+      notifyListeners();
     }
 
-    notifyListeners();
+    if (finalText.isEmpty) notifyListeners();
   }
 
   void _filterByGender() {
     _clearSearchText();
 
     if (genderTypeFilter == none) {
-      _predicateList.removeWhere((k, v) => k == FilterType.gender);
+      _resetPredicates();
     } else {
       bool predicate(Person person) => person.gender == genderTypeFilter;
       _predicateList.putIfAbsent(FilterType.gender, () => predicate);
+      _predicateList.removeWhere((k, v) => k == FilterType.text);
     }
 
     notifyListeners();

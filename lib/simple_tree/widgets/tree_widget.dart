@@ -10,6 +10,7 @@ class TreeWidget<T> extends StatefulWidget {
     required this.horizontalScrollController,
     required this.verticalScrollController,
     required this.breadCrumbLinesColor,
+    this.initializeExpanded = true,
     required this.elementsColor,
     this.resetOnFilter = true,
     required this.nodeConfig,
@@ -19,6 +20,7 @@ class TreeWidget<T> extends StatefulWidget {
   });
 
   final bool Function(Parent)? filterPredicate;
+  final bool initializeExpanded;
   final List<Parent> dataList;
   final bool resetOnFilter;
 
@@ -45,7 +47,10 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
 
   @override
   void initState() {
-    _treeInstance = TreeManager.instance(widget.dataList);
+    _treeInstance = TreeManager.instance(
+      widget.dataList,
+      widget.initializeExpanded,
+    );
     horizontalScrollController = widget.horizontalScrollController;
     verticalScrollController = widget.verticalScrollController;
 

@@ -13,8 +13,8 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => HomeController()),
         ChangeNotifierProvider(create: (context) => AssetsController()),
+        ChangeNotifierProvider(create: (context) => HomeController()),
       ],
       child: const MyApp(),
     ),
@@ -90,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
       horizontalScrollController: horizontalScrollController,
       verticalScrollController: verticalScrollController,
       filterPredicate: predicate,
+      initializeExpanded: true,
     );
   }
 

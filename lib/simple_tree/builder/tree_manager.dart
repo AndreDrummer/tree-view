@@ -6,7 +6,7 @@ import 'dart:collection';
 import 'package:tree_view/simple_tree/utils/extensions.dart';
 
 class TreeManager<T extends Parent> {
-  TreeManager._(this._dataList) {
+  TreeManager._(this._dataList, this._initializeExpanded) {
     if (_dataList.isNotEmpty) {
       _treeRoot = _referenceTree();
     } else {
@@ -16,14 +16,17 @@ class TreeManager<T extends Parent> {
 
   // Is is changed constantly to reflect the data dynamicity.
   final List<T> _dataList;
+  final bool _initializeExpanded;
 
-  static TreeManager instance<T extends Parent>(List<T> dataList) {
-    return TreeManager._(dataList);
+  static TreeManager instance<T extends Parent>(
+      List<T> dataList, bool initializeExpanded) {
+    return TreeManager._(dataList, initializeExpanded);
   }
 
   /// This is representation of a empty tree.
   final Node<NodeData<T>> _emptyTree = Node<NodeData<T>>(
     value: NodeData(id: -1),
+    expanded: false,
     id: -1,
   );
 
@@ -47,11 +50,13 @@ class TreeManager<T extends Parent> {
 
     final Node<NodeData<T>> nodeRoot = Node(
       value: NodeData<T>(data: _dataList.first, id: 0),
+      expanded: _initializeExpanded,
       id: 0,
     );
 
     for (final nodeData in nodeDataList) {
       Node<NodeData<T>> node = Node<NodeData<T>>(
+        expanded: _initializeExpanded,
         id: nodeData.id,
         value: nodeData,
       );
@@ -134,17 +139,23 @@ class TreeManager<T extends Parent> {
 
     if (pathsToEachNode.isEmpty) _updateTree(_emptyTree);
 
-    Node<NodeData<T>> newTree = _treeRoot.copyWith(
-      expanded: true,
-      children: [],
-    );
+    Node<NodeData<T>> newTree =
+        _treeRoot.copyWith(children: [], expanded: true);
 
     for (final path in pathsToEachNode) {
       if (path.isNotEmpty) {
         if (path.length == 1) {
-          newTree = _addNodeImmediateChildren(newTree, path);
+          newTree = _addNodeImmediateChildren(
+            predicate: predicate,
+            rootNode: newTree,
+            path: path,
+          );
         } else {
-          newTree = _addNestedNodes(newTree, path);
+          newTree = _addNestedNodes(
+            predicate: predicate,
+            rootNode: newTree,
+            path: path,
+          );
         }
       }
     }
@@ -173,16 +184,19 @@ class TreeManager<T extends Parent> {
         .toList();
   }
 
-  Node<NodeData<T>> _addNodeImmediateChildren(
-      Node<NodeData<T>> rootNode, NodePath path) {
+  Node<NodeData<T>> _addNodeImmediateChildren({
+    required bool Function(T) predicate,
+    required Node<NodeData<T>> rootNode,
+    required NodePath path,
+  }) {
     final currentChildren = rootNode.children;
     Node<NodeData<T>>? newChildren = _findNodeByPath(path);
 
     newChildren ??= _treeRoot.children!.elementAt(path.last);
 
     newChildren = newChildren.copyWith(
-      children: [],
       expanded: true,
+      children: [],
     );
 
     currentChildren!.addChild(
@@ -193,14 +207,21 @@ class TreeManager<T extends Parent> {
     return rootNode;
   }
 
-  Node<NodeData<T>> _addNestedNodes(Node<NodeData<T>> rootNode, NodePath path) {
+  Node<NodeData<T>> _addNestedNodes({
+    required bool Function(T) predicate,
+    required Node<NodeData<T>> rootNode,
+    required NodePath path,
+  }) {
     Node<NodeData<T>> currentNode = rootNode;
 
     for (int i = 0; i < path.length; i++) {
       final childPosition = path[i];
 
-      final Node<NodeData<T>> node = _findNodeByPath(path.sublist(0, i + 1))!
-          .copyWith(children: [], expanded: true);
+      final nodeFoundByPath = _findNodeByPath(path.sublist(0, i + 1))!;
+      final Node<NodeData<T>> node = nodeFoundByPath.copyWith(
+        expanded: true,
+        children: [],
+      );
 
       if (node.parent?.id == currentNode.id) {
         currentNode.children!.addChild(node, position: childPosition);

@@ -9,6 +9,7 @@ class WidgetTree<T> extends StatelessWidget {
     required this.horizontalScrollController,
     required this.verticalScrollController,
     required this.breadCrumbLinesColor,
+    this.initializeExpanded = true,
     required this.elementsColor,
     this.resetOnFilter = true,
     required this.nodeConfig,
@@ -18,6 +19,7 @@ class WidgetTree<T> extends StatelessWidget {
   });
 
   final bool Function(Parent)? filterPredicate;
+  final bool initializeExpanded;
   final List<Parent> dataList;
   final bool resetOnFilter;
 
@@ -37,6 +39,7 @@ class WidgetTree<T> extends StatelessWidget {
       horizontalScrollController: horizontalScrollController,
       verticalScrollController: verticalScrollController,
       breadCrumbLinesColor: breadCrumbLinesColor,
+      initializeExpanded: initializeExpanded,
       filterPredicate: filterPredicate,
       backgroundColor: backgroundColor,
       resetOnFilter: resetOnFilter,

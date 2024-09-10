@@ -32,12 +32,6 @@ class SearchHeader extends StatelessWidget {
       color: headerBackgroundColor,
       child: Column(
         children: [
-          InputSearch(
-            hintText: 'Buscar pessoa ou funcão',
-            initialValue: textInitialValue,
-            search: onFilterByText,
-            color: elementsColor,
-          ),
           Row(
             children: [
               InlineCheckbox(
@@ -57,6 +51,12 @@ class SearchHeader extends StatelessWidget {
                 text: "Female",
               ),
             ],
+          ),
+          InputSearch(
+            hintText: 'Buscar pessoa ou funcão',
+            initialValue: textInitialValue,
+            search: onFilterByText,
+            color: elementsColor,
           ),
         ],
       ),
