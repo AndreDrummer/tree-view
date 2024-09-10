@@ -2,10 +2,43 @@ import 'package:tree_view/core/models/person.dart';
 
 final dataPerson = [
   Person(
-    id: 0,
-    name: "José Francisco e Maria de Jesus",
+    id: 9900,
+    name: "Batuira Carneiro",
     gender: PersonGender.male,
     fat: false,
+  ),
+  Person(
+    id: 0,
+    name: "José e Maria",
+    gender: PersonGender.male,
+    fat: false,
+  ),
+  Person(
+    id: 8790,
+    name: "Garibalda Pinto",
+    gender: PersonGender.female,
+    fat: true,
+  ),
+  Person(
+    id: 9876,
+    name: "Salamantra Bujão",
+    gender: PersonGender.female,
+    parentId: 8790,
+    fat: true,
+  ),
+  Person(
+    id: 6574,
+    name: "Corno Manso",
+    gender: PersonGender.male,
+    parentId: 9900,
+    fat: true,
+  ),
+  Person(
+    id: 1234,
+    name: "Paula Tejando",
+    gender: PersonGender.male,
+    parentId: 8790,
+    fat: true,
   ),
   Person(
     id: 2,

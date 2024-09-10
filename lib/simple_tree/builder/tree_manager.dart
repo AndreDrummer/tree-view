@@ -1,26 +1,29 @@
-import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
+import 'package:tree_view/simple_tree/models/node_data.dart';
+import 'package:tree_view/simple_tree/utils/extensions.dart';
 import 'package:tree_view/simple_tree/builder/node.dart';
 import 'dart:collection';
 
-import 'package:tree_view/simple_tree/utils/extensions.dart';
-
 class TreeManager<T extends Parent> {
-  TreeManager._(this._dataList, this._initializeExpanded) {
+  TreeManager._(this._dataList, this._initializeExpanded, this._rootData) {
     if (_dataList.isNotEmpty) {
-      _treeRoot = _referenceTree();
+      _tree = _referenceTree();
     } else {
-      _treeRoot = _emptyTree;
+      _tree = _emptyTree;
     }
   }
 
   // Is is changed constantly to reflect the data dynamicity.
-  final List<T> _dataList;
   final bool _initializeExpanded;
+  final NodeData<T> _rootData;
+  final List<T> _dataList;
 
-  static TreeManager instance<T extends Parent>(
-      List<T> dataList, bool initializeExpanded) {
-    return TreeManager._(dataList, initializeExpanded);
+  static TreeManager instance<T extends Parent>({
+    required NodeData<T> rootData,
+    required bool initializeExpanded,
+    required List<T> dataList,
+  }) {
+    return TreeManager._(dataList, initializeExpanded, rootData);
   }
 
   /// This is representation of a empty tree.
@@ -30,29 +33,33 @@ class TreeManager<T extends Parent> {
     id: -1,
   );
 
-  late Node<NodeData<T>> _treeRoot;
+  late Node<NodeData<T>> _tree;
 
-  Node<NodeData<T>> get treeRoot => _treeRoot;
+  Node<NodeData<T>> get tree => _tree;
 
-  bool get treeIsNotEmpty => _treeRoot.id != _emptyTree.id;
+  bool get treeIsNotEmpty => _tree.id != _emptyTree.id;
+
+  Node<NodeData<T>> nodeStart() {
+    return Node(
+      expanded: _initializeExpanded,
+      value: _rootData,
+      id: _rootData.id,
+    );
+  }
 
   void _updateTree(Node<NodeData<T>> node) {
-    _treeRoot = node;
+    _tree = node;
   }
 
   void _resetTree() {
-    _treeRoot = _referenceTree();
+    _tree = _referenceTree();
   }
 
   /// This is the initial tree mounted. It never changes.
   Node<NodeData<T>> _referenceTree() {
     final List<NodeData<T>> nodeDataList = _dataList.toNodeDataList();
 
-    final Node<NodeData<T>> nodeRoot = Node(
-      value: NodeData<T>(data: _dataList.first, id: 0),
-      expanded: _initializeExpanded,
-      id: 0,
-    );
+    final startNode = nodeStart();
 
     for (final nodeData in nodeDataList) {
       Node<NodeData<T>> node = Node<NodeData<T>>(
@@ -62,7 +69,7 @@ class TreeManager<T extends Parent> {
       );
 
       Node<NodeData<T>>? nodeParent = bfsTraversal(
-        startNoode: nodeRoot,
+        startNoode: startNode,
         predicate: (innerNode) {
           return innerNode.value?.data?.id == nodeData.data?.parentId;
         },
@@ -71,10 +78,13 @@ class TreeManager<T extends Parent> {
       if (nodeParent != null) {
         nodeParent.children!.addChild(node);
         node.parent = nodeParent;
+      } else {
+        startNode.children!.addChild(node);
+        node.parent = startNode;
       }
     }
 
-    return nodeRoot;
+    return startNode;
   }
 
   void toogleNodeView(Node<NodeData<T>> node, {bool shouldResetTree = false}) {
@@ -82,9 +92,9 @@ class TreeManager<T extends Parent> {
 
     final updatedNode = node.expanded ? node.close() : node.open();
 
-    final newNode = treeRoot.toggleNode(updatedNode);
+    final newNode = tree.toggleNode(updatedNode);
 
-    if (node.id == treeRoot.id) _updateTree(newNode ?? _emptyTree);
+    if (node.id == tree.id) _updateTree(newNode ?? _emptyTree);
   }
 
   Node<NodeData<T>>? bfsTraversal({
@@ -131,15 +141,14 @@ class TreeManager<T extends Parent> {
           nodes.add(node);
         }
       },
-      startNoode: _treeRoot,
+      startNoode: _tree,
     );
 
     List<NodePath> pathsToEachNode = _nodePathList(nodes);
 
     if (pathsToEachNode.isEmpty) _updateTree(_emptyTree);
 
-    Node<NodeData<T>> newTree =
-        _treeRoot.copyWith(children: [], expanded: true);
+    Node<NodeData<T>> newTree = _tree.copyWith(children: [], expanded: true);
 
     for (final path in pathsToEachNode) {
       if (path.isNotEmpty) {
@@ -163,7 +172,7 @@ class TreeManager<T extends Parent> {
   }
 
   Node<NodeData<T>>? _findNodeByPath(NodePath ids) {
-    Node<NodeData<T>> current = _treeRoot;
+    Node<NodeData<T>> current = _tree;
 
     // Traverse until the second-to-last id to find the parent
     for (int i = 0; i < ids.length; i++) {
@@ -178,8 +187,7 @@ class TreeManager<T extends Parent> {
 
   List<NodePath> _nodePathList(List<Node<NodeData<T>>> nodes) {
     return nodes
-        .map((node) =>
-            _treeRoot.nodePath((innerNode) => innerNode.id == node.id))
+        .map((node) => _tree.nodePath((innerNode) => innerNode.id == node.id))
         .toList();
   }
 
@@ -191,7 +199,7 @@ class TreeManager<T extends Parent> {
     final currentChildren = rootNode.children;
     Node<NodeData<T>>? newChildren = _findNodeByPath(path);
 
-    newChildren ??= _treeRoot.children!.elementAt(path.last);
+    newChildren ??= _tree.children!.elementAt(path.last);
 
     newChildren = newChildren.copyWith(
       expanded: true,

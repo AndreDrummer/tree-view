@@ -38,7 +38,10 @@ class _CustomScrollBarState extends State<CustomScrollBar> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-              return widget.scrollables.elementAt(index);
+              return SizedBox(
+                height: 50,
+                child: widget.scrollables.elementAt(index),
+              );
             },
             childCount: widget.scrollables.length,
           ),

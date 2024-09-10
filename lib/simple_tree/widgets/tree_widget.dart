@@ -1,5 +1,6 @@
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 import 'package:tree_view/simple_tree/builder/tree_manager.dart';
+import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/widgets/tree.dart';
 import 'package:flutter/material.dart';
@@ -9,24 +10,30 @@ class TreeWidget<T> extends StatefulWidget {
     super.key,
     required this.horizontalScrollController,
     required this.verticalScrollController,
-    required this.breadCrumbLinesColor,
+    required this.showCustomizationForRoot,
     this.alwaysScrollToTheEndOfTree = true,
+    required this.breadCrumbLinesColor,
     this.initializeExpanded = true,
     this.showBackTopButton = true,
     required this.elementsColor,
     this.resetOnFilter = true,
     required this.nodeConfig,
     required this.dataList,
+    required this.rootData,
+    this.nothingFoundText,
     this.filterPredicate,
     this.backgroundColor,
   });
 
   final bool Function(Parent)? filterPredicate;
   final bool alwaysScrollToTheEndOfTree;
+  final bool showCustomizationForRoot;
+  final String? nothingFoundText;
   final bool initializeExpanded;
   final bool showBackTopButton;
   final List<Parent> dataList;
   final bool resetOnFilter;
+  final Parent rootData;
 
   final ScrollController horizontalScrollController;
   final ScrollController verticalScrollController;
@@ -52,8 +59,12 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
   @override
   void initState() {
     _treeInstance = TreeManager.instance(
-      widget.dataList,
-      widget.initializeExpanded,
+      dataList: widget.dataList,
+      initializeExpanded: widget.initializeExpanded,
+      rootData: NodeData<Parent>(
+        id: widget.rootData.id,
+        data: widget.rootData,
+      ),
     );
     horizontalScrollController = widget.horizontalScrollController;
     verticalScrollController = widget.verticalScrollController;
@@ -83,21 +94,41 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
     });
   }
 
+  Widget emptyTreeWidget() {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: MediaQuery.sizeOf(context).height / 6,
+      ),
+      child: Text(
+        style: TextStyle(color: widget.elementsColor, fontSize: 18),
+        widget.nothingFoundText ?? "Nada foi encontrado",
+      ),
+    );
+  }
+
+  bool showCustomizationForRoot() {
+    return widget.showCustomizationForRoot;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: widget.backgroundColor,
-      child: Tree(
-        _treeInstance.treeRoot,
-        breadCrumbLinesColor: widget.breadCrumbLinesColor,
-        alwaysScrollToTheEndOfTree: widget.alwaysScrollToTheEndOfTree,
-        horizontalController: horizontalScrollController,
-        verticalController: verticalScrollController,
-        showBackTopButton: widget.showBackTopButton,
-        elementsColor: widget.elementsColor,
-        toggleNodeView: onNodeToggled,
-        nodeRowConfig: nodeConfig,
-      ),
+      child: _treeInstance.tree.id == -1
+          ? emptyTreeWidget()
+          : Tree(
+              _treeInstance.tree,
+              alwaysScrollToTheEndOfTree: widget.alwaysScrollToTheEndOfTree,
+              showCustomizationForRoot: showCustomizationForRoot(),
+              breadCrumbLinesColor: widget.breadCrumbLinesColor,
+              horizontalController: horizontalScrollController,
+              verticalController: verticalScrollController,
+              showBackTopButton: widget.showBackTopButton,
+              nodeRootId: _treeInstance.nodeStart().id,
+              elementsColor: widget.elementsColor,
+              toggleNodeView: onNodeToggled,
+              nodeRowConfig: nodeConfig,
+            ),
     );
   }
 }

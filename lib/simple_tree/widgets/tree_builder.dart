@@ -12,27 +12,31 @@ class TreeBuilder<T> extends StatelessWidget {
     this.node, {
     super.key,
     this.toggleNodeView,
+    required this.alwaysScrollToTheEndOfTree,
+    required this.showCustomizationForRoot,
     required this.breadCrumbLinesColor,
     required this.horizontalController,
     required this.allowHorizontalScrool,
-    required this.alwaysScrollToTheEndOfTree,
     required this.allowVerticalScrool,
     required this.verticalController,
     required this.showBackTopButton,
     required this.nodeRowConfig,
     required this.elementsColor,
+    required this.nodeRootId,
   });
 
   final void Function(Node<NodeData<T>> node)? toggleNodeView;
   final ScrollController horizontalController;
   final ScrollController verticalController;
+  final bool alwaysScrollToTheEndOfTree;
+  final bool showCustomizationForRoot;
   final Color breadCrumbLinesColor;
   final bool allowHorizontalScrool;
-  final bool alwaysScrollToTheEndOfTree;
   final bool allowVerticalScrool;
   final Node<NodeData<T>> node;
   final bool showBackTopButton;
   final Color elementsColor;
+  final int nodeRootId;
 
   // Properties related to the row
   final NodeRowConfig Function(T? data) nodeRowConfig;
@@ -43,6 +47,13 @@ class TreeBuilder<T> extends StatelessWidget {
     return (48 * descendentsShowing);
   }
 
+  bool showCustomization() {
+    if (node.id == nodeRootId) {
+      return showCustomizationForRoot;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -50,6 +61,7 @@ class TreeBuilder<T> extends StatelessWidget {
       children: [
         NodeRow(
           node,
+          showCustomizationForRoot: showCustomization(),
           onPressed: () => toggleNodeView?.call(node),
           breadCrumbLineColor: breadCrumbLinesColor,
           elementsColor: elementsColor,
@@ -69,6 +81,7 @@ class TreeBuilder<T> extends StatelessWidget {
                 children: node.children!.map((nodeChild) {
                   return Tree(
                     nodeChild,
+                    showCustomizationForRoot: showCustomizationForRoot,
                     breadCrumbLinesColor: breadCrumbLinesColor,
                     horizontalController: horizontalController,
                     verticalController: verticalController,
@@ -79,6 +92,7 @@ class TreeBuilder<T> extends StatelessWidget {
                     allowHorizontalScrool: false,
                     elementsColor: elementsColor,
                     allowVerticalScrool: false,
+                    nodeRootId: nodeRootId,
                   );
                 }).toList(),
               ),

@@ -7,18 +7,20 @@ class TreeScroller extends StatefulWidget {
   final bool alwaysScrollToTheEndOfTree;
   final bool allowVerticalScrool;
   final bool showBackTopButton;
+  final int nodeDecendants;
   final double viewHeight;
   final double viewWidth;
   final int nodeHeight;
   final Widget child;
 
   const TreeScroller({
-    required this.horizontalController,
-    required this.verticalController,
-    this.allowHorizontalScrool = true,
     this.alwaysScrollToTheEndOfTree = true,
+    required this.horizontalController,
+    this.allowHorizontalScrool = true,
+    required this.verticalController,
     this.allowVerticalScrool = true,
     this.showBackTopButton = true,
+    required this.nodeDecendants,
     required this.nodeHeight,
     required this.viewHeight,
     required this.viewWidth,
@@ -43,16 +45,10 @@ class _HorizontalScrollState extends State<TreeScroller> {
     super.initState();
   }
 
-  void alwaysScrollToTheEndOfTree() {
+  void scrollToTheEndOfTree() {
     if (widget.alwaysScrollToTheEndOfTree) {
       verticalController.animateTo(
         verticalController.position.maxScrollExtent,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeIn,
-      );
-
-      horizontalController.animateTo(
-        (widget.nodeHeight * widget.nodeHeight).toDouble(),
         duration: const Duration(seconds: 1),
         curve: Curves.easeIn,
       );
@@ -80,14 +76,14 @@ class _HorizontalScrollState extends State<TreeScroller> {
       });
     });
 
-    Future.delayed(const Duration(seconds: 1), alwaysScrollToTheEndOfTree);
+    Future.delayed(const Duration(seconds: 1), scrollToTheEndOfTree);
 
     super.didChangeDependencies();
   }
 
   @override
   void didUpdateWidget(covariant TreeScroller oldWidget) {
-    alwaysScrollToTheEndOfTree();
+    scrollToTheEndOfTree();
 
     super.didUpdateWidget(oldWidget);
   }

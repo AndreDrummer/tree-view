@@ -69,11 +69,13 @@ class _AssetsViewState extends State<AssetsView> {
       backgroundColor: darkMode ? Colors.black : Colors.white,
       elementsColor: darkMode ? Colors.white : Colors.black,
       horizontalScrollController: horizontalScrollController,
+      rootData: Person(id: 998877, name: "Familia Nascimento"),
       nodeConfig: (Person data) => nodeRow(data, darkMode),
       verticalScrollController: verticalScrollController,
-      alwaysScrollToTheEndOfTree: true,
+      alwaysScrollToTheEndOfTree: false,
+      showCustomizationForRoot: false,
       filterPredicate: predicate,
-      initializeExpanded: true,
+      initializeExpanded: false,
       showBackTopButton: true,
     );
   }

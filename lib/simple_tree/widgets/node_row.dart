@@ -6,6 +6,7 @@ import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 class NodeRow<T> extends StatelessWidget {
   const NodeRow(
     this.node, {
+    required this.showCustomizationForRoot,
     required this.breadCrumbLineColor,
     required this.elementsColor,
     required this.nodeRowConfig,
@@ -16,6 +17,7 @@ class NodeRow<T> extends StatelessWidget {
   final NodeRowConfig Function(T data) nodeRowConfig;
   final Node<NodeData<T>> node;
 
+  final bool showCustomizationForRoot;
   final void Function()? onPressed;
   final Color breadCrumbLineColor;
   final Color elementsColor;
@@ -47,7 +49,7 @@ class NodeRow<T> extends StatelessWidget {
             ),
           ),
         ),
-        _prefixIcon(context, nodeConfig),
+        _prefixIcon(context, nodeConfig, showCustomizationForRoot),
         TextButton(
           onPressed: onPressed,
           child: Text(
@@ -55,13 +57,17 @@ class NodeRow<T> extends StatelessWidget {
             style: TextStyle(color: elementsColor, fontSize: 18),
           ),
         ),
-        _suffixIcon(context, nodeConfig),
+        _suffixIcon(context, nodeConfig, showCustomizationForRoot),
       ],
     );
   }
 
-  Widget _suffixIcon(BuildContext context, NodeRowConfig? nodeConfig) {
-    if (nodeConfig?.suffixIcon != null) {
+  Widget _suffixIcon(
+    BuildContext context,
+    NodeRowConfig? nodeConfig,
+    bool showCustomizationForRoot,
+  ) {
+    if (nodeConfig?.suffixIcon != null && showCustomizationForRoot) {
       final Color? iconColor =
           nodeConfig?.suffixIconColor ?? Theme.of(context).iconTheme.color;
 
@@ -71,8 +77,12 @@ class NodeRow<T> extends StatelessWidget {
     return Container();
   }
 
-  Widget _prefixIcon(BuildContext context, NodeRowConfig? nodeConfig) {
-    if (nodeConfig?.prefixIcon != null) {
+  Widget _prefixIcon(
+    BuildContext context,
+    NodeRowConfig? nodeConfig,
+    bool showCustomizationForRoot,
+  ) {
+    if (nodeConfig?.prefixIcon != null && showCustomizationForRoot) {
       final Color? iconColor =
           nodeConfig?.prefixIconColor ?? Theme.of(context).iconTheme.color;
 

@@ -7,14 +7,16 @@ class WidgetTree<T> extends StatelessWidget {
   const WidgetTree({
     super.key,
     required this.horizontalScrollController,
-    required this.verticalScrollController,
-    required this.breadCrumbLinesColor,
     this.alwaysScrollToTheEndOfTree = true,
+    required this.verticalScrollController,
+    required this.showCustomizationForRoot,
+    required this.breadCrumbLinesColor,
     this.initializeExpanded = true,
     this.showBackTopButton = true,
     required this.elementsColor,
     this.resetOnFilter = true,
     required this.nodeConfig,
+    required this.rootData,
     required this.dataList,
     this.filterPredicate,
     this.backgroundColor,
@@ -22,10 +24,12 @@ class WidgetTree<T> extends StatelessWidget {
 
   final bool Function(Parent)? filterPredicate;
   final bool alwaysScrollToTheEndOfTree;
+  final bool showCustomizationForRoot;
   final bool initializeExpanded;
   final bool showBackTopButton;
   final List<Parent> dataList;
   final bool resetOnFilter;
+  final Parent rootData;
 
   final ScrollController horizontalScrollController;
   final ScrollController verticalScrollController;
@@ -40,10 +44,11 @@ class WidgetTree<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TreeWidget(
+      alwaysScrollToTheEndOfTree: alwaysScrollToTheEndOfTree,
       horizontalScrollController: horizontalScrollController,
       verticalScrollController: verticalScrollController,
+      showCustomizationForRoot: showCustomizationForRoot,
       breadCrumbLinesColor: breadCrumbLinesColor,
-      alwaysScrollToTheEndOfTree: alwaysScrollToTheEndOfTree,
       initializeExpanded: initializeExpanded,
       showBackTopButton: showBackTopButton,
       filterPredicate: filterPredicate,
@@ -51,6 +56,7 @@ class WidgetTree<T> extends StatelessWidget {
       resetOnFilter: resetOnFilter,
       elementsColor: elementsColor,
       nodeConfig: nodeConfig,
+      rootData: rootData,
       dataList: dataList,
     );
   }
