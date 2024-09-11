@@ -35,15 +35,10 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: RotatedBox(
-        quarterTurns: 15,
-        child: SizedBox.expand(
-          child: Opacity(
-            opacity: .8,
-            child: VideoPlayer(_videoPlayerController),
-          ),
-        ),
+    return RotatedBox(
+      quarterTurns: 15,
+      child: SizedBox.expand(
+        child: VideoPlayer(_videoPlayerController),
       ),
     );
   }
