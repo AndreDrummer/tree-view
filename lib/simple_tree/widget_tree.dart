@@ -11,8 +11,10 @@ class WidgetTree<T> extends StatelessWidget {
     required this.verticalScrollController,
     required this.showCustomizationForRoot,
     required this.breadCrumbLinesColor,
+    this.backTopButtonBackgroundColor,
     this.initializeExpanded = true,
     this.showBackTopButton = true,
+    this.backTopButtonIconColor,
     required this.elementsColor,
     this.resetOnFilter = true,
     required this.nodeConfig,
@@ -34,6 +36,9 @@ class WidgetTree<T> extends StatelessWidget {
   final ScrollController horizontalScrollController;
   final ScrollController verticalScrollController;
 
+  final Color? backTopButtonBackgroundColor;
+  final Color? backTopButtonIconColor;
+
   final Color breadCrumbLinesColor;
   final Color? backgroundColor;
   final Color elementsColor;
@@ -44,10 +49,12 @@ class WidgetTree<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TreeWidget(
+      backTopButtonBackgroundColor: backTopButtonBackgroundColor,
       alwaysScrollToTheEndOfTree: alwaysScrollToTheEndOfTree,
       horizontalScrollController: horizontalScrollController,
-      verticalScrollController: verticalScrollController,
       showCustomizationForRoot: showCustomizationForRoot,
+      verticalScrollController: verticalScrollController,
+      backTopButtonIconColor: backTopButtonIconColor,
       breadCrumbLinesColor: breadCrumbLinesColor,
       initializeExpanded: initializeExpanded,
       showBackTopButton: showBackTopButton,

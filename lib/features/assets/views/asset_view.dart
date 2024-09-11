@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:tree_view/core/models/coisa.dart';
 import 'package:tree_view/core/models/enums.dart';
+import 'package:tree_view/core/widgets/dark_mode_button.dart';
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/assets/widgets/search_header.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
@@ -27,14 +28,6 @@ class _AssetsViewState extends State<AssetsView> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    horizontalScrollController.dispose();
-    verticalScrollController.dispose();
-
-    super.dispose();
-  }
-
   Widget searchHeader() {
     final AssetsController controller = Get.find();
 
@@ -52,7 +45,6 @@ class _AssetsViewState extends State<AssetsView> {
       onFilterByEnergy: () {
         controller.filterByEnergy();
       },
-      darkMode: Get.isDarkMode,
     );
   }
 
@@ -62,18 +54,17 @@ class _AssetsViewState extends State<AssetsView> {
     bool predicate(data) => assetsController.filterPredicate(data);
 
     return WidgetTree<Coisa>(
+      rootData: assetsController.data.first,
       dataList: assetsController.data,
-      rootData: Coisa(
-        kind: ItemKind.location,
-        name: "ROOT",
-        id: "998877",
-      ),
-      breadCrumbLinesColor: Get.isDarkMode ? Colors.white12 : Colors.black12,
-      backgroundColor: Get.isDarkMode ? AppTheme.dark1 : AppTheme.light1,
-      elementsColor: Get.isDarkMode ? AppTheme.light1 : AppTheme.dark1,
+      elementsColor: Get.isDarkMode ? AppTheme.light : AppTheme.primaryColor,
+      backTopButtonBackgroundColor:
+          Get.isDarkMode ? AppTheme.secondaryColor : AppTheme.primaryColor,
+      breadCrumbLinesColor: Get.isDarkMode ? AppTheme.light1 : AppTheme.dark1,
       nodeConfig: (Coisa data) => nodeRow(data, Get.isDarkMode),
       horizontalScrollController: horizontalScrollController,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       verticalScrollController: verticalScrollController,
+      backTopButtonIconColor: AppTheme.light,
       alwaysScrollToTheEndOfTree: false,
       showCustomizationForRoot: false,
       filterPredicate: predicate,
@@ -95,7 +86,7 @@ class _AssetsViewState extends State<AssetsView> {
 
   NodeRowConfig nodeRow(Coisa item, bool darkMode) {
     final prefixIcon = prefixIconBasedOnKind(item.kind);
-    final Color prefixIconColor = darkMode ? AppTheme.light1 : AppTheme.dark1;
+    final Color prefixIconColor = darkMode ? AppTheme.light : AppTheme.dark;
 
     final suffixIcon = item.sensorType != null
         ? (item.sensorType == AssetFilter.vibration.name
@@ -124,13 +115,25 @@ class _AssetsViewState extends State<AssetsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Column(
-        children: [
-          searchHeader(),
-          tree(),
-        ],
-      );
-    });
+    return Scaffold(
+      appBar: AppBar(
+        leading: const BackButton(),
+        title: const Text(
+          "Assets",
+          style: TextStyle(color: AppTheme.light),
+        ),
+        actions: const [DarkModeButton()],
+        centerTitle: true,
+      ),
+      body: Obx(() {
+        return ListView(
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            searchHeader(),
+            tree(),
+          ],
+        );
+      }),
+    );
   }
 }

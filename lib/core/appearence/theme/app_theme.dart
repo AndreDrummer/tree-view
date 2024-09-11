@@ -2,58 +2,68 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppTheme {
-  static Color dark1 = const Color.fromARGB(255, 8, 3, 3);
   static const Color secondaryColor = Color(0XFF2188FF);
   static const Color primaryColor = Color(0xFF17192D);
-  static const Color light1 = Colors.white;
+  static const Color dark = Colors.black;
+  static const Color light = Colors.white;
+  static const Color dark1 = Colors.black12;
+  static const Color light1 = Colors.white12;
 
   static const ColorScheme _darkColorScheme = ColorScheme.dark(
+    onPrimaryContainer: primaryColor,
     brightness: Brightness.dark,
     primary: primaryColor,
-    surface: primaryColor,
+    surface: dark,
   );
 
   static const ColorScheme _lightColorScheme = ColorScheme.light(
     onPrimaryContainer: secondaryColor,
     brightness: Brightness.light,
-    primary: secondaryColor,
-    surface: secondaryColor,
+    primary: primaryColor,
+    surface: light,
   );
 
-  static ThemeData light = ThemeData(
+  static ThemeData lightMode = ThemeData(
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppTheme.secondaryColor,
+      backgroundColor: AppTheme.primaryColor,
       systemOverlayStyle: SystemUiOverlayStyle(
         systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: light1,
+        systemNavigationBarColor: light,
       ),
+    ),
+    textTheme: const TextTheme(
+      bodyMedium: TextStyle(fontSize: 18, color: AppTheme.light),
+      bodyLarge: TextStyle(fontSize: 20, color: AppTheme.light),
     ),
     iconButtonTheme: const IconButtonThemeData(
       style: ButtonStyle(
-        iconColor: WidgetStatePropertyAll(AppTheme.light1),
+        iconColor: WidgetStatePropertyAll(AppTheme.light),
       ),
     ),
-    scaffoldBackgroundColor: light1,
+    scaffoldBackgroundColor: light,
     colorScheme: _lightColorScheme,
     brightness: Brightness.light,
     useMaterial3: true,
   );
 
-  static ThemeData dark = ThemeData(
-    appBarTheme: AppBarTheme(
+  static ThemeData darkMode = ThemeData(
+    appBarTheme: const AppBarTheme(
       backgroundColor: AppTheme.primaryColor,
       systemOverlayStyle: SystemUiOverlayStyle(
         systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: dark1,
+        systemNavigationBarColor: dark,
       ),
+    ),
+    textTheme: const TextTheme(
+      bodyMedium: TextStyle(fontSize: 18, color: AppTheme.light),
+      bodyLarge: TextStyle(fontSize: 20, color: AppTheme.light),
     ),
     iconButtonTheme: const IconButtonThemeData(
       style: ButtonStyle(
-        iconColor: WidgetStatePropertyAll(AppTheme.light1),
+        iconColor: WidgetStatePropertyAll(AppTheme.light),
       ),
     ),
-    navigationBarTheme: NavigationBarThemeData(backgroundColor: dark1),
-    scaffoldBackgroundColor: dark1,
+    scaffoldBackgroundColor: dark,
     colorScheme: _darkColorScheme,
     brightness: Brightness.dark,
     useMaterial3: true,

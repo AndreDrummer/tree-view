@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tree_view/core/routes/app_routes.dart';
+import 'package:tree_view/features/assets/views/asset_view.dart';
 import 'package:tree_view/features/home/views/home.dart';
 
 class RouterGenerator {
@@ -7,8 +8,8 @@ class RouterGenerator {
     switch (settings.name) {
       case Routes.root:
         return createCustomTransition(const Home());
-      case Routes.home:
-        return createCustomTransition(const Home());
+      case Routes.assetsView:
+        return createCustomTransition(const AssetsView());
     }
     return null;
   }

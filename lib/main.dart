@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
       themeMode: Get.find<AppearenceController>().isDarkModeON
           ? ThemeMode.dark
           : ThemeMode.light,
-      darkTheme: AppTheme.dark,
-      theme: AppTheme.light,
+      darkTheme: AppTheme.darkMode,
+      theme: AppTheme.lightMode,
       debugShowCheckedModeBanner: false,
     );
   }

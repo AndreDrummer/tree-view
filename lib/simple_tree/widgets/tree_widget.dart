@@ -9,12 +9,14 @@ class TreeWidget<T> extends StatefulWidget {
   const TreeWidget({
     super.key,
     required this.horizontalScrollController,
+    this.alwaysScrollToTheEndOfTree = true,
     required this.verticalScrollController,
     required this.showCustomizationForRoot,
-    this.alwaysScrollToTheEndOfTree = true,
     required this.breadCrumbLinesColor,
+    this.backTopButtonBackgroundColor,
     this.initializeExpanded = true,
     this.showBackTopButton = true,
+    this.backTopButtonIconColor,
     required this.elementsColor,
     this.resetOnFilter = true,
     required this.nodeConfig,
@@ -37,6 +39,9 @@ class TreeWidget<T> extends StatefulWidget {
 
   final ScrollController horizontalScrollController;
   final ScrollController verticalScrollController;
+
+  final Color? backTopButtonBackgroundColor;
+  final Color? backTopButtonIconColor;
 
   final Color breadCrumbLinesColor;
   final Color? backgroundColor;
@@ -118,7 +123,9 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
           ? emptyTreeWidget()
           : Tree(
               _treeInstance.tree,
+              backTopButtonBackgroundColor: widget.backTopButtonBackgroundColor,
               alwaysScrollToTheEndOfTree: widget.alwaysScrollToTheEndOfTree,
+              backTopButtonIconColor: widget.backTopButtonIconColor,
               showCustomizationForRoot: showCustomizationForRoot(),
               breadCrumbLinesColor: widget.breadCrumbLinesColor,
               horizontalController: horizontalScrollController,

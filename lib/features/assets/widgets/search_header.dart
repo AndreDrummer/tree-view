@@ -1,12 +1,12 @@
-import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:tree_view/features/assets/widgets/inline_checkbox.dart';
 import 'package:tree_view/features/assets/widgets/input_search.dart';
+import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SearchHeader extends StatelessWidget {
   const SearchHeader({
     super.key,
-    this.darkMode = true,
     this.scrollFunction,
     this.onFilterByText,
     this.onFilterByEnergy,
@@ -22,44 +22,45 @@ class SearchHeader extends StatelessWidget {
   final bool isFilteringByEnergy;
   final String textInitialValue;
   final bool isFilteringByVibration;
-  final bool darkMode;
 
   @override
   Widget build(BuildContext context) {
-    final headerBackgroundColor = darkMode ? AppTheme.dark1 : AppTheme.light1;
-    final elementsColor = darkMode ? AppTheme.light1 : AppTheme.dark1;
+    final elementsColor =
+        Get.isDarkMode ? AppTheme.light : AppTheme.primaryColor;
 
-    return Container(
-      color: headerBackgroundColor,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              InlineCheckbox(
-                value: isFilteringByEnergy,
-                onPressed: onFilterByEnergy,
-                activeColor: Colors.greenAccent,
-                borderColor: elementsColor,
-                textColor: elementsColor,
-                text: "Sensor de Energia",
-              ),
-              InlineCheckbox(
-                activeColor: Colors.redAccent,
-                borderColor: elementsColor,
-                onPressed: onFilterByVibration,
-                textColor: elementsColor,
-                value: isFilteringByVibration,
-                text: "Crítico",
-              ),
-            ],
-          ),
-          InputSearch(
-            hintText: 'Buscar Ativo ou local',
-            initialValue: textInitialValue,
-            search: onFilterByText,
-            color: elementsColor,
-          ),
-        ],
+    return Material(
+      child: Container(
+        color: Get.isDarkMode ? AppTheme.primaryColor : AppTheme.light,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                InlineCheckbox(
+                  value: isFilteringByEnergy,
+                  onPressed: onFilterByEnergy,
+                  activeColor: Colors.greenAccent,
+                  borderColor: elementsColor,
+                  textColor: elementsColor,
+                  text: "Sensor de Energia",
+                ),
+                InlineCheckbox(
+                  activeColor: Colors.redAccent,
+                  borderColor: elementsColor,
+                  onPressed: onFilterByVibration,
+                  textColor: elementsColor,
+                  value: isFilteringByVibration,
+                  text: "Crítico",
+                ),
+              ],
+            ),
+            InputSearch(
+              hintText: 'Buscar Ativo ou local',
+              initialValue: textInitialValue,
+              search: onFilterByText,
+              color: elementsColor,
+            ),
+          ],
+        ),
       ),
     );
   }

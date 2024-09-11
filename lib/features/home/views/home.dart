@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+import 'package:tree_view/core/routes/app_routes.dart';
 import 'package:tree_view/features/home/widgets/company_tile.dart';
 import 'package:tree_view/core/widgets/dark_mode_button.dart';
 import 'package:tree_view/core/constants/image_assets.dart';
@@ -21,7 +23,10 @@ class Home extends StatelessWidget {
             children: List.generate(
               3,
               (i) {
-                return const CompanyTile(title: "Jaguar Unit");
+                return CompanyTile(
+                  onTap: () => Get.toNamed(Routes.assetsView),
+                  title: "Jaguar Unit",
+                );
               },
             ),
           ),

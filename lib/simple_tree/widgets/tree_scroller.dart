@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class TreeScroller extends StatefulWidget {
   final ScrollController horizontalController;
   final ScrollController verticalController;
-  final bool allowHorizontalScrool;
+  final Color? backTopButtonBackgroundColor;
   final bool alwaysScrollToTheEndOfTree;
+  final Color? backTopButtonIconColor;
+  final bool allowHorizontalScrool;
   final bool allowVerticalScrool;
   final bool showBackTopButton;
   final int nodeDecendants;
@@ -17,10 +19,12 @@ class TreeScroller extends StatefulWidget {
     this.alwaysScrollToTheEndOfTree = true,
     required this.horizontalController,
     this.allowHorizontalScrool = true,
+    this.backTopButtonBackgroundColor,
     required this.verticalController,
     this.allowVerticalScrool = true,
     this.showBackTopButton = true,
     required this.nodeDecendants,
+    this.backTopButtonIconColor,
     required this.nodeHeight,
     required this.viewHeight,
     required this.viewWidth,
@@ -112,8 +116,12 @@ class _HorizontalScrollState extends State<TreeScroller> {
               duration: Durations.extralong4,
               opacity: backToTopButtonOpacity,
               child: FloatingActionButton(
+                backgroundColor: widget.backTopButtonBackgroundColor,
                 onPressed: scrollToTheBeginningOfData,
-                child: const Icon(Icons.arrow_upward_rounded),
+                child: Icon(
+                  color: widget.backTopButtonIconColor,
+                  Icons.arrow_upward_rounded,
+                ),
               ),
             ),
           ),

@@ -16,7 +16,7 @@ class AppearenceController extends GetxController {
   }
 
   void toggleAppearenceMode() {
-    Get.changeTheme(isDarkModeON ? AppTheme.light : AppTheme.dark);
+    Get.changeTheme(isDarkModeON ? AppTheme.lightMode : AppTheme.darkMode);
     _isDarkModeON.value ? _turnOffDarkMode() : _turnOnDarkMode();
   }
 
