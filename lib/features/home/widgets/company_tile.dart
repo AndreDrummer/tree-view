@@ -1,6 +1,8 @@
+import 'package:flutter_svg/svg.dart';
 import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tree_view/core/constants/graphic_assets.dart';
 
 class CompanyTile extends StatelessWidget {
   const CompanyTile({
@@ -30,9 +32,14 @@ class CompanyTile extends StatelessWidget {
           child: Row(
             children: [
               const SizedBox(width: 24),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.business_rounded, color: AppTheme.light),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  SVGAssets.hierarchy.name,
+                  height: 24,
+                  colorFilter:
+                      const ColorFilter.mode(AppTheme.light, BlendMode.srcIn),
+                ),
               ),
               Text(
                 title,

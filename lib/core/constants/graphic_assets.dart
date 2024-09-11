@@ -1,4 +1,5 @@
 enum SVGAssets {
+  hierarchy('assets/svg/hierarchy.svg'),
   component('assets/svg/component.svg'),
   location('assets/svg/location.svg'),
   asset('assets/svg/asset.svg');
