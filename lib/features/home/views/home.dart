@@ -1,9 +1,9 @@
-import 'package:get/get.dart';
-import 'package:tree_view/core/routes/app_routes.dart';
 import 'package:tree_view/features/home/widgets/company_tile.dart';
 import 'package:tree_view/core/widgets/dark_mode_button.dart';
 import 'package:tree_view/core/constants/graphic_assets.dart';
+import 'package:tree_view/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});

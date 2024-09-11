@@ -16,3 +16,11 @@ enum ImageAssets {
 
   final String name;
 }
+
+enum VideoAssets {
+  loadingScreen('assets/videos/video.mp4');
+
+  const VideoAssets(this.name);
+
+  final String name;
+}

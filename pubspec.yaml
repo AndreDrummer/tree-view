@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8  
   get: ^4.6.6
   flutter_svg: ^2.0.10+1
+  video_player: ^2.9.1
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/videos/
     - assets/svg/
 
   # An image asset can refer to one or more resolution-specific "variants", see
