@@ -1,11 +1,11 @@
-import 'package:tree_view/core/models/coisa.dart';
+import 'package:tree_view/core/models/data_item.dart';
 import 'package:tree_view/core/utils/extensions.dart';
 import 'package:tree_view/core/models/enums.dart';
-import 'package:tree_view/core/data/coisa.dart';
+import 'package:tree_view/core/data/data_item.dart';
 import 'package:get/get.dart';
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 
-typedef Predicate<Coisa> = bool Function(Coisa item);
+typedef Predicate<DataItem> = bool Function(DataItem item);
 
 enum FilterType {
   sensorType,
@@ -14,7 +14,7 @@ enum FilterType {
 
 class AssetsController extends GetxController {
   Rx<AssetFilter> tractianItenFilter = AssetFilter.none.obs;
-  final RxList<Coisa> _data = coisa.obs;
+  final RxList<DataItem> _data = dataItem.obs;
   final RxString _textToSearch = "".obs;
 
   // Getters
@@ -28,11 +28,11 @@ class AssetsController extends GetxController {
   bool get resetDataOnFilter => false;
   List<Parent> get data => _data;
 
-  final RxMap<FilterType, Predicate<Coisa>> _predicateMap =
-      <FilterType, Predicate<Coisa>>{}.obs;
+  final RxMap<FilterType, Predicate<DataItem>> _predicateMap =
+      <FilterType, Predicate<DataItem>>{}.obs;
 
-  bool Function(Coisa) get filterPredicate {
-    return (Coisa item) {
+  bool Function(DataItem) get filterPredicate {
+    return (DataItem item) {
       // Combine all predicates using AND logic
       for (var predicate in _predicateMap.entries) {
         if (!predicate.value(item)) {
@@ -59,7 +59,7 @@ class AssetsController extends GetxController {
     _predicateMap.value = {..._predicateMap}..remove(FilterType.text);
 
     if (finalText.length >= 3) {
-      bool predicate(Coisa item) {
+      bool predicate(DataItem item) {
         final nameToCompare = item.name.removeAccents().trim().toLowerCase();
         return nameToCompare.contains(finalText);
       }
@@ -74,7 +74,7 @@ class AssetsController extends GetxController {
     if (tractianItenFilter.value == none) {
       _resetPredicates();
     } else {
-      bool predicate(Coisa item) =>
+      bool predicate(DataItem item) =>
           item.sensorType == tractianItenFilter.value.name;
 
       _predicateMap.putIfAbsent(FilterType.sensorType, () => predicate);

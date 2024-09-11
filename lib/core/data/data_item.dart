@@ -1,6 +1,6 @@
 import 'package:tree_view/core/data/json_location_list.dart';
 import 'package:tree_view/core/data/json_asset_list.dart';
-import 'package:tree_view/core/models/coisa.dart';
+import 'package:tree_view/core/models/data_item.dart';
 import 'package:tree_view/core/models/location.dart';
 import 'package:tree_view/core/models/asset.dart';
 
@@ -17,4 +17,4 @@ final _itemList = [
   ..._dataAsset,
 ];
 
-final List<Coisa> coisa = Coisa.fromItemList(_itemList);
+final List<DataItem> dataItem = DataItem.fromItemList(_itemList);

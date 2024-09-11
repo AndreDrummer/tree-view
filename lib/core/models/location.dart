@@ -26,7 +26,7 @@ class Location extends Parent {
   });
 
   // Factory method to create a Location from JSON
-  factory Location.fromJson(Map<String, dynamic> json) {
+  factory Location.fromJson(json) {
     return Location(
       parentId: json[LocationEnum.parentId.name],
       name: json[LocationEnum.name.name],
