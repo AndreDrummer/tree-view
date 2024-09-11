@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:tree_view/core/routes/app_routes.dart';
-import 'package:tree_view/core/widgets/splashscreen.dart';
 import 'package:tree_view/features/assets/views/asset_view.dart';
+import 'package:tree_view/core/system/views/splashscreen.dart';
 import 'package:tree_view/features/home/views/home.dart';
+import 'package:tree_view/core/routes/app_routes.dart';
+import 'package:flutter/material.dart';
 
 class RouterGenerator {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {

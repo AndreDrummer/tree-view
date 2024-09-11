@@ -39,7 +39,7 @@ class Asset extends Parent {
   });
 
   // Factory method to create a Asset from JSON
-  factory Asset.fromJson(json) {
+  factory Asset.fromJson(Map<String, dynamic> json) {
     return Asset(
       locationId: json[AssetEnum.locationId.name],
       sensorType: json[AssetEnum.sensorType.name],
@@ -51,6 +51,12 @@ class Asset extends Parent {
       id: json[AssetEnum.id.name],
       kind: kindDefiner(json),
     );
+  }
+
+  static List<Asset> fromList(list) {
+    if (list is! List || list.isEmpty) return [];
+
+    return list.map((json) => Asset.fromJson(json)).toList();
   }
 
   // Method to convert a Asset to JSON

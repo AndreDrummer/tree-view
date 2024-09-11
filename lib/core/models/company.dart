@@ -10,11 +10,17 @@ class Company {
   });
 
   // Factory method to create a Company from JSON
-  factory Company.fromJson(json) {
+  factory Company.fromJson(Map<String, dynamic> json) {
     return Company(
       name: json[CompanyEnum.name.name],
       id: json[CompanyEnum.id.name],
     );
+  }
+
+  static List<Company> fromList(list) {
+    if (list is! List || list.isEmpty) return [];
+
+    return list.map((json) => Company.fromJson(json)).toList();
   }
 
   // Method to convert a Company to JSON

@@ -26,12 +26,18 @@ class Location extends Parent {
   });
 
   // Factory method to create a Location from JSON
-  factory Location.fromJson(json) {
+  factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
       parentId: json[LocationEnum.parentId.name],
       name: json[LocationEnum.name.name],
       id: json[LocationEnum.id.name],
     );
+  }
+
+  static List<Location> fromList(list) {
+    if (list is! List || list.isEmpty) return [];
+
+    return list.map((json) => Location.fromJson(json)).toList();
   }
 
   // Method to convert a Location to JSON
