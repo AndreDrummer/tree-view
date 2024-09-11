@@ -8,19 +8,19 @@ class SearchHeader extends StatelessWidget {
     this.darkMode = true,
     this.scrollFunction,
     this.onFilterByText,
-    this.onFilterByFemale,
-    this.onFilterByMale,
-    this.isFilteringByFemale = false,
-    this.isFilteringByMale = false,
+    this.onFilterByEnergy,
+    this.onFilterByVibration,
+    this.isFilteringByEnergy = false,
+    this.isFilteringByVibration = false,
     required this.textInitialValue,
   });
   final Function(String text)? onFilterByText;
   final Function(bool)? scrollFunction;
-  final Function()? onFilterByFemale;
-  final Function()? onFilterByMale;
-  final bool isFilteringByFemale;
+  final Function()? onFilterByEnergy;
+  final Function()? onFilterByVibration;
+  final bool isFilteringByEnergy;
   final String textInitialValue;
-  final bool isFilteringByMale;
+  final bool isFilteringByVibration;
   final bool darkMode;
 
   @override
@@ -35,25 +35,25 @@ class SearchHeader extends StatelessWidget {
           Row(
             children: [
               InlineCheckbox(
-                activeColor: Colors.blue,
+                value: isFilteringByEnergy,
+                onPressed: onFilterByEnergy,
+                activeColor: Colors.greenAccent,
                 borderColor: elementsColor,
-                onPressed: onFilterByMale,
                 textColor: elementsColor,
-                value: isFilteringByMale,
-                text: "Male",
+                text: "Sensor de Energia",
               ),
               InlineCheckbox(
-                value: isFilteringByFemale,
-                onPressed: onFilterByFemale,
-                activeColor: Colors.pink,
+                activeColor: Colors.redAccent,
                 borderColor: elementsColor,
+                onPressed: onFilterByVibration,
                 textColor: elementsColor,
-                text: "Female",
+                value: isFilteringByVibration,
+                text: "Crítico",
               ),
             ],
           ),
           InputSearch(
-            hintText: 'Buscar pessoa ou funcão',
+            hintText: 'Buscar Ativo ou local',
             initialValue: textInitialValue,
             search: onFilterByText,
             color: elementsColor,

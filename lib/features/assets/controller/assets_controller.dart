@@ -1,36 +1,38 @@
+import 'package:tree_view/core/models/coisa.dart';
 import 'package:tree_view/core/utils/extensions.dart';
-import 'package:tree_view/core/models/person.dart';
-import 'package:tree_view/core/data/person.dart';
+import 'package:tree_view/core/models/enums.dart';
+import 'package:tree_view/core/data/coisa.dart';
 import 'package:get/get.dart';
+import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 
-typedef Predicate<Person> = bool Function(Person item);
+typedef Predicate<Coisa> = bool Function(Coisa item);
 
 enum FilterType {
-  gender,
+  sensorType,
   text,
 }
 
 class AssetsController extends GetxController {
-  Rx<PersonGender> genderTypeFilter = PersonGender.none.obs;
-  final RxList<Person> _data = dataPerson.obs;
+  Rx<AssetFilter> tractianItenFilter = AssetFilter.none.obs;
+  final RxList<Coisa> _data = coisa.obs;
   final RxString _textToSearch = "".obs;
 
   // Getters
-  bool get isFilteringByFemale => genderTypeFilter.value == female;
-  bool get isFilteringByMale => genderTypeFilter.value == male;
+  bool get isFilteringByEnergy => tractianItenFilter.value == energy;
+  bool get isFilteringByVibration => tractianItenFilter.value == vibration;
   bool get isFilteringByAny => _predicateMap.isNotEmpty;
   String get textToSearch => _textToSearch.value;
-  PersonGender get female => PersonGender.female;
-  PersonGender get male => PersonGender.male;
-  PersonGender get none => PersonGender.none;
+  AssetFilter get vibration => AssetFilter.vibration;
+  AssetFilter get energy => AssetFilter.energy;
+  AssetFilter get none => AssetFilter.none;
   bool get resetDataOnFilter => false;
-  List<Person> get data => _data;
+  List<Parent> get data => _data;
 
-  final RxMap<FilterType, Predicate<Person>> _predicateMap =
-      <FilterType, Predicate<Person>>{}.obs;
+  final RxMap<FilterType, Predicate<Coisa>> _predicateMap =
+      <FilterType, Predicate<Coisa>>{}.obs;
 
-  bool Function(Person) get filterPredicate {
-    return (Person item) {
+  bool Function(Coisa) get filterPredicate {
+    return (Coisa item) {
       // Combine all predicates using AND logic
       for (var predicate in _predicateMap.entries) {
         if (!predicate.value(item)) {
@@ -57,8 +59,8 @@ class AssetsController extends GetxController {
     _predicateMap.value = {..._predicateMap}..remove(FilterType.text);
 
     if (finalText.length >= 3) {
-      bool predicate(Person person) {
-        final nameToCompare = person.name.removeAccents().trim().toLowerCase();
+      bool predicate(Coisa item) {
+        final nameToCompare = item.name.removeAccents().trim().toLowerCase();
         return nameToCompare.contains(finalText);
       }
 
@@ -66,35 +68,36 @@ class AssetsController extends GetxController {
     }
   }
 
-  void _filterByGender() {
+  void _filterBySensor() {
     _clearSearchText();
 
-    if (genderTypeFilter.value == none) {
+    if (tractianItenFilter.value == none) {
       _resetPredicates();
     } else {
-      bool predicate(Person person) => person.gender == genderTypeFilter.value;
+      bool predicate(Coisa item) =>
+          item.sensorType == tractianItenFilter.value.name;
 
-      _predicateMap.putIfAbsent(FilterType.gender, () => predicate);
+      _predicateMap.putIfAbsent(FilterType.sensorType, () => predicate);
 
       _predicateMap.removeWhere((k, v) => k == FilterType.text);
     }
   }
 
-  void filterByMaleGender() {
-    if (genderTypeFilter.value == male) {
-      genderTypeFilter(none);
+  void filterByEnergy() {
+    if (tractianItenFilter.value == energy) {
+      tractianItenFilter(none);
     } else {
-      genderTypeFilter(male);
+      tractianItenFilter(energy);
     }
-    _filterByGender();
+    _filterBySensor();
   }
 
-  void filterByFemaleGender() {
-    if (genderTypeFilter.value == female) {
-      genderTypeFilter(none);
+  void filterByVibration() {
+    if (tractianItenFilter.value == vibration) {
+      tractianItenFilter(none);
     } else {
-      genderTypeFilter(female);
+      tractianItenFilter(vibration);
     }
-    _filterByGender();
+    _filterBySensor();
   }
 }

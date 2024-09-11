@@ -43,7 +43,7 @@ class TreeManager<T extends Parent> {
     return Node(
       expanded: _initializeExpanded,
       value: _rootData,
-      id: _rootData.id,
+      id: 9999,
     );
   }
 

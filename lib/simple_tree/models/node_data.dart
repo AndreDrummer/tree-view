@@ -2,7 +2,7 @@ import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 
 class NodeData<T> {
   final T? data;
-  final int id;
+  final dynamic id;
 
   NodeData({
     this.data,

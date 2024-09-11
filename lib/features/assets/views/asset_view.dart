@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tree_view/core/models/person.dart';
+import 'package:tree_view/core/models/coisa.dart';
+import 'package:tree_view/core/models/enums.dart';
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/assets/widgets/search_header.dart';
 import 'package:tree_view/core/appearence/controller/appearence_controller.dart';
@@ -38,19 +39,19 @@ class _AssetsViewState extends State<AssetsView> {
     final AppearenceController appearence = Get.find();
     final AssetsController controller = Get.find();
 
-    final isFilteringByFemale = controller.isFilteringByFemale;
-    final isFilteringByMale = controller.isFilteringByMale;
+    final isFilteringByVibration = controller.isFilteringByVibration;
+    final isFilteringByEnergy = controller.isFilteringByEnergy;
 
     return SearchHeader(
+      isFilteringByVibration: isFilteringByVibration,
       textInitialValue: controller.textToSearch,
-      isFilteringByFemale: isFilteringByFemale,
+      isFilteringByEnergy: isFilteringByEnergy,
       onFilterByText: controller.setSearchText,
-      isFilteringByMale: isFilteringByMale,
-      onFilterByMale: () {
-        controller.filterByMaleGender();
+      onFilterByVibration: () {
+        controller.filterByVibration();
       },
-      onFilterByFemale: () {
-        controller.filterByFemaleGender();
+      onFilterByEnergy: () {
+        controller.filterByEnergy();
       },
       darkMode: appearence.isDarkModeON,
     );
@@ -63,40 +64,64 @@ class _AssetsViewState extends State<AssetsView> {
 
     bool predicate(data) => assetsController.filterPredicate(data);
 
-    return WidgetTree<Person>(
+    return WidgetTree<Coisa>(
       dataList: assetsController.data,
+      rootData: Coisa(
+        kind: ItemKind.location,
+        name: "ROOT",
+        id: "998877",
+      ),
       breadCrumbLinesColor: darkMode ? Colors.white12 : Colors.black12,
       backgroundColor: darkMode ? Colors.black : Colors.white,
+      nodeConfig: (Coisa data) => nodeRow(data, darkMode),
       elementsColor: darkMode ? Colors.white : Colors.black,
       horizontalScrollController: horizontalScrollController,
-      rootData: Person(id: 998877, name: "Familia Nascimento"),
-      nodeConfig: (Person data) => nodeRow(data, darkMode),
       verticalScrollController: verticalScrollController,
       alwaysScrollToTheEndOfTree: false,
       showCustomizationForRoot: false,
       filterPredicate: predicate,
-      initializeExpanded: false,
+      initializeExpanded: true,
       showBackTopButton: true,
     );
   }
 
-  NodeRowConfig nodeRow(Person person, bool darkMode) {
-    final prefixIcon = person.male ? Icons.man : Icons.woman;
+  IconData prefixIconBasedOnKind(ItemKind kind) {
+    switch (kind) {
+      case ItemKind.location:
+        return Icons.pin_drop_outlined;
+      case ItemKind.asset:
+        return Icons.square;
+      case ItemKind.component:
+        return Icons.grid_on_outlined;
+    }
+  }
+
+  NodeRowConfig nodeRow(Coisa item, bool darkMode) {
+    final prefixIcon = prefixIconBasedOnKind(item.kind);
     final Color prefixIconColor = darkMode ? Colors.white : Colors.black;
 
-    final suffixIcon =
-        person.fat ? Icons.fastfood_outlined : Icons.flash_on_rounded;
+    final suffixIcon = item.sensorType != null
+        ? (item.sensorType == AssetFilter.vibration.name
+            ? Icons.circle
+            : Icons.flash_on_rounded)
+        : null;
 
-    final Color suffixIconColor =
-        person.fat ? Colors.redAccent : Colors.greenAccent;
+    final Color? suffixIconColor = item.sensorType != null
+        ? (item.sensorType == AssetFilter.vibration.name
+            ? Colors.redAccent
+            : Colors.greenAccent)
+        : null;
 
     return NodeRowConfig(
       prefixIconColor: prefixIconColor,
       suffixIconColor: suffixIconColor,
       suffixIcon: suffixIcon,
       prefixIcon: prefixIcon,
-      title: person.name,
-      suffixIconSize: 14,
+      title: item.name,
+      suffixIconSize: item.sensorType != null &&
+              item.sensorType == AssetFilter.vibration.name
+          ? 8
+          : 14,
     );
   }
 
