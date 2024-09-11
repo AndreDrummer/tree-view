@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/builder/node.dart';
@@ -68,12 +69,14 @@ class NodeRow<T> extends StatelessWidget {
     NodeRowConfig? nodeConfig,
     bool showCustomizationForRoot,
   ) {
-    if (nodeConfig?.suffixIcon != null && showCustomizationForRoot) {
+    if (nodeConfig != null &&
+        nodeConfig.suffixIcon != null &&
+        showCustomizationForRoot) {
       final Color? iconColor =
-          nodeConfig?.suffixIconColor ?? Get.theme.iconTheme.color;
+          nodeConfig.suffixIconColor ?? Get.theme.iconTheme.color;
 
-      return Icon(nodeConfig?.suffixIcon!,
-          color: iconColor, size: nodeConfig?.suffixIconSize);
+      return Icon(nodeConfig.suffixIcon!,
+          color: iconColor, size: nodeConfig.suffixIconSize);
     }
     return Container();
   }
@@ -83,12 +86,18 @@ class NodeRow<T> extends StatelessWidget {
     NodeRowConfig? nodeConfig,
     bool showCustomizationForRoot,
   ) {
-    if (nodeConfig?.prefixIcon != null && showCustomizationForRoot) {
+    if (nodeConfig != null &&
+        nodeConfig.prefixIcon != null &&
+        showCustomizationForRoot) {
       final Color? iconColor =
-          nodeConfig?.prefixIconColor ?? Get.theme.iconTheme.color;
+          nodeConfig.prefixIconColor ?? Get.theme.iconTheme.color;
 
-      return Icon(nodeConfig?.prefixIcon!,
-          color: iconColor, size: nodeConfig?.prefixIconSize);
+      final Widget svg = SvgPicture.asset(
+        nodeConfig.prefixIcon!,
+        height: 24,
+        colorFilter: ColorFilter.mode(iconColor!, BlendMode.srcIn),
+      );
+      return svg;
     }
     return Container();
   }

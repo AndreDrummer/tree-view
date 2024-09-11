@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tree_view/core/appearence/theme/app_theme.dart';
+import 'package:tree_view/core/constants/graphic_assets.dart';
 import 'package:tree_view/core/models/coisa.dart';
 import 'package:tree_view/core/models/enums.dart';
 import 'package:tree_view/core/widgets/dark_mode_button.dart';
@@ -66,27 +67,26 @@ class _AssetsViewState extends State<AssetsView> {
       verticalScrollController: verticalScrollController,
       backTopButtonIconColor: AppTheme.light,
       alwaysScrollToTheEndOfTree: false,
-      showCustomizationForRoot: false,
       filterPredicate: predicate,
       initializeExpanded: true,
       showBackTopButton: true,
     );
   }
 
-  IconData prefixIconBasedOnKind(ItemKind kind) {
+  String prefixIconBasedOnKind(ItemKind kind) {
     switch (kind) {
       case ItemKind.location:
-        return Icons.pin_drop_outlined;
+        return SVGAssets.location.name;
       case ItemKind.asset:
-        return Icons.square;
+        return SVGAssets.asset.name;
       case ItemKind.component:
-        return Icons.grid_on_outlined;
+        return SVGAssets.component.name;
     }
   }
 
   NodeRowConfig nodeRow(Coisa item, bool darkMode) {
     final prefixIcon = prefixIconBasedOnKind(item.kind);
-    final Color prefixIconColor = darkMode ? AppTheme.light : AppTheme.dark;
+    final Color prefixIconColor = darkMode ? AppTheme.light : AppTheme.secondaryColor;
 
     final suffixIcon = item.sensorType != null
         ? (item.sensorType == AssetFilter.vibration.name

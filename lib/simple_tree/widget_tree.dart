@@ -9,7 +9,7 @@ class WidgetTree<T> extends StatelessWidget {
     required this.horizontalScrollController,
     this.alwaysScrollToTheEndOfTree = true,
     required this.verticalScrollController,
-    required this.showCustomizationForRoot,
+    this.showCustomizationForRoot = true,
     required this.breadCrumbLinesColor,
     this.backTopButtonBackgroundColor,
     this.initializeExpanded = true,

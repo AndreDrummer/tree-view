@@ -5,7 +5,7 @@ class NodeRowConfig {
   final double? prefixIconSize;
   final double? suffixIconSize;
   final Color? suffixIconColor;
-  final IconData? prefixIcon;
+  final String? prefixIcon;
   final IconData? suffixIcon;
   final String title;
 
