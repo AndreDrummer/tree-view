@@ -1,34 +1,32 @@
+import 'package:tree_view/features/home/widgets/company_tile.dart';
+import 'package:tree_view/core/widgets/dark_mode_button.dart';
+import 'package:tree_view/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:tree_view/core/appearence/controller/appearence_controller.dart';
-import 'package:tree_view/core/widgets/custom_app_bar.dart';
-import 'package:tree_view/features/assets/views/asset_view.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key, required this.darkMode});
-
-  final bool darkMode;
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Obx(() {
-        final AppearenceController appearence = Get.find();
-
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: darkMode ? Colors.black : Colors.white,
-          body: Column(
-            children: [
-              CustomAppBar(
-                onDarkModeChanged: appearence.toggleAppearenceMode,
-                darkMode: appearence.isDarkModeON,
-              ),
-              const AssetsView(),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Image.asset(ImageAssets.logo),
+        actions: const [DarkModeButton()],
+        centerTitle: true,
+      ),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: List.generate(
+              3,
+              (i) {
+                return const CompanyTile(title: "Jaguar Unit");
+              },
+            ),
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:tree_view/core/models/coisa.dart';
 import 'package:tree_view/core/models/enums.dart';
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/assets/widgets/search_header.dart';
-import 'package:tree_view/core/appearence/controller/appearence_controller.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/widget_tree.dart';
 
@@ -36,7 +36,6 @@ class _AssetsViewState extends State<AssetsView> {
   }
 
   Widget searchHeader() {
-    final AppearenceController appearence = Get.find();
     final AssetsController controller = Get.find();
 
     final isFilteringByVibration = controller.isFilteringByVibration;
@@ -53,14 +52,12 @@ class _AssetsViewState extends State<AssetsView> {
       onFilterByEnergy: () {
         controller.filterByEnergy();
       },
-      darkMode: appearence.isDarkModeON,
+      darkMode: Get.isDarkMode,
     );
   }
 
   Widget tree() {
     final AssetsController assetsController = Get.find();
-    final AppearenceController appearence = Get.find();
-    final bool darkMode = appearence.isDarkModeON;
 
     bool predicate(data) => assetsController.filterPredicate(data);
 
@@ -71,10 +68,10 @@ class _AssetsViewState extends State<AssetsView> {
         name: "ROOT",
         id: "998877",
       ),
-      breadCrumbLinesColor: darkMode ? Colors.white12 : Colors.black12,
-      backgroundColor: darkMode ? Colors.black : Colors.white,
-      nodeConfig: (Coisa data) => nodeRow(data, darkMode),
-      elementsColor: darkMode ? Colors.white : Colors.black,
+      breadCrumbLinesColor: Get.isDarkMode ? Colors.white12 : Colors.black12,
+      backgroundColor: Get.isDarkMode ? AppTheme.dark1 : AppTheme.light1,
+      elementsColor: Get.isDarkMode ? AppTheme.light1 : AppTheme.dark1,
+      nodeConfig: (Coisa data) => nodeRow(data, Get.isDarkMode),
       horizontalScrollController: horizontalScrollController,
       verticalScrollController: verticalScrollController,
       alwaysScrollToTheEndOfTree: false,
@@ -98,7 +95,7 @@ class _AssetsViewState extends State<AssetsView> {
 
   NodeRowConfig nodeRow(Coisa item, bool darkMode) {
     final prefixIcon = prefixIconBasedOnKind(item.kind);
-    final Color prefixIconColor = darkMode ? Colors.white : Colors.black;
+    final Color prefixIconColor = darkMode ? AppTheme.light1 : AppTheme.dark1;
 
     final suffixIcon = item.sensorType != null
         ? (item.sensorType == AssetFilter.vibration.name

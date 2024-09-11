@@ -1,6 +1,7 @@
 import 'package:tree_view/core/appearence/controller/appearence_controller.dart';
+import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:tree_view/core/system/initializers.dart';
-import 'package:tree_view/features/home/views/home.dart';
+import 'package:tree_view/core/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,23 +14,18 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  ThemeData _themeData(bool darkMode) {
-    return ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: darkMode ? Colors.lightBlue : Colors.blue,
-      ),
-      useMaterial3: true,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final AppearenceController appearence = Get.find();
+    Get.find<AppearenceController>().setSystemThemeMode();
 
     return GetMaterialApp(
-      home: Home(darkMode: appearence.isDarkModeON),
+      onGenerateRoute: RouterGenerator.onGenerateRoute,
+      themeMode: Get.find<AppearenceController>().isDarkModeON
+          ? ThemeMode.dark
+          : ThemeMode.light,
+      darkTheme: AppTheme.dark,
+      theme: AppTheme.light,
       debugShowCheckedModeBanner: false,
-      theme: _themeData(appearence.isDarkModeON),
     );
   }
 }

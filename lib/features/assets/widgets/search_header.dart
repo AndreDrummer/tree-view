@@ -1,3 +1,4 @@
+import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:tree_view/features/assets/widgets/inline_checkbox.dart';
 import 'package:tree_view/features/assets/widgets/input_search.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +26,8 @@ class SearchHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headerBackgroundColor = darkMode ? Colors.black : Colors.white;
-    final elementsColor = darkMode ? Colors.white : Colors.black;
+    final headerBackgroundColor = darkMode ? AppTheme.dark1 : AppTheme.light1;
+    final elementsColor = darkMode ? AppTheme.light1 : AppTheme.dark1;
 
     return Container(
       color: headerBackgroundColor,

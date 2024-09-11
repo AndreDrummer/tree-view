@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart' hide Node;
 import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/builder/node.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
@@ -69,7 +70,7 @@ class NodeRow<T> extends StatelessWidget {
   ) {
     if (nodeConfig?.suffixIcon != null && showCustomizationForRoot) {
       final Color? iconColor =
-          nodeConfig?.suffixIconColor ?? Theme.of(context).iconTheme.color;
+          nodeConfig?.suffixIconColor ?? Get.theme.iconTheme.color;
 
       return Icon(nodeConfig?.suffixIcon!,
           color: iconColor, size: nodeConfig?.suffixIconSize);
@@ -84,7 +85,7 @@ class NodeRow<T> extends StatelessWidget {
   ) {
     if (nodeConfig?.prefixIcon != null && showCustomizationForRoot) {
       final Color? iconColor =
-          nodeConfig?.prefixIconColor ?? Theme.of(context).iconTheme.color;
+          nodeConfig?.prefixIconColor ?? Get.theme.iconTheme.color;
 
       return Icon(nodeConfig?.prefixIcon!,
           color: iconColor, size: nodeConfig?.prefixIconSize);
