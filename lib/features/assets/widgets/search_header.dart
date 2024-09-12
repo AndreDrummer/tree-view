@@ -1,4 +1,3 @@
-import 'package:tree_view/features/assets/widgets/inline_checkbox.dart';
 import 'package:tree_view/features/assets/widgets/input_search.dart';
 import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +18,9 @@ class SearchHeader extends StatelessWidget {
   final Function(bool)? scrollFunction;
   final Function()? onFilterByEnergy;
   final Function()? onFilterByVibration;
+  final bool isFilteringByVibration;
   final bool isFilteringByEnergy;
   final String textInitialValue;
-  final bool isFilteringByVibration;
 
   @override
   Widget build(BuildContext context) {
@@ -34,22 +33,23 @@ class SearchHeader extends StatelessWidget {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                InlineCheckbox(
-                  value: isFilteringByEnergy,
-                  onPressed: onFilterByEnergy,
-                  activeColor: Colors.greenAccent,
-                  borderColor: elementsColor,
-                  textColor: elementsColor,
-                  text: "Sensor de Energia",
+                Expanded(
+                  child: ButtonFiler(
+                    icon: Icons.flash_on_outlined,
+                    active: isFilteringByEnergy,
+                    text: "Sensor de Energia",
+                    onTap: onFilterByEnergy,
+                  ),
                 ),
-                InlineCheckbox(
-                  activeColor: Colors.redAccent,
-                  borderColor: elementsColor,
-                  onPressed: onFilterByVibration,
-                  textColor: elementsColor,
-                  value: isFilteringByVibration,
-                  text: "Crítico",
+                Expanded(
+                  child: ButtonFiler(
+                    active: isFilteringByVibration,
+                    onTap: onFilterByVibration,
+                    icon: Icons.info_outline,
+                    text: "Crítico",
+                  ),
                 ),
               ],
             ),
@@ -58,6 +58,61 @@ class SearchHeader extends StatelessWidget {
               initialValue: textInitialValue,
               search: onFilterByText,
               color: elementsColor,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ButtonFiler extends StatelessWidget {
+  const ButtonFiler({
+    super.key,
+    this.onTap,
+    required this.active,
+    required this.icon,
+    required this.text,
+  });
+
+  final Function()? onTap;
+  final IconData icon;
+  final bool active;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        // width: 100,
+        margin: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4.0),
+          border: Border.all(
+            color: Colors.grey,
+          ),
+          color: active ? AppTheme.secondaryColor : Colors.transparent,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: Icon(
+                icon,
+                color: active ? AppTheme.light : Colors.grey,
+                size: 16,
+              ),
+            ),
+            Text(
+              text,
+              style: context.theme.textTheme.bodyMedium?.copyWith(
+                fontSize: 15,
+                color: active ? AppTheme.light : Colors.grey,
+              ),
             ),
           ],
         ),

@@ -68,29 +68,37 @@ class _InputSearchState extends State<InputSearch> {
 
           widget.search?.call(_textEditingController.text);
         },
-        style: TextStyle(color: widget.color),
+        cursorColor: Colors.grey,
+        style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
         onSubmitted: widget.search,
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
-          hintStyle: TextStyle(color: widget.hintTextColor),
+          contentPadding: const EdgeInsets.only(left: 8.0),
+          hintStyle: const TextStyle(color: Colors.grey),
           hintText: widget.hintText,
           prefixIcon: _textEditingController.text.isEmpty
-              ? const Icon(Icons.search)
+              ? const Icon(Icons.search, color: Colors.grey)
               : null,
           suffixIcon: Visibility(
             visible: _textEditingController.text.isNotEmpty,
             child: IconButton(
               onPressed: clear,
-              icon: const Icon(Icons.close),
+              icon: const Icon(Icons.close, color: Colors.grey),
             ),
           ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: widget.color,
-            ),
-          ),
+          enabledBorder: _inputBorder(),
+          focusedBorder: _inputBorder(),
+          border: _inputBorder(),
         ),
+      ),
+    );
+  }
+
+  OutlineInputBorder _inputBorder() {
+    return const OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.grey,
       ),
     );
   }
