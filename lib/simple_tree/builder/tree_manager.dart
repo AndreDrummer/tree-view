@@ -4,7 +4,7 @@ import 'package:tree_view/simple_tree/utils/extensions.dart';
 import 'package:tree_view/simple_tree/builder/node.dart';
 import 'dart:collection';
 
-class TreeManager<T extends Parent> {
+class TreeManager<T extends ParentProtocol> {
   TreeManager._(this._dataList, this._initializeExpanded, this._rootData) {
     if (_dataList.isNotEmpty) {
       _tree = _referenceTree();
@@ -18,7 +18,7 @@ class TreeManager<T extends Parent> {
   final NodeData<T> _rootData;
   final List<T> _dataList;
 
-  static TreeManager instance<T extends Parent>({
+  static TreeManager instance<T extends ParentProtocol>({
     required NodeData<T> rootData,
     required bool initializeExpanded,
     required List<T> dataList,

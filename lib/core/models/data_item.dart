@@ -15,7 +15,7 @@ enum DataItemEnum {
   id,
 }
 
-class DataItem extends Parent {
+class DataItem extends ParentProtocol {
   final String? gatewayId; // Nullable
   final String? sensorType; // Nullable
   final String? locationId; // Nullable
@@ -40,7 +40,8 @@ class DataItem extends Parent {
     this.status,
   });
 
-  static List<DataItem> fromItemList(List item) {
+  static List<DataItem> fromList(List item) {
+    print("DADOS ${item.length}");
     List<DataItem> dataItem = [];
 
     for (final i in item) {

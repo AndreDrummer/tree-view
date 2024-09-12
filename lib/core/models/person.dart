@@ -2,7 +2,7 @@ import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 
 enum PersonGender { female, male, none }
 
-class Person extends Parent {
+class Person extends ParentProtocol {
   PersonGender gender;
   @override
   int? parentId;

@@ -5,6 +5,7 @@ import 'package:tree_view/core/models/company.dart';
 
 class HomeController extends GetxController {
   final RxList<Company> _companies = <Company>[].obs;
+
   late HttpProvider _httpProvider;
 
   List<Company> get companies => _companies;

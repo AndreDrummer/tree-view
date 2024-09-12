@@ -15,7 +15,7 @@ class NodeData<T> {
   }
 }
 
-class EmptyNodeData extends Parent {
+class EmptyNodeData extends ParentProtocol {
   @override
   get id => 0;
 

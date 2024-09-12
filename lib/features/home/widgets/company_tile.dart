@@ -37,14 +37,13 @@ class CompanyTile extends StatelessWidget {
                 child: SvgPicture.asset(
                   SVGAssets.hierarchy.name,
                   height: 24,
-                  colorFilter:
-                      const ColorFilter.mode(AppTheme.light, BlendMode.srcIn),
+                  colorFilter: const ColorFilter.mode(
+                    AppTheme.light,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
-              Text(
-                title,
-                style: context.theme.textTheme.bodyLarge,
-              ),
+              Text(title, style: context.theme.textTheme.bodyLarge),
             ],
           ),
         ),

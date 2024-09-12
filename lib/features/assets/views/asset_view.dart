@@ -55,7 +55,7 @@ class _AssetsViewState extends State<AssetsView> {
     bool predicate(data) => assetsController.filterPredicate(data);
 
     return WidgetTree<DataItem>(
-      rootData: assetsController.data.first,
+      rootData: assetsController.rootData,
       dataList: assetsController.data,
       elementsColor: Get.isDarkMode ? AppTheme.light : AppTheme.primaryColor,
       backTopButtonBackgroundColor:

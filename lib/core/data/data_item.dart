@@ -17,4 +17,4 @@ final _itemList = [
   ..._dataAsset,
 ];
 
-final List<DataItem> dataItem = DataItem.fromItemList(_itemList);
+final List<DataItem> dataItem = DataItem.fromList(_itemList);

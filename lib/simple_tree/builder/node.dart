@@ -159,7 +159,7 @@ class Node<T> {
       for (int i = 0; i < nodePath.length - 1; i++) {
         int id = nodePath[i];
         if (current == null || id >= current.children!.length) {
-          return null; // Parent not found
+          return null; // ParentProtocol not found
         }
         current = current.children![id];
       }

@@ -24,14 +24,14 @@ class WidgetTree<T> extends StatelessWidget {
     this.backgroundColor,
   });
 
-  final bool Function(Parent)? filterPredicate;
+  final bool Function(ParentProtocol)? filterPredicate;
   final bool alwaysScrollToTheEndOfTree;
   final bool showCustomizationForRoot;
   final bool initializeExpanded;
   final bool showBackTopButton;
-  final List<Parent> dataList;
+  final List<ParentProtocol> dataList;
   final bool resetOnFilter;
-  final Parent rootData;
+  final ParentProtocol rootData;
 
   final ScrollController horizontalScrollController;
   final ScrollController verticalScrollController;

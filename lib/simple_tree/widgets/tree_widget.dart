@@ -27,15 +27,15 @@ class TreeWidget<T> extends StatefulWidget {
     this.backgroundColor,
   });
 
-  final bool Function(Parent)? filterPredicate;
+  final bool Function(ParentProtocol)? filterPredicate;
   final bool alwaysScrollToTheEndOfTree;
   final bool showCustomizationForRoot;
   final String? nothingFoundText;
   final bool initializeExpanded;
   final bool showBackTopButton;
-  final List<Parent> dataList;
+  final List<ParentProtocol> dataList;
   final bool resetOnFilter;
-  final Parent rootData;
+  final ParentProtocol rootData;
 
   final ScrollController horizontalScrollController;
   final ScrollController verticalScrollController;
@@ -66,7 +66,7 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
     _treeInstance = TreeManager.instance(
       dataList: widget.dataList,
       initializeExpanded: widget.initializeExpanded,
-      rootData: NodeData<Parent>(
+      rootData: NodeData<ParentProtocol>(
         id: widget.rootData.id,
         data: widget.rootData,
       ),

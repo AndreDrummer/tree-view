@@ -13,7 +13,7 @@ enum AssetEnum {
   id,
 }
 
-class Asset extends Parent {
+class Asset extends ParentProtocol {
   final String? gatewayId; // Nullable
   final String? sensorType; // Nullable
   final String? locationId; // Nullable

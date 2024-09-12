@@ -8,7 +8,7 @@ enum LocationEnum {
   id,
 }
 
-class Location extends Parent {
+class Location extends ParentProtocol {
   @override
   final String? parentId; // Nullable
 

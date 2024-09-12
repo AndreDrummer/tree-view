@@ -9,8 +9,6 @@ class HttpProvider extends GetConnect {
   void onInit() {
     httpClient.defaultDecoder = Company.fromList;
     httpClient.baseUrl = 'https://fake-api.tractian.com';
-
-    print("PROVIDER INITIAL ${httpClient.baseUrl}");
   }
 
   Future<Response<List<Company>>> getCompanies(String urlPath) {
