@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 import 'package:tree_view/core/http/http_provider.dart';
 import 'package:tree_view/core/utils/extensions.dart';
@@ -75,7 +77,8 @@ class AssetsController extends GetxController {
     setLoading();
     await _loadCompanyLocations();
     await _loadCompanyAssets();
-    _data(DataItem.fromList([..._locations, ..._assets]));
+    final sample = DataItem.fromList([..._locations, ..._assets]);
+    _data(sample.sublist(0, min(sample.length, 100)));
     resetLoading();
   }
 
@@ -142,7 +145,6 @@ class AssetsController extends GetxController {
 
     if (response.isOk) {
       _locations = response.body!;
-      print("LOCATIONS ${_locations.length}");
     }
   }
 
@@ -154,7 +156,6 @@ class AssetsController extends GetxController {
 
     if (response.isOk) {
       _assets = response.body!;
-      print("ASSETS ${_assets.length}");
     }
   }
 

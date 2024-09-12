@@ -39,7 +39,7 @@ class NodeRow<T> extends StatelessWidget {
           replacement: Container(
             color: breadCrumbLineColor,
             height: 1,
-            width: 49,
+            width: 48,
           ),
           child: IconButton(
             onPressed: onPressed,

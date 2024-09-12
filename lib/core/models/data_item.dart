@@ -41,7 +41,6 @@ class DataItem extends ParentProtocol {
   });
 
   static List<DataItem> fromList(List item) {
-    print("DADOS ${item.length}");
     List<DataItem> dataItem = [];
 
     for (final i in item) {
