@@ -1,6 +1,5 @@
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 import 'package:tree_view/simple_tree/builder/tree_manager.dart';
-import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/widgets/tree.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +17,9 @@ class TreeWidget<T> extends StatefulWidget {
     this.showBackTopButton = true,
     this.backTopButtonIconColor,
     required this.elementsColor,
+    required this.treeManager,
     this.resetOnFilter = true,
     required this.nodeConfig,
-    required this.dataList,
-    required this.rootData,
     this.nothingFoundText,
     this.filterPredicate,
     this.backgroundColor,
@@ -30,15 +28,17 @@ class TreeWidget<T> extends StatefulWidget {
   final bool Function(ParentProtocol)? filterPredicate;
   final bool alwaysScrollToTheEndOfTree;
   final bool showCustomizationForRoot;
+
   final String? nothingFoundText;
   final bool initializeExpanded;
+
   final bool showBackTopButton;
-  final List<ParentProtocol> dataList;
   final bool resetOnFilter;
-  final ParentProtocol rootData;
 
   final ScrollController horizontalScrollController;
   final ScrollController verticalScrollController;
+
+  final TreeManager treeManager;
 
   final Color? backTopButtonBackgroundColor;
   final Color? backTopButtonIconColor;
@@ -57,35 +57,25 @@ class TreeWidget<T> extends StatefulWidget {
 class _TreeWidgetState<T> extends State<TreeWidget<T>> {
   late final ScrollController horizontalScrollController;
   late final ScrollController verticalScrollController;
-  late final TreeManager _treeInstance;
+  late final TreeManager treeManager;
 
   double backToTopButtonOpacity = 1;
 
   @override
   void initState() {
-    _treeInstance = TreeManager.instance(
-      dataList: widget.dataList,
-      initializeExpanded: widget.initializeExpanded,
-      rootData: NodeData<ParentProtocol>(
-        id: widget.rootData.id,
-        data: widget.rootData,
-      ),
-    );
     horizontalScrollController = widget.horizontalScrollController;
     verticalScrollController = widget.verticalScrollController;
+    treeManager = widget.treeManager;
 
     super.initState();
   }
 
   @override
   void didUpdateWidget(TreeWidget<T> oldWidget) {
-    if (widget.filterPredicate != null) {
-      _treeInstance.rebuild(
-        shouldResetTree: widget.resetOnFilter,
-        widget.filterPredicate!,
-      );
-    }
-
+    treeManager.rebuild(
+      shouldResetTree: widget.resetOnFilter,
+      widget.filterPredicate!,
+    );
     super.didUpdateWidget(oldWidget);
   }
 
@@ -95,7 +85,7 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
 
   void onNodeToggled(node) {
     setState(() {
-      _treeInstance.toogleNodeView(node);
+      treeManager.toogleNodeView(node);
     });
   }
 
@@ -120,10 +110,10 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
   Widget build(BuildContext context) {
     return Container(
       color: widget.backgroundColor,
-      child: _treeInstance.tree.id == -1
+      child: treeManager.tree.id == -1
           ? emptyTreeWidget()
           : Tree(
-              _treeInstance.tree,
+              treeManager.tree,
               backTopButtonBackgroundColor: widget.backTopButtonBackgroundColor,
               alwaysScrollToTheEndOfTree: widget.alwaysScrollToTheEndOfTree,
               backTopButtonIconColor: widget.backTopButtonIconColor,
@@ -132,7 +122,7 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
               horizontalController: horizontalScrollController,
               verticalController: verticalScrollController,
               showBackTopButton: widget.showBackTopButton,
-              nodeRootId: _treeInstance.nodeStart().id,
+              nodeRootId: treeManager.nodeStart().id,
               elementsColor: widget.elementsColor,
               toggleNodeView: onNodeToggled,
               nodeRowConfig: nodeConfig,

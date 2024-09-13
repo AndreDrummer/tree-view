@@ -5,8 +5,12 @@ import 'package:tree_view/core/constants/graphic_assets.dart';
 import 'package:tree_view/core/models/data_item.dart';
 import 'package:tree_view/core/models/enums.dart';
 import 'package:tree_view/core/widgets/dark_mode_button.dart';
+import 'package:tree_view/core/widgets/screen_blur.dart';
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/assets/widgets/search_header.dart';
+import 'package:tree_view/features/home/widgets/loading_widget.dart';
+import 'package:tree_view/simple_tree/builder/tree_manager.dart';
+import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/widget_tree.dart';
 
@@ -20,11 +24,26 @@ class AssetsView extends StatefulWidget {
 class _AssetsViewState extends State<AssetsView> {
   late final ScrollController horizontalScrollController;
   late final ScrollController verticalScrollController;
+  late final TreeManager treeManager;
+  bool dataViewIsReady = true;
 
   @override
   void initState() {
     horizontalScrollController = ScrollController();
     verticalScrollController = ScrollController();
+
+    final controller = Get.find<AssetsController>();
+
+    treeManager = TreeManager(
+      dataList: controller.data,
+      initializeExpanded: true,
+      rootData: NodeData<DataItem>(
+        data: controller.data.first,
+        id: controller.rootData.id,
+      ),
+    );
+
+    treeManager.buildTree();
 
     super.initState();
   }
@@ -55,8 +74,6 @@ class _AssetsViewState extends State<AssetsView> {
     bool predicate(data) => assetsController.filterPredicate(data);
 
     return WidgetTree<DataItem>(
-      rootData: assetsController.data.first,
-      dataList: assetsController.data,
       elementsColor: Get.isDarkMode ? AppTheme.light : AppTheme.primaryColor,
       backTopButtonBackgroundColor:
           Get.isDarkMode ? AppTheme.secondaryColor : AppTheme.primaryColor,
@@ -69,6 +86,7 @@ class _AssetsViewState extends State<AssetsView> {
       alwaysScrollToTheEndOfTree: false,
       filterPredicate: predicate,
       initializeExpanded: true,
+      treeManager: treeManager,
       showBackTopButton: true,
     );
   }
@@ -127,11 +145,24 @@ class _AssetsViewState extends State<AssetsView> {
         centerTitle: true,
       ),
       body: Obx(() {
-        return ListView(
-          physics: const NeverScrollableScrollPhysics(),
+        return Stack(
           children: [
-            searchHeader(),
-            tree(),
+            ListView(
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                searchHeader(),
+                Visibility(
+                  visible: dataViewIsReady,
+                  child: tree(),
+                ),
+              ],
+            ),
+            Visibility(
+              visible: !dataViewIsReady,
+              child: const ScreenBlur(
+                child: LoadingWidget(),
+              ),
+            )
           ],
         );
       }),

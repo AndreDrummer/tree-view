@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 import 'package:tree_view/core/http/http_provider.dart';
 import 'package:tree_view/core/utils/extensions.dart';
 import 'package:tree_view/core/models/data_item.dart';
@@ -52,7 +51,7 @@ class AssetsController extends GetxController {
   AssetFilter get energy => AssetFilter.energy;
   AssetFilter get none => AssetFilter.none;
   bool get isLoading => _isLoading.value;
-  List<ParentProtocol> get data => _data;
+  List<DataItem> get data => _data;
   bool get resetDataOnFilter => false;
 
   final RxMap<FilterType, Predicate<DataItem>> _predicateFilterMap =

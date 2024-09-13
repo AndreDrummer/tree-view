@@ -15,9 +15,9 @@ class SearchHeader extends StatelessWidget {
     required this.textInitialValue,
   });
   final Function(String text)? onFilterByText;
+  final Function()? onFilterByVibration;
   final Function(bool)? scrollFunction;
   final Function()? onFilterByEnergy;
-  final Function()? onFilterByVibration;
   final bool isFilteringByVibration;
   final bool isFilteringByEnergy;
   final String textInitialValue;

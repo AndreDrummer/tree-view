@@ -5,26 +5,26 @@ import 'package:tree_view/simple_tree/builder/node.dart';
 import 'dart:collection';
 
 class TreeManager<T extends ParentProtocol> {
-  TreeManager._(this._dataList, this._initializeExpanded, this._rootData) {
-    if (_dataList.isNotEmpty) {
-      _tree = _referenceTree();
-    } else {
-      _tree = _emptyTree;
-    }
-  }
+  TreeManager({
+    required bool initializeExpanded,
+    required NodeData<T> rootData,
+    required List<T> dataList,
+  })  : _initializeExpanded = initializeExpanded,
+        _rootData = rootData,
+        _dataList = dataList;
 
   // Is is changed constantly to reflect the data dynamicity.
   final bool _initializeExpanded;
   final NodeData<T> _rootData;
   final List<T> _dataList;
 
-  static TreeManager instance<T extends ParentProtocol>({
-    required NodeData<T> rootData,
-    required bool initializeExpanded,
-    required List<T> dataList,
-  }) {
-    return TreeManager._(dataList, initializeExpanded, rootData);
-  }
+  // static TreeManager instance<T extends ParentProtocol>({
+  //   required NodeData<T> rootData,
+  //   required bool initializeExpanded,
+  //   required List<T> dataList,
+  // }) {
+  //   return TreeManager._(dataList, initializeExpanded, rootData);
+  // }
 
   /// This is representation of a empty tree.
   final Node<NodeData<T>> _emptyTree = Node<NodeData<T>>(
@@ -45,6 +45,10 @@ class TreeManager<T extends ParentProtocol> {
       value: _rootData,
       id: 9999,
     );
+  }
+
+  void buildTree() {
+    _tree = _referenceTree();
   }
 
   void _updateTree(Node<NodeData<T>> node) {

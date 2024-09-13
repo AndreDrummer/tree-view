@@ -1,3 +1,4 @@
+import 'package:tree_view/simple_tree/builder/tree_manager.dart';
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/widgets/tree_widget.dart';
@@ -18,8 +19,7 @@ class WidgetTree<T> extends StatelessWidget {
     required this.elementsColor,
     this.resetOnFilter = true,
     required this.nodeConfig,
-    required this.rootData,
-    required this.dataList,
+    required this.treeManager,
     this.filterPredicate,
     this.backgroundColor,
   });
@@ -28,10 +28,9 @@ class WidgetTree<T> extends StatelessWidget {
   final bool alwaysScrollToTheEndOfTree;
   final bool showCustomizationForRoot;
   final bool initializeExpanded;
+  final TreeManager treeManager;
   final bool showBackTopButton;
-  final List<ParentProtocol> dataList;
   final bool resetOnFilter;
-  final ParentProtocol rootData;
 
   final ScrollController horizontalScrollController;
   final ScrollController verticalScrollController;
@@ -62,9 +61,8 @@ class WidgetTree<T> extends StatelessWidget {
       backgroundColor: backgroundColor,
       resetOnFilter: resetOnFilter,
       elementsColor: elementsColor,
+      treeManager: treeManager,
       nodeConfig: nodeConfig,
-      rootData: rootData,
-      dataList: dataList,
     );
   }
 }
