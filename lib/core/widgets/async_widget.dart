@@ -24,9 +24,8 @@ class _AsyncWidgetState extends State<AsyncWidget> {
     return FutureBuilder(
       future: widget.future,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return widget.whenLoadingShow;
-        }
+        return widget.whenLoadingShow;
+        if (snapshot.connectionState == ConnectionState.waiting) {}
 
         if (snapshot.hasError) {
           return widget.whenErrorShow;

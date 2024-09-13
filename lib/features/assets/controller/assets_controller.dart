@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:tree_view/core/http/http_provider.dart';
 import 'package:tree_view/core/utils/extensions.dart';
 import 'package:tree_view/core/models/data_item.dart';
@@ -77,7 +75,7 @@ class AssetsController extends GetxController {
     await _loadCompanyLocations();
     await _loadCompanyAssets();
     final sample = DataItem.fromList([..._locations, ..._assets]);
-    _data(sample.sublist(0, min(sample.length, 100)));
+    _data(sample);
     resetLoading();
   }
 

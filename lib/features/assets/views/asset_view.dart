@@ -25,7 +25,7 @@ class _AssetsViewState extends State<AssetsView> {
   late final ScrollController horizontalScrollController;
   late final ScrollController verticalScrollController;
   late final TreeManager treeManager;
-  bool dataViewIsReady = true;
+  bool dataViewIsReady = false;
 
   @override
   void initState() {
@@ -43,7 +43,18 @@ class _AssetsViewState extends State<AssetsView> {
       ),
     );
 
-    treeManager.buildTree();
+    if (controller.data.length < 100) {
+      setState(() {
+        treeManager.buildTree();
+        dataViewIsReady = true;
+      });
+    } else {
+      treeManager.buildTreeOnIsolate().then((_) {
+        setState(() {
+          dataViewIsReady = true;
+        });
+      });
+    }
 
     super.initState();
   }
@@ -159,7 +170,9 @@ class _AssetsViewState extends State<AssetsView> {
             Visibility(
               visible: !dataViewIsReady,
               child: const ScreenBlur(
-                child: LoadingWidget(),
+                child: LoadingWidget(
+                  feedbackText: "Montando visualização de dados!",
+                ),
               ),
             )
           ],

@@ -2,7 +2,14 @@ import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/utils/extensions.dart';
 import 'package:tree_view/simple_tree/builder/node.dart';
+import 'package:tree_view/simple_tree/utils/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:collection';
+
+enum BuildTreeMode {
+  onMain,
+  onSpawnIsolate,
+}
 
 class TreeManager<T extends ParentProtocol> {
   TreeManager({
@@ -17,14 +24,6 @@ class TreeManager<T extends ParentProtocol> {
   final bool _initializeExpanded;
   final NodeData<T> _rootData;
   final List<T> _dataList;
-
-  // static TreeManager instance<T extends ParentProtocol>({
-  //   required NodeData<T> rootData,
-  //   required bool initializeExpanded,
-  //   required List<T> dataList,
-  // }) {
-  //   return TreeManager._(dataList, initializeExpanded, rootData);
-  // }
 
   /// This is representation of a empty tree.
   final Node<NodeData<T>> _emptyTree = Node<NodeData<T>>(
@@ -48,7 +47,24 @@ class TreeManager<T extends ParentProtocol> {
   }
 
   void buildTree() {
-    _tree = _referenceTree();
+    final startTime = Utils.startExecutionTime(methodName: "buildTree");
+    _tree = _referenceTree(BuildTreeMode.onMain);
+    Utils.endExecutionTime(startTime, methodName: "buildTree");
+  }
+
+  Future<void> buildTreeOnIsolate() async {
+    final startTime = Utils.startExecutionTime(
+      methodName: "buildTreeOnIsolate",
+    );
+
+    try {
+      _tree = await compute(_referenceTree, BuildTreeMode.onSpawnIsolate);
+    } catch (err, stack) {
+      debugPrint("Error running buildTreeOnIsolate: $err");
+      debugPrint("Stack Trace: $stack");
+      rethrow;
+    }
+    Utils.endExecutionTime(startTime, methodName: "buildTreeOnIsolate");
   }
 
   void _updateTree(Node<NodeData<T>> node) {
@@ -56,11 +72,14 @@ class TreeManager<T extends ParentProtocol> {
   }
 
   void _resetTree() {
-    _tree = _referenceTree();
+    _tree = _referenceTree(BuildTreeMode.onMain);
   }
 
   /// This is the initial tree mounted. It never changes.
-  Node<NodeData<T>> _referenceTree() {
+  Node<NodeData<T>> _referenceTree(
+    BuildTreeMode? buildTreeMode,
+  ) {
+    debugPrint("BuildTree Mode: ${buildTreeMode ?? BuildTreeMode.onMain}");
     final List<NodeData<T>> nodeDataList = _dataList.toNodeDataList();
 
     final startNode = nodeStart();

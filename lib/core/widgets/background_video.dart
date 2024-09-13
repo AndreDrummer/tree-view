@@ -23,10 +23,10 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
         VideoPlayerController.asset(VideoAssets.loadingScreen.name)
           ..initialize().then((_) {
             setState(() {});
-          });
-    // ..play()
-    // ..setLooping(true)
-    // ..setVolume(0);
+          })
+          ..play()
+          ..setLooping(true)
+          ..setVolume(0);
   }
 
   @override

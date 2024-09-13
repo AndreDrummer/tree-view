@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:get/get.dart';
+import 'package:tree_view/core/widgets/progress_loading.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({super.key, this.feedbackText});
@@ -12,18 +13,13 @@ class LoadingWidget extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(
-          height: 16,
-          width: 16,
-          child: CircularProgressIndicator(
-            backgroundColor: AppTheme.light,
-            strokeWidth: 1.5,
-          ),
-        ),
-        const SizedBox(height: 8.0),
+        const ProgressLoading(),
+        const SizedBox(height: 16.0),
         if (feedbackText != null)
           Text(
-            style: context.theme.textTheme.bodySmall,
+            style: context.theme.textTheme.bodySmall?.copyWith(
+              color: AppTheme.light,
+            ),
             feedbackText!,
             textAlign: TextAlign.center,
           ),
