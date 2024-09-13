@@ -8,11 +8,12 @@ class AppTheme {
   static const Color light = Colors.white;
   static const Color dark1 = Colors.black12;
   static const Color light1 = Colors.white12;
+  static const Color light2 = Colors.white54;
 
   static const ColorScheme _darkColorScheme = ColorScheme.dark(
     onPrimaryContainer: primaryColor,
     brightness: Brightness.dark,
-    primary: primaryColor,
+    primary: secondaryColor,
     surface: dark,
   );
 
@@ -25,7 +26,7 @@ class AppTheme {
 
   static ThemeData lightMode = ThemeData(
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppTheme.primaryColor,
+      backgroundColor: AppTheme.secondaryColor,
       systemOverlayStyle: SystemUiOverlayStyle(
         systemNavigationBarIconBrightness: Brightness.light,
         systemNavigationBarColor: light,
@@ -38,6 +39,32 @@ class AppTheme {
     iconButtonTheme: const IconButtonThemeData(
       style: ButtonStyle(
         iconColor: WidgetStatePropertyAll(AppTheme.light),
+      ),
+    ),
+    textButtonTheme: const TextButtonThemeData(
+      style: ButtonStyle(
+        iconColor: WidgetStatePropertyAll(AppTheme.light),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: const WidgetStatePropertyAll(AppTheme.light),
+        backgroundColor: const WidgetStatePropertyAll(AppTheme.secondaryColor),
+        iconColor: const WidgetStatePropertyAll(AppTheme.light),
+        foregroundBuilder: (context, states, child) {
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: child,
+          );
+        },
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        textStyle: const WidgetStatePropertyAll(
+          TextStyle(color: AppTheme.light),
+        ),
       ),
     ),
     scaffoldBackgroundColor: light,
@@ -61,6 +88,32 @@ class AppTheme {
     iconButtonTheme: const IconButtonThemeData(
       style: ButtonStyle(
         iconColor: WidgetStatePropertyAll(AppTheme.light),
+      ),
+    ),
+    textButtonTheme: const TextButtonThemeData(
+      style: ButtonStyle(
+        iconColor: WidgetStatePropertyAll(AppTheme.light),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: const WidgetStatePropertyAll(AppTheme.light),
+        backgroundColor: const WidgetStatePropertyAll(AppTheme.secondaryColor),
+        iconColor: const WidgetStatePropertyAll(AppTheme.light),
+        foregroundBuilder: (context, states, child) {
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: child,
+          );
+        },
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        textStyle: const WidgetStatePropertyAll(
+          TextStyle(color: AppTheme.light),
+        ),
       ),
     ),
     scaffoldBackgroundColor: dark,

@@ -32,7 +32,8 @@ class SearchHeader extends StatelessWidget {
       onPopInvokedWithResult: (value, any) => onFilterByText(""),
       child: Material(
         child: Container(
-          color: Get.isDarkMode ? AppTheme.primaryColor : AppTheme.light,
+          color:
+              Get.isDarkMode ? AppTheme.primaryColor : AppTheme.secondaryColor,
           child: Column(
             children: [
               Row(
@@ -89,15 +90,13 @@ class ButtonFiler extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        // width: 100,
-        margin: const EdgeInsets.all(8),
         padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.0),
-          border: Border.all(
-            color: Colors.grey,
-          ),
-          color: active ? AppTheme.secondaryColor : Colors.transparent,
+          border: Border.all(color: active ? AppTheme.light1 : AppTheme.light2),
+          color:
+              active ? context.theme.colorScheme.primary : Colors.transparent,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -107,7 +106,7 @@ class ButtonFiler extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
               child: Icon(
                 icon,
-                color: active ? AppTheme.light : Colors.grey,
+                color: active ? AppTheme.light : AppTheme.light2,
                 size: 16,
               ),
             ),
@@ -115,7 +114,7 @@ class ButtonFiler extends StatelessWidget {
               text,
               style: context.theme.textTheme.bodyMedium?.copyWith(
                 fontSize: 15,
-                color: active ? AppTheme.light : Colors.grey,
+                color: active ? AppTheme.light : AppTheme.light2,
               ),
             ),
           ],

@@ -1,10 +1,10 @@
+import 'package:tree_view/core/routes/app_routes.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
 import 'package:tree_view/core/constants/graphic_assets.dart';
 import 'package:tree_view/core/widgets/progress_loading.dart';
 import 'package:tree_view/core/widgets/background_video.dart';
 import 'package:tree_view/core/widgets/async_widget.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:tree_view/features/home/views/home.dart';
 import 'package:tree_view/core/widgets/screen_blur.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,13 +12,17 @@ import 'package:get/get.dart';
 class Splashscreen extends StatelessWidget {
   const Splashscreen({super.key});
 
+  TextStyle _textStyle() {
+    return const TextStyle(
+      fontSize: 32.0,
+      fontFamily: 'Horizon',
+    );
+  }
+
   Widget welcomeText() {
-    return const Text(
+    return Text(
       "Olá, seja bem vindo a",
-      style: TextStyle(
-        fontSize: 32.0,
-        fontFamily: 'Horizon',
-      ),
+      style: _textStyle(),
       textAlign: TextAlign.center,
     );
   }
@@ -41,10 +45,7 @@ class Splashscreen extends StatelessWidget {
     return Center(
       child: DefaultTextStyle(
         textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 16.0,
-          fontFamily: 'Horizon',
-        ),
+        style: _textStyle().copyWith(fontSize: 16),
         child: AnimatedTextKit(
           animatedTexts: [
             RotateAnimatedText('Por favor aguarde,'),
@@ -57,16 +58,35 @@ class Splashscreen extends StatelessWidget {
     );
   }
 
-  Widget loadingWidget() {
+  Widget welcomeWidget() {
     return Center(
       child: Column(
         children: [
           SizedBox(height: Get.height / 2.5),
           welcomeText(),
           imageLogo(),
-          loadingIndicator(),
-          roundingTexts(),
         ],
+      ),
+    );
+  }
+
+  Widget loadingWidget() {
+    return Column(
+      children: [
+        loadingIndicator(),
+        roundingTexts(),
+      ],
+    );
+  }
+
+  Widget continueButton() {
+    return ElevatedButton(
+      onPressed: () {
+        Get.toNamed(Routes.home);
+      },
+      child: Text(
+        "Continuar",
+        style: _textStyle().copyWith(fontSize: 16),
       ),
     );
   }
@@ -80,11 +100,16 @@ class Splashscreen extends StatelessWidget {
         children: [
           const BackgroundVideo(),
           const ScreenBlur(),
-          AsyncWidget(
-            whenErrorShow: const SizedBox.shrink(),
-            future: homeController.loadCompanies(),
-            whenLoadingShow: loadingWidget(),
-            whenSuccessShow: const Home(),
+          Column(
+            children: [
+              welcomeWidget(),
+              AsyncWidget(
+                whenErrorShow: const SizedBox.shrink(),
+                future: homeController.loadCompanies(),
+                whenLoadingShow: loadingWidget(),
+                whenSuccessShow: continueButton(),
+              ),
+            ],
           ),
         ],
       ),

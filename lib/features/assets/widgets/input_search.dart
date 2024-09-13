@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tree_view/core/appearence/theme/app_theme.dart';
 
 class InputSearch extends StatefulWidget {
   const InputSearch({
@@ -68,27 +69,29 @@ class _InputSearchState extends State<InputSearch> {
 
           widget.search?.call(_textEditingController.text);
         },
-        cursorColor: Colors.grey,
-        style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
+        cursorColor: AppTheme.light,
+        style: const TextStyle(color: AppTheme.light, fontSize: 14),
         onSubmitted: widget.search,
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(left: 8.0),
-          hintStyle: const TextStyle(color: Colors.grey),
+          hintStyle: const TextStyle(color: AppTheme.light2),
           hintText: widget.hintText,
-          prefixIcon: _textEditingController.text.isEmpty
-              ? const Icon(Icons.search, color: Colors.grey)
-              : null,
+          prefixIcon: const Icon(Icons.search, color: AppTheme.light2),
           suffixIcon: Visibility(
             visible: _textEditingController.text.isNotEmpty,
             child: IconButton(
               onPressed: clear,
-              icon: const Icon(Icons.close, color: Colors.grey),
+              icon: const Icon(Icons.close, color: AppTheme.light2),
             ),
           ),
           enabledBorder: _inputBorder(),
-          focusedBorder: _inputBorder(),
+          focusedBorder: _inputBorder().copyWith(
+            borderSide: const BorderSide(
+              color: AppTheme.light,
+            ),
+          ),
           border: _inputBorder(),
         ),
       ),
@@ -98,7 +101,7 @@ class _InputSearchState extends State<InputSearch> {
   OutlineInputBorder _inputBorder() {
     return const OutlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.grey,
+        color: AppTheme.light2,
       ),
     );
   }
