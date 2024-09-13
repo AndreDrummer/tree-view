@@ -83,7 +83,6 @@ class _AssetsViewState extends State<AssetsView> {
       backgroundColor: context.theme.scaffoldBackgroundColor,
       verticalScrollController: verticalScrollController,
       backTopButtonIconColor: AppTheme.light,
-      alwaysScrollToTheEndOfTree: false,
       filterPredicate: predicate,
       initializeExpanded: true,
       treeManager: treeManager,
@@ -134,18 +133,18 @@ class _AssetsViewState extends State<AssetsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(),
-        title: const Text(
-          "Assets",
-          style: TextStyle(color: AppTheme.light),
+    return Obx(() {
+      return Scaffold(
+        appBar: AppBar(
+          leading: const BackButton(),
+          title: const Text(
+            "Assets",
+            style: TextStyle(color: AppTheme.light),
+          ),
+          actions: const [DarkModeButton()],
+          centerTitle: true,
         ),
-        actions: const [DarkModeButton()],
-        centerTitle: true,
-      ),
-      body: Obx(() {
-        return Stack(
+        body: Stack(
           children: [
             ListView(
               physics: const NeverScrollableScrollPhysics(),
@@ -164,8 +163,8 @@ class _AssetsViewState extends State<AssetsView> {
               ),
             )
           ],
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 }

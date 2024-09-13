@@ -8,7 +8,6 @@ class TreeWidget<T> extends StatefulWidget {
   const TreeWidget({
     super.key,
     required this.horizontalScrollController,
-    this.alwaysScrollToTheEndOfTree = true,
     required this.verticalScrollController,
     required this.showCustomizationForRoot,
     required this.breadCrumbLinesColor,
@@ -26,7 +25,6 @@ class TreeWidget<T> extends StatefulWidget {
   });
 
   final bool Function(ParentProtocol)? filterPredicate;
-  final bool alwaysScrollToTheEndOfTree;
   final bool showCustomizationForRoot;
 
   final String? nothingFoundText;
@@ -110,23 +108,24 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
   Widget build(BuildContext context) {
     return Container(
       color: widget.backgroundColor,
-      child: treeManager.tree.id == -1
-          ? emptyTreeWidget()
-          : Tree(
-              treeManager.tree,
-              backTopButtonBackgroundColor: widget.backTopButtonBackgroundColor,
-              alwaysScrollToTheEndOfTree: widget.alwaysScrollToTheEndOfTree,
-              backTopButtonIconColor: widget.backTopButtonIconColor,
-              showCustomizationForRoot: showCustomizationForRoot(),
-              breadCrumbLinesColor: widget.breadCrumbLinesColor,
-              horizontalController: horizontalScrollController,
-              verticalController: verticalScrollController,
-              showBackTopButton: widget.showBackTopButton,
-              nodeRootId: treeManager.nodeStart().id,
-              elementsColor: widget.elementsColor,
-              toggleNodeView: onNodeToggled,
-              nodeRowConfig: nodeConfig,
-            ),
+      child: Visibility(
+        visible: treeManager.tree.id > -1,
+        replacement: emptyTreeWidget(),
+        child: Tree(
+          treeManager.tree,
+          backTopButtonBackgroundColor: widget.backTopButtonBackgroundColor,
+          backTopButtonIconColor: widget.backTopButtonIconColor,
+          showCustomizationForRoot: showCustomizationForRoot(),
+          breadCrumbLinesColor: widget.breadCrumbLinesColor,
+          horizontalController: horizontalScrollController,
+          verticalController: verticalScrollController,
+          showBackTopButton: widget.showBackTopButton,
+          nodeRootId: treeManager.nodeStart().id,
+          elementsColor: widget.elementsColor,
+          toggleNodeView: onNodeToggled,
+          nodeRowConfig: nodeConfig,
+        ),
+      ),
     );
   }
 }

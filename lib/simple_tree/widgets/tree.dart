@@ -1,4 +1,3 @@
-import 'package:tree_view/simple_tree/widgets/tree_scroller.dart';
 import 'package:tree_view/simple_tree/widgets/tree_builder.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/models/node_data.dart';
@@ -9,7 +8,6 @@ class Tree<T> extends StatelessWidget {
   const Tree(
     this.node, {
     super.key,
-    this.alwaysScrollToTheEndOfTree = true,
     required this.showCustomizationForRoot,
     required this.horizontalController,
     required this.breadCrumbLinesColor,
@@ -29,7 +27,6 @@ class Tree<T> extends StatelessWidget {
   final ScrollController horizontalController;
   final Color? backTopButtonBackgroundColor;
   final ScrollController verticalController;
-  final bool alwaysScrollToTheEndOfTree;
   final Color? backTopButtonIconColor;
   final bool showCustomizationForRoot;
   final Color breadCrumbLinesColor;
@@ -43,53 +40,23 @@ class Tree<T> extends StatelessWidget {
   // Properties related to the row
   final NodeRowConfig Function(T? data) nodeRowConfig;
 
-  int lineBreadCrumbHeight() {
-    int descendentsShowing = node.numberOfDescendentsShowingUp;
-
-    return (48 * descendentsShowing);
-  }
-
-  double verticalHeight(double height) {
-    if (allowVerticalScrool) {
-      return height * .72;
-    } else {
-      return lineBreadCrumbHeight().toDouble() + 50;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.sizeOf(context).height;
-    final width = MediaQuery.sizeOf(context).width;
-
-    return TreeScroller(
-      viewWidth: (width * (node.getHeightFromNodeToRoot + 1)),
-      alwaysScrollToTheEndOfTree: alwaysScrollToTheEndOfTree,
+    return TreeBuilder(
+      node,
       backTopButtonBackgroundColor: backTopButtonBackgroundColor,
-      nodeDecendants: node.numberOfDescendentsShowingUp,
+      showCustomizationForRoot: showCustomizationForRoot,
       backTopButtonIconColor: backTopButtonIconColor,
       allowHorizontalScrool: allowHorizontalScrool,
+      breadCrumbLinesColor: breadCrumbLinesColor,
       horizontalController: horizontalController,
       allowVerticalScrool: allowVerticalScrool,
       verticalController: verticalController,
       showBackTopButton: showBackTopButton,
-      viewHeight: verticalHeight(height),
-      nodeHeight: node.getHeight,
-      child: TreeBuilder(
-        node,
-        alwaysScrollToTheEndOfTree: alwaysScrollToTheEndOfTree,
-        showCustomizationForRoot: showCustomizationForRoot,
-        allowHorizontalScrool: allowHorizontalScrool,
-        breadCrumbLinesColor: breadCrumbLinesColor,
-        allowVerticalScrool: allowVerticalScrool,
-        horizontalController: ScrollController(),
-        verticalController: ScrollController(),
-        showBackTopButton: showBackTopButton,
-        toggleNodeView: toggleNodeView,
-        elementsColor: elementsColor,
-        nodeRowConfig: nodeRowConfig,
-        nodeRootId: nodeRootId,
-      ),
+      toggleNodeView: toggleNodeView,
+      elementsColor: elementsColor,
+      nodeRowConfig: nodeRowConfig,
+      nodeRootId: nodeRootId,
     );
   }
 }

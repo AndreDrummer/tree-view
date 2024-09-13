@@ -7,14 +7,14 @@ class SearchHeader extends StatelessWidget {
   const SearchHeader({
     super.key,
     this.scrollFunction,
-    this.onFilterByText,
     this.onFilterByEnergy,
     this.onFilterByVibration,
     this.isFilteringByEnergy = false,
     this.isFilteringByVibration = false,
+    required this.onFilterByText,
     required this.textInitialValue,
   });
-  final Function(String text)? onFilterByText;
+  final Function(String text) onFilterByText;
   final Function()? onFilterByVibration;
   final Function(bool)? scrollFunction;
   final Function()? onFilterByEnergy;
@@ -27,39 +27,43 @@ class SearchHeader extends StatelessWidget {
     final elementsColor =
         Get.isDarkMode ? AppTheme.light : AppTheme.primaryColor;
 
-    return Material(
-      child: Container(
-        color: Get.isDarkMode ? AppTheme.primaryColor : AppTheme.light,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: ButtonFiler(
-                    icon: Icons.flash_on_outlined,
-                    active: isFilteringByEnergy,
-                    text: "Sensor de Energia",
-                    onTap: onFilterByEnergy,
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (value, any) => onFilterByText(""),
+      child: Material(
+        child: Container(
+          color: Get.isDarkMode ? AppTheme.primaryColor : AppTheme.light,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: ButtonFiler(
+                      icon: Icons.flash_on_outlined,
+                      active: isFilteringByEnergy,
+                      text: "Sensor de Energia",
+                      onTap: onFilterByEnergy,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: ButtonFiler(
-                    active: isFilteringByVibration,
-                    onTap: onFilterByVibration,
-                    icon: Icons.info_outline,
-                    text: "Crítico",
+                  Expanded(
+                    child: ButtonFiler(
+                      active: isFilteringByVibration,
+                      onTap: onFilterByVibration,
+                      icon: Icons.info_outline,
+                      text: "Crítico",
+                    ),
                   ),
-                ),
-              ],
-            ),
-            InputSearch(
-              hintText: 'Buscar Ativo ou local',
-              initialValue: textInitialValue,
-              search: onFilterByText,
-              color: elementsColor,
-            ),
-          ],
+                ],
+              ),
+              InputSearch(
+                hintText: 'Buscar Ativo ou local',
+                initialValue: textInitialValue,
+                search: onFilterByText,
+                color: elementsColor,
+              ),
+            ],
+          ),
         ),
       ),
     );

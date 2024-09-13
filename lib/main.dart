@@ -24,13 +24,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.find<AppearenceController>().setSystemThemeMode();
+    final apprearenceController = Get.find<AppearenceController>();
+    apprearenceController.setSystemThemeMode();
 
     return GetMaterialApp(
       onGenerateRoute: RouterGenerator.onGenerateRoute,
-      themeMode: Get.find<AppearenceController>().isDarkModeON
-          ? ThemeMode.dark
-          : ThemeMode.light,
+      themeMode:
+          apprearenceController.isDarkModeON ? ThemeMode.dark : ThemeMode.light,
       darkTheme: AppTheme.darkMode,
       theme: AppTheme.lightMode,
       debugShowCheckedModeBanner: false,

@@ -8,7 +8,6 @@ class WidgetTree<T> extends StatelessWidget {
   const WidgetTree({
     super.key,
     required this.horizontalScrollController,
-    this.alwaysScrollToTheEndOfTree = true,
     required this.verticalScrollController,
     this.showCustomizationForRoot = true,
     required this.breadCrumbLinesColor,
@@ -25,7 +24,6 @@ class WidgetTree<T> extends StatelessWidget {
   });
 
   final bool Function(ParentProtocol)? filterPredicate;
-  final bool alwaysScrollToTheEndOfTree;
   final bool showCustomizationForRoot;
   final bool initializeExpanded;
   final TreeManager treeManager;
@@ -49,7 +47,6 @@ class WidgetTree<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return TreeWidget(
       backTopButtonBackgroundColor: backTopButtonBackgroundColor,
-      alwaysScrollToTheEndOfTree: alwaysScrollToTheEndOfTree,
       horizontalScrollController: horizontalScrollController,
       showCustomizationForRoot: showCustomizationForRoot,
       verticalScrollController: verticalScrollController,
