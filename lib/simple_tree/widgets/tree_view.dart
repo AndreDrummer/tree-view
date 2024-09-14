@@ -41,7 +41,6 @@ class TreeView<T> extends StatefulWidget {
 class _TreeBuilderState<T> extends State<TreeView<T>> {
   late ScrollController horizontalController;
   late ScrollController verticalController;
-  double backToTopButtonOpacity = 1.0;
 
   @override
   void initState() {
@@ -73,40 +72,30 @@ class _TreeBuilderState<T> extends State<TreeView<T>> {
           width: MediaQuery.sizeOf(context).height,
           child: SingleChildScrollView(
             controller: verticalController,
-            child: Row(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: horizontalController,
-                    scrollDirection: Axis.horizontal,
-                    child: builder(
-                      widget.node,
-                      showCustomizationForRoot: widget.showCustomizationForRoot,
-                      breadCrumbLinesColor: widget.breadCrumbLinesColor,
-                      nodeRowConfig: widget.nodeRowConfig,
-                      elementsColor: widget.elementsColor,
-                      nodeRootId: widget.nodeRootId,
-                      toggleNode: widget.toggleNode,
-                    ),
-                  ),
-                ),
-              ],
+            child: SingleChildScrollView(
+              controller: horizontalController,
+              scrollDirection: Axis.horizontal,
+              child: builder(
+                widget.node,
+                showCustomizationForRoot: widget.showCustomizationForRoot,
+                breadCrumbLinesColor: widget.breadCrumbLinesColor,
+                nodeRowConfig: widget.nodeRowConfig,
+                elementsColor: widget.elementsColor,
+                nodeRootId: widget.nodeRootId,
+                toggleNode: widget.toggleNode,
+              ),
             ),
           ),
         ),
         Positioned(
           bottom: 24,
           right: 24,
-          child: AnimatedOpacity(
-            duration: Durations.extralong4,
-            opacity: backToTopButtonOpacity,
-            child: FloatingActionButton(
-              backgroundColor: widget.backTopButtonBackgroundColor,
-              onPressed: scrollToTheBeginningOfData,
-              child: Icon(
-                color: widget.backTopButtonIconColor,
-                Icons.arrow_upward_rounded,
-              ),
+          child: FloatingActionButton(
+            backgroundColor: widget.backTopButtonBackgroundColor,
+            onPressed: scrollToTheBeginningOfData,
+            child: Icon(
+              color: widget.backTopButtonIconColor,
+              Icons.arrow_upward_rounded,
             ),
           ),
         ),

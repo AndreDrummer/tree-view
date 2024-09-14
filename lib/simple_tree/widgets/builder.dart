@@ -18,6 +18,7 @@ Widget builder<T>(
     breadCrumbLinesColor: breadCrumbLinesColor,
     nodeRowConfig: nodeRowConfig,
     elementsColor: elementsColor,
+    key: Key(node.id.toString()),
     toggleNode: toggleNode,
     nodeRootId: nodeRootId,
     node: node,

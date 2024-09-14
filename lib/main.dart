@@ -1,9 +1,10 @@
-import 'package:flutter/services.dart';
 import 'package:tree_view/core/appearence/controller/appearence_controller.dart';
 import 'package:tree_view/core/appearence/theme/app_theme.dart';
+import 'package:tree_view/core/widgets/restart_widget.dart';
 import 'package:tree_view/core/system/initializers.dart';
 import 'package:tree_view/core/routes/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -16,7 +17,7 @@ void main() {
 
   SystemInitializer.initDependencies();
 
-  runApp(const MyApp());
+  runApp(const RestartWidget(MyApp()));
 }
 
 class MyApp extends StatelessWidget {

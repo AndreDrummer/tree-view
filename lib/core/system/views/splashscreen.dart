@@ -1,11 +1,13 @@
-import 'package:tree_view/core/routes/app_routes.dart';
+import 'package:tree_view/core/widgets/restart_widget.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
+import 'package:tree_view/core/widgets/simple_error_widget.dart';
 import 'package:tree_view/core/constants/graphic_assets.dart';
 import 'package:tree_view/core/widgets/progress_loading.dart';
 import 'package:tree_view/core/widgets/background_video.dart';
 import 'package:tree_view/core/widgets/async_widget.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:tree_view/core/widgets/screen_blur.dart';
+import 'package:tree_view/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -91,10 +93,40 @@ class Splashscreen extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget errorStatusWidget(BuildContext context) {
     final HomeController homeController = Get.find();
 
+    if (homeController.hasConnectionError) {
+      return const SimpleErrorWidget(
+        errorMessage: "Erro ao fazer conexão com a internet.",
+        icon: Icons.wifi_off_rounded,
+      );
+    } else if (homeController.hasServerError) {
+      return const SimpleErrorWidget(
+        errorMessage:
+            "Ocorreu um erro no servidor.\nTente novamente mais tarde!",
+        icon: Icons.public_off,
+      );
+    } else {
+      return SimpleErrorWidget(
+        errorMessage:
+            "Ocorreu um erro inesperado. Reinicie o aplicativo ou tente novamente mais tarde!",
+        retryAction: () => RestartWidget.restartApp(context),
+        icon: Icons.error,
+      );
+    }
+  }
+
+  Widget onRequesFinish(BuildContext context) {
+    if (!Get.find<HomeController>().hasError) {
+      return continueButton();
+    } else {
+      return errorStatusWidget(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
@@ -104,10 +136,10 @@ class Splashscreen extends StatelessWidget {
             children: [
               welcomeWidget(),
               AsyncWidget(
+                future: Get.find<HomeController>().loadCompanies(),
+                whenSuccessShow: onRequesFinish(context),
                 whenErrorShow: const SizedBox.shrink(),
-                future: homeController.loadCompanies(),
                 whenLoadingShow: loadingWidget(),
-                whenSuccessShow: continueButton(),
               ),
             ],
           ),

@@ -33,6 +33,13 @@ class AssetsController extends GetxController {
   final RxBool _isLoading = false.obs;
 
   late HttpProvider _httpProvider;
+  final RxBool _hasConnectionError = false.obs;
+  final RxBool _hasServerError = false.obs;
+  final RxBool _hasError = false.obs;
+
+  bool get hasConnectionError => _hasConnectionError.value;
+  bool get hasServerError => _hasServerError.value;
+  bool get hasError => _hasError.value;
 
   late Company _companyToSearch;
 
@@ -44,6 +51,18 @@ class AssetsController extends GetxController {
 
     resetLoading();
     super.onInit();
+  }
+
+  void _handleErrorResponse(Response response) {
+    _hasConnectionError(response.status.connectionError);
+    _hasServerError(response.status.isServerError);
+    _hasError(response.status.hasError);
+  }
+
+  void _resetErrorStatus() {
+    _hasConnectionError(false);
+    _hasServerError(false);
+    _hasError(false);
   }
 
   // Getters
@@ -75,16 +94,18 @@ class AssetsController extends GetxController {
   }
 
   Future<void> _updateTreeManager() async {
+    const dataLengthThreshold = 150;
+
     treeManager = TreeManager(
       dataList: data,
-      initializeExpanded: data.length <= 100,
+      initializeExpanded: data.length <= dataLengthThreshold,
       rootData: NodeData<DataItem>(
         data: data.first,
         id: data.first.id,
       ),
     );
 
-    if (data.length > 100) {
+    if (data.length > dataLengthThreshold) {
       await treeManager.buildTreeOnIsolate();
     } else if (data.isNotEmpty) {
       treeManager.buildTree();
@@ -168,6 +189,9 @@ class AssetsController extends GetxController {
 
     if (response.isOk) {
       _locations = response.body!;
+      _resetErrorStatus();
+    } else {
+      _handleErrorResponse(response);
     }
   }
 
@@ -179,6 +203,9 @@ class AssetsController extends GetxController {
 
     if (response.isOk) {
       _assets = response.body!;
+      _resetErrorStatus();
+    } else {
+      _handleErrorResponse(response);
     }
   }
 
