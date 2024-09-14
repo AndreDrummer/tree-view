@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 typedef NodePath = List<int>;
 
 class Node<T> {
@@ -5,6 +7,7 @@ class Node<T> {
   Node<T>? parent;
   bool expanded;
   T? value;
+  Key? key;
   int id;
 
   Node({
@@ -13,6 +16,7 @@ class Node<T> {
     this.children,
     this.parent,
     this.value,
+    this.key,
   }) {
     children ??= [];
   }

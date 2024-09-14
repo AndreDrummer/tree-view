@@ -12,7 +12,6 @@ class WidgetTree<T> extends StatelessWidget {
     this.showCustomizationForRoot = true,
     required this.breadCrumbLinesColor,
     this.backTopButtonBackgroundColor,
-    this.initializeExpanded = true,
     this.showBackTopButton = true,
     this.backTopButtonIconColor,
     required this.elementsColor,
@@ -25,7 +24,6 @@ class WidgetTree<T> extends StatelessWidget {
 
   final bool Function(ParentProtocol)? filterPredicate;
   final bool showCustomizationForRoot;
-  final bool initializeExpanded;
   final TreeManager treeManager;
   final bool showBackTopButton;
   final bool resetOnFilter;
@@ -52,7 +50,6 @@ class WidgetTree<T> extends StatelessWidget {
       verticalScrollController: verticalScrollController,
       backTopButtonIconColor: backTopButtonIconColor,
       breadCrumbLinesColor: breadCrumbLinesColor,
-      initializeExpanded: initializeExpanded,
       showBackTopButton: showBackTopButton,
       filterPredicate: filterPredicate,
       backgroundColor: backgroundColor,

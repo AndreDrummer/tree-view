@@ -1,18 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:tree_view/core/appearence/theme/app_theme.dart';
-import 'package:tree_view/core/constants/graphic_assets.dart';
-import 'package:tree_view/core/models/data_item.dart';
-import 'package:tree_view/core/models/enums.dart';
-import 'package:tree_view/core/widgets/dark_mode_button.dart';
-import 'package:tree_view/core/widgets/screen_blur.dart';
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/assets/widgets/search_header.dart';
 import 'package:tree_view/features/home/widgets/loading_widget.dart';
-import 'package:tree_view/simple_tree/builder/tree_manager.dart';
-import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
+import 'package:tree_view/core/appearence/theme/app_theme.dart';
+import 'package:tree_view/core/constants/graphic_assets.dart';
+import 'package:tree_view/core/widgets/dark_mode_button.dart';
+import 'package:tree_view/core/widgets/screen_blur.dart';
 import 'package:tree_view/simple_tree/widget_tree.dart';
+import 'package:tree_view/core/models/data_item.dart';
+import 'package:tree_view/core/models/enums.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AssetsView extends StatefulWidget {
   const AssetsView({super.key});
@@ -24,39 +22,22 @@ class AssetsView extends StatefulWidget {
 class _AssetsViewState extends State<AssetsView> {
   late final ScrollController horizontalScrollController;
   late final ScrollController verticalScrollController;
-  late final TreeManager treeManager;
-  bool dataViewIsReady = false;
+  bool dataViewIsReady = true;
 
   @override
   void initState() {
     horizontalScrollController = ScrollController();
     verticalScrollController = ScrollController();
 
-    final controller = Get.find<AssetsController>();
-
-    treeManager = TreeManager(
-      dataList: controller.data,
-      initializeExpanded: true,
-      rootData: NodeData<DataItem>(
-        data: controller.data.first,
-        id: controller.rootData.id,
-      ),
-    );
-
-    if (controller.data.length < 100) {
-      setState(() {
-        treeManager.buildTree();
-        dataViewIsReady = true;
-      });
-    } else {
-      treeManager.buildTreeOnIsolate().then((_) {
-        setState(() {
-          dataViewIsReady = true;
-        });
-      });
-    }
-
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    horizontalScrollController.dispose();
+    verticalScrollController.dispose();
+
+    super.dispose();
   }
 
   Widget searchHeader() {
@@ -93,10 +74,9 @@ class _AssetsViewState extends State<AssetsView> {
       horizontalScrollController: horizontalScrollController,
       backgroundColor: context.theme.scaffoldBackgroundColor,
       verticalScrollController: verticalScrollController,
+      treeManager: assetsController.treeManager,
       backTopButtonIconColor: AppTheme.light,
       filterPredicate: predicate,
-      initializeExpanded: true,
-      treeManager: treeManager,
       showBackTopButton: true,
     );
   }

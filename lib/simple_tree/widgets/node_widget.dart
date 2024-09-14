@@ -5,24 +5,33 @@ import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/builder/node.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 
-class NodeRow<T> extends StatelessWidget {
-  const NodeRow(
+class NodeWidget<T> extends StatelessWidget {
+  const NodeWidget(
     this.node, {
     required this.showCustomizationForRoot,
     required this.breadCrumbLineColor,
     required this.elementsColor,
     required this.nodeRowConfig,
-    this.onPressed,
+    required this.nodeRootId,
+    required this.toggleNode,
     super.key,
   });
 
-  final NodeRowConfig Function(T data) nodeRowConfig;
+  final NodeRowConfig Function(T) nodeRowConfig;
   final Node<NodeData<T>> node;
+  final Function() toggleNode;
 
   final bool showCustomizationForRoot;
-  final void Function()? onPressed;
   final Color breadCrumbLineColor;
   final Color elementsColor;
+  final int nodeRootId;
+
+  bool showCustomization() {
+    if (node.id == nodeRootId) {
+      return showCustomizationForRoot;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +43,21 @@ class NodeRow<T> extends StatelessWidget {
 
     return Row(
       children: [
+        Container(
+          margin: EdgeInsets.only(left: node.getHeightFromNodeToRoot * 20),
+          width: node.getHeightFromNodeToRoot > 0 ? 1 : 0,
+          color: breadCrumbLineColor,
+          height: 48,
+        ),
         Visibility(
           visible: node.hasChildren,
           replacement: Container(
             color: breadCrumbLineColor,
-            height: 1,
             width: 48,
+            height: 1,
           ),
           child: IconButton(
-            onPressed: onPressed,
+            onPressed: toggleNode,
             icon: Icon(
               !node.hasChildren || !node.expanded
                   ? Icons.keyboard_arrow_right_outlined
@@ -53,7 +68,7 @@ class NodeRow<T> extends StatelessWidget {
         ),
         _prefixIcon(context, nodeConfig, showCustomizationForRoot),
         TextButton(
-          onPressed: onPressed,
+          onPressed: toggleNode,
           child: Text(
             "${nodeConfig?.title}",
             style: TextStyle(color: elementsColor, fontSize: 18),

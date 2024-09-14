@@ -1,7 +1,7 @@
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 import 'package:tree_view/simple_tree/builder/tree_manager.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
-import 'package:tree_view/simple_tree/widgets/tree.dart';
+import 'package:tree_view/simple_tree/widgets/tree_view.dart';
 import 'package:flutter/material.dart';
 
 class TreeWidget<T> extends StatefulWidget {
@@ -70,10 +70,10 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
 
   @override
   void didUpdateWidget(TreeWidget<T> oldWidget) {
-    treeManager.rebuild(
-      shouldResetTree: widget.resetOnFilter,
-      widget.filterPredicate!,
-    );
+    // treeManager.rebuild(
+    //   shouldResetTree: widget.resetOnFilter,
+    //   widget.filterPredicate!,
+    // );
     super.didUpdateWidget(oldWidget);
   }
 
@@ -111,7 +111,7 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
       child: Visibility(
         visible: treeManager.tree.id > -1,
         replacement: emptyTreeWidget(),
-        child: Tree(
+        child: TreeView(
           treeManager.tree,
           backTopButtonBackgroundColor: widget.backTopButtonBackgroundColor,
           backTopButtonIconColor: widget.backTopButtonIconColor,
@@ -119,10 +119,8 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
           breadCrumbLinesColor: widget.breadCrumbLinesColor,
           horizontalController: horizontalScrollController,
           verticalController: verticalScrollController,
-          showBackTopButton: widget.showBackTopButton,
           nodeRootId: treeManager.nodeStart().id,
           elementsColor: widget.elementsColor,
-          toggleNodeView: onNodeToggled,
           nodeRowConfig: nodeConfig,
         ),
       ),

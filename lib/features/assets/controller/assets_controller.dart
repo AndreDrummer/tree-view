@@ -1,3 +1,5 @@
+import 'package:tree_view/simple_tree/builder/tree_manager.dart';
+import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/core/http/http_provider.dart';
 import 'package:tree_view/core/utils/extensions.dart';
 import 'package:tree_view/core/models/data_item.dart';
@@ -16,7 +18,8 @@ enum FilterType {
 }
 
 class AssetsController extends GetxController {
-  final rootData = DataItem(kind: ItemKind.location, name: "", id: "");
+  // final rootData = DataItem(kind: ItemKind.location, name: "", id: "");
+
   Rx<AssetFilter> itemFilter = AssetFilter.none.obs;
 
   static List<Location> _locations = <Location>[];
@@ -33,9 +36,13 @@ class AssetsController extends GetxController {
 
   late Company _companyToSearch;
 
+  late TreeManager treeManager;
+
   @override
   void onInit() {
     _httpProvider = Get.find();
+
+    resetLoading();
     super.onInit();
   }
 
@@ -67,6 +74,23 @@ class AssetsController extends GetxController {
     };
   }
 
+  Future<void> _updateTreeManager() async {
+    treeManager = TreeManager(
+      dataList: data,
+      initializeExpanded: data.length <= 100,
+      rootData: NodeData<DataItem>(
+        data: data.first,
+        id: data.first.id,
+      ),
+    );
+
+    if (data.length > 100) {
+      await treeManager.buildTreeOnIsolate();
+    } else if (data.isNotEmpty) {
+      treeManager.buildTree();
+    }
+  }
+
   void _resetPredicates() => _predicateFilterMap.clear();
 
   Future loadCompanyItems(Company company) async {
@@ -76,6 +100,7 @@ class AssetsController extends GetxController {
     await _loadCompanyAssets();
     final sample = DataItem.fromList([..._locations, ..._assets]);
     _data(sample);
+    await _updateTreeManager();
     resetLoading();
   }
 

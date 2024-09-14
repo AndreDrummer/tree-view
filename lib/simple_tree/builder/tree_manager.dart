@@ -79,7 +79,8 @@ class TreeManager<T extends ParentProtocol> {
   Node<NodeData<T>> _referenceTree(
     BuildTreeMode? buildTreeMode,
   ) {
-    debugPrint("BuildTree Mode: ${buildTreeMode ?? BuildTreeMode.onMain}");
+    debugPrint("BuildTree Mode: ${buildTreeMode ?? BuildTreeMode.onMain}.");
+    debugPrint("Data Length: ${_dataList.length} items.");
     final List<NodeData<T>> nodeDataList = _dataList.toNodeDataList();
 
     final startNode = nodeStart();
