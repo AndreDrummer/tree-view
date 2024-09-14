@@ -27,11 +27,7 @@ class _InputSearchState extends State<InputSearch> {
   @override
   void initState() {
     _textEditingController = TextEditingController(text: widget.initialValue);
-    _textEditingController.addListener(() {
-      if (_textEditingController.text.isEmpty) {
-        FocusScope.of(context).unfocus();
-      }
-    });
+
     super.initState();
   }
 

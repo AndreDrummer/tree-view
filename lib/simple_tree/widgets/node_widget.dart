@@ -1,9 +1,10 @@
+import 'package:tree_view/simple_tree/models/node_row_dto.dart';
+import 'package:tree_view/simple_tree/models/node_data.dart';
+import 'package:tree_view/simple_tree/widgets/builder.dart';
+import 'package:tree_view/simple_tree/builder/node.dart';
+import 'package:get/get.dart' hide Node;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart' hide Node;
-import 'package:tree_view/simple_tree/models/node_data.dart';
-import 'package:tree_view/simple_tree/builder/node.dart';
-import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 
 class NodeWidget<T> extends StatelessWidget {
   const NodeWidget(
@@ -18,8 +19,8 @@ class NodeWidget<T> extends StatelessWidget {
   });
 
   final NodeRowConfig Function(T) nodeRowConfig;
+  final Function(Node<NodeData<T>>) toggleNode;
   final Node<NodeData<T>> node;
-  final Function() toggleNode;
 
   final bool showCustomizationForRoot;
   final Color breadCrumbLineColor;
@@ -41,40 +42,62 @@ class NodeWidget<T> extends StatelessWidget {
       nodeConfig = nodeRowConfig(node.value!.data as T);
     }
 
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          margin: EdgeInsets.only(left: node.getHeightFromNodeToRoot * 20),
-          width: node.getHeightFromNodeToRoot > 0 ? 1 : 0,
-          color: breadCrumbLineColor,
-          height: 48,
+        Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: node.getHeightFromNodeToRoot * 20),
+              width: node.getHeightFromNodeToRoot > 0 ? 1 : 0,
+              color: breadCrumbLineColor,
+              height: 48,
+            ),
+            Visibility(
+              visible: node.hasChildren,
+              replacement: Container(
+                color: breadCrumbLineColor,
+                width: 48,
+                height: 1,
+              ),
+              child: IconButton(
+                onPressed: () => toggleNode(node),
+                icon: Icon(
+                  !node.hasChildren || !node.expanded
+                      ? Icons.keyboard_arrow_right_outlined
+                      : Icons.keyboard_arrow_down,
+                  color: elementsColor,
+                ),
+              ),
+            ),
+            _prefixIcon(context, nodeConfig, showCustomizationForRoot),
+            TextButton(
+              onPressed: () => toggleNode(node),
+              child: Text(
+                "${nodeConfig?.title}",
+                style: TextStyle(color: elementsColor, fontSize: 18),
+              ),
+            ),
+            _suffixIcon(context, nodeConfig, showCustomizationForRoot),
+          ],
         ),
         Visibility(
-          visible: node.hasChildren,
-          replacement: Container(
-            color: breadCrumbLineColor,
-            width: 48,
-            height: 1,
-          ),
-          child: IconButton(
-            onPressed: toggleNode,
-            icon: Icon(
-              !node.hasChildren || !node.expanded
-                  ? Icons.keyboard_arrow_right_outlined
-                  : Icons.keyboard_arrow_down,
-              color: elementsColor,
-            ),
-          ),
-        ),
-        _prefixIcon(context, nodeConfig, showCustomizationForRoot),
-        TextButton(
-          onPressed: toggleNode,
-          child: Text(
-            "${nodeConfig?.title}",
-            style: TextStyle(color: elementsColor, fontSize: 18),
+          visible: node.expanded,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: node.children!.map((nodeChild) {
+              return builder(
+                nodeChild,
+                showCustomizationForRoot: showCustomizationForRoot,
+                breadCrumbLinesColor: breadCrumbLineColor,
+                nodeRowConfig: nodeRowConfig,
+                elementsColor: elementsColor,
+                toggleNode: toggleNode,
+                nodeRootId: nodeRootId,
+              );
+            }).toList(),
           ),
         ),
-        _suffixIcon(context, nodeConfig, showCustomizationForRoot),
       ],
     );
   }

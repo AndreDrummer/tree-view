@@ -72,7 +72,7 @@ class TreeManager<T extends ParentProtocol> {
   }
 
   void _resetTree() {
-    _tree = _referenceTree(BuildTreeMode.onMain);
+    buildTreeOnIsolate();
   }
 
   /// This is the initial tree mounted. It never changes.

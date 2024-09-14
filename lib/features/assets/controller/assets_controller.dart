@@ -100,6 +100,7 @@ class AssetsController extends GetxController {
     await _loadCompanyAssets();
     final sample = DataItem.fromList([..._locations, ..._assets]);
     _data(sample);
+    _feedbackText('Montando mapa de dados...');
     await _updateTreeManager();
     resetLoading();
   }

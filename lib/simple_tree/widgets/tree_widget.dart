@@ -70,10 +70,10 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
 
   @override
   void didUpdateWidget(TreeWidget<T> oldWidget) {
-    // treeManager.rebuild(
-    //   shouldResetTree: widget.resetOnFilter,
-    //   widget.filterPredicate!,
-    // );
+    treeManager.rebuild(
+      shouldResetTree: widget.resetOnFilter,
+      widget.filterPredicate!,
+    );
     super.didUpdateWidget(oldWidget);
   }
 
@@ -81,7 +81,7 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
     return widget.nodeConfig(data as T);
   }
 
-  void onNodeToggled(node) {
+  void toggleNode(node) {
     setState(() {
       treeManager.toogleNodeView(node);
     });
@@ -122,6 +122,7 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
           nodeRootId: treeManager.nodeStart().id,
           elementsColor: widget.elementsColor,
           nodeRowConfig: nodeConfig,
+          toggleNode: toggleNode,
         ),
       ),
     );
