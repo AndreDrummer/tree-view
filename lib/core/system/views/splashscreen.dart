@@ -1,3 +1,4 @@
+import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:tree_view/core/widgets/restart_widget.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
 import 'package:tree_view/core/widgets/simple_error_widget.dart';
@@ -23,7 +24,7 @@ class Splashscreen extends StatelessWidget {
 
   Widget welcomeText() {
     return Text(
-      "Olá, seja bem vindo a",
+      "Hello, welcomings to",
       style: _textStyle(),
       textAlign: TextAlign.center,
     );
@@ -50,9 +51,9 @@ class Splashscreen extends StatelessWidget {
         style: _textStyle().copyWith(fontSize: 16),
         child: AnimatedTextKit(
           animatedTexts: [
-            RotateAnimatedText('Por favor aguarde,'),
-            RotateAnimatedText('Já vamos começar'),
-            RotateAnimatedText('É muito bom ter você aqui!'),
+            RotateAnimatedText('Please wait,'),
+            RotateAnimatedText('Let\'s get started now'),
+            RotateAnimatedText('It\'s great to have you here!'),
           ],
           repeatForever: true,
         ),
@@ -84,10 +85,10 @@ class Splashscreen extends StatelessWidget {
   Widget continueButton() {
     return ElevatedButton(
       onPressed: () {
-        Get.toNamed(Routes.home);
+        Get.offNamed(Routes.home);
       },
       child: Text(
-        "Continuar",
+        "Continue",
         style: _textStyle().copyWith(fontSize: 16),
       ),
     );
@@ -98,20 +99,31 @@ class Splashscreen extends StatelessWidget {
 
     if (homeController.hasConnectionError) {
       return const SimpleErrorWidget(
-        errorMessage: "Erro ao fazer conexão com a internet.",
+        errorMessage: "Error connecting to the internet.",
         icon: Icons.wifi_off_rounded,
+        iconColor: AppTheme.light,
+        textColor: AppTheme.light,
       );
     } else if (homeController.hasServerError) {
       return const SimpleErrorWidget(
-        errorMessage:
-            "Ocorreu um erro no servidor.\nTente novamente mais tarde!",
+        errorMessage: "A server error occurred.\nTry again later!",
+        iconColor: AppTheme.light,
+        textColor: AppTheme.light,
         icon: Icons.public_off,
       );
     } else {
       return SimpleErrorWidget(
         errorMessage:
-            "Ocorreu um erro inesperado. Reinicie o aplicativo ou tente novamente mais tarde!",
-        retryAction: () => RestartWidget.restartApp(context),
+            "An unexpected error has occurred. Please restart the application or try again later!",
+        retryAction: () {
+          RestartWidget.restartApp(context);
+          Get.offNamedUntil(
+            Routes.root,
+            ModalRoute.withName(Routes.root),
+          );
+        },
+        iconColor: AppTheme.light,
+        textColor: AppTheme.light,
         icon: Icons.error,
       );
     }

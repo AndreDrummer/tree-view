@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tree_view/core/appearence/controller/appearence_controller.dart';
-import 'package:tree_view/core/appearence/theme/app_theme.dart';
 
 class SimpleErrorWidget extends StatelessWidget {
   const SimpleErrorWidget({
     super.key,
     required this.errorMessage,
+    required this.textColor,
+    required this.iconColor,
     required this.icon,
     this.retryAction,
     this.retryMessage,
@@ -15,6 +15,8 @@ class SimpleErrorWidget extends StatelessWidget {
   final void Function()? retryAction;
   final String? retryMessage;
   final String errorMessage;
+  final Color textColor;
+  final Color iconColor;
   final IconData icon;
 
   @override
@@ -25,21 +27,19 @@ class SimpleErrorWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon),
+          Icon(
+            icon,
+            color: iconColor,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Obx(() {
-              final AppearenceController controller = Get.find();
-              return Text(
-                errorMessage,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: controller.isDarkModeON
-                      ? AppTheme.light
-                      : AppTheme.primaryColor,
-                ),
-              );
-            }),
+            child: Text(
+              errorMessage,
+              textAlign: TextAlign.center,
+              style: context.theme.textTheme.bodyMedium?.copyWith(
+                color: textColor,
+              ),
+            ),
           ),
           Visibility(
             visible: retryAction != null,
@@ -48,7 +48,7 @@ class SimpleErrorWidget extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: retryAction,
                 child: Text(
-                  retryMessage ?? "Recarregar",
+                  retryMessage ?? "Reload",
                 ),
               ),
             ),

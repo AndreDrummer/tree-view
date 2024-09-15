@@ -25,7 +25,6 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
             setState(() {});
           })
           ..play()
-          ..setLooping(true)
           ..setVolume(0);
   }
 

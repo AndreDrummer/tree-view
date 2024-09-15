@@ -88,7 +88,7 @@ class _TreeBuilderState<T> extends State<TreeView<T>> {
           ),
         ),
         Positioned(
-          bottom: 24,
+          bottom: 48,
           right: 24,
           child: FloatingActionButton(
             backgroundColor: widget.backTopButtonBackgroundColor,

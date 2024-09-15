@@ -1,3 +1,5 @@
+import 'package:tree_view/core/appearence/controller/appearence_controller.dart';
+import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
 import 'package:tree_view/features/home/widgets/loading_widget.dart';
@@ -29,6 +31,7 @@ class Home extends StatelessWidget {
           child: Center(
             child: Obx(
               () {
+                final AppearenceController appearenceController = Get.find();
                 final AssetsController assetsController = Get.find();
                 final HomeController homeController = Get.find();
                 return Stack(
@@ -42,11 +45,17 @@ class Home extends StatelessWidget {
                             ModalRoute.withName(Routes.root),
                           );
                         },
-                        errorMessage: "Xiii, parece que não tem nada aqui.",
-                        retryMessage: "Recomeçar",
+                        errorMessage: "Oh, looks like there's nothing here.",
+                        retryMessage: "Restart",
+                        iconColor: appearenceController.isDarkModeON
+                            ? AppTheme.light
+                            : AppTheme.primaryColor,
+                        textColor: appearenceController.isDarkModeON
+                            ? AppTheme.light
+                            : AppTheme.primaryColor,
                         icon: Icons.air,
                       ),
-                      child: Column(
+                      child: ListView(
                         children: homeController.companies.map(
                           (company) {
                             return CompanyTile(

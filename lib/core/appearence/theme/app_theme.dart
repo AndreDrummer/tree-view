@@ -97,8 +97,8 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
+        backgroundColor: const WidgetStatePropertyAll(AppTheme.primaryColor),
         foregroundColor: const WidgetStatePropertyAll(AppTheme.light),
-        backgroundColor: const WidgetStatePropertyAll(AppTheme.secondaryColor),
         iconColor: const WidgetStatePropertyAll(AppTheme.light),
         foregroundBuilder: (context, states, child) {
           return Padding(

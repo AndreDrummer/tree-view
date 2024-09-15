@@ -121,7 +121,7 @@ class AssetsController extends GetxController {
     await _loadCompanyAssets();
     final sample = DataItem.fromList([..._locations, ..._assets]);
     _data(sample);
-    _feedbackText('Montando mapa de dados...');
+    _feedbackText('Data map mounting ...');
     await _updateTreeManager();
     resetLoading();
   }
@@ -182,7 +182,7 @@ class AssetsController extends GetxController {
   }
 
   Future<void> _loadCompanyLocations() async {
-    _feedbackText('Buscando Locais de ${_companyToSearch.name}');
+    _feedbackText('Searching Locations of ${_companyToSearch.name}');
     final response = await _httpProvider.getLocations(
       Endpoints.locations(_companyToSearch.id),
     );
@@ -196,7 +196,7 @@ class AssetsController extends GetxController {
   }
 
   Future<void> _loadCompanyAssets() async {
-    _feedbackText('Buscando Ativos de ${_companyToSearch.name}');
+    _feedbackText('Searching assets of ${_companyToSearch.name}');
     final response = await _httpProvider.getAssets(
       Endpoints.assets(_companyToSearch.id),
     );

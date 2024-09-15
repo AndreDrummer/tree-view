@@ -94,7 +94,7 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
       ),
       child: Text(
         style: TextStyle(color: widget.elementsColor, fontSize: 18),
-        widget.nothingFoundText ?? "Nada foi encontrado",
+        widget.nothingFoundText ?? "Nothing found",
         textAlign: TextAlign.center,
       ),
     );
