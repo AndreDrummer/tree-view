@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/widgets/builder.dart';
@@ -39,13 +41,33 @@ class TreeView<T> extends StatefulWidget {
 class _TreeBuilderState<T> extends State<TreeView<T>> {
   late ScrollController horizontalController;
   late ScrollController verticalController;
+  int numberOfChildrenToShow = 150;
 
   @override
   void initState() {
     horizontalController = widget.horizontalController;
     verticalController = widget.verticalController;
 
+    verticalController.addListener(() {
+      final maxPosition = verticalController.position.maxScrollExtent.toInt();
+      final currentPosition = verticalController.offset.toInt();
+
+      if (currentPosition == maxPosition) {
+        setState(() {
+          calculateNumberOfChildrenToShow();
+        });
+      }
+    });
+
     super.initState();
+  }
+
+  int calculateNumberOfChildrenToShow() {
+    if (numberOfChildrenToShow < widget.node.numberOfChildren) {
+      numberOfChildrenToShow +=
+          min(150, widget.node.numberOfChildren - numberOfChildrenToShow);
+    }
+    return numberOfChildrenToShow;
   }
 
   void scrollToTheBeginningOfData() {
@@ -77,6 +99,7 @@ class _TreeBuilderState<T> extends State<TreeView<T>> {
                 widget.node,
                 showCustomizationForRoot: widget.showCustomizationForRoot,
                 breadCrumbLinesColor: widget.breadCrumbLinesColor,
+                maxChildrenVisible: numberOfChildrenToShow,
                 nodeRowConfig: widget.nodeRowConfig,
                 elementsColor: widget.elementsColor,
                 nodeRootId: widget.nodeRootId,

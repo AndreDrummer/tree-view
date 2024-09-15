@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/widgets/builder.dart';
@@ -11,6 +13,7 @@ class NodeWidget<T> extends StatefulWidget {
     this.node, {
     required this.showCustomizationForRoot,
     required this.breadCrumbLineColor,
+    required this.maxChildrenVisible,
     required this.elementsColor,
     required this.nodeRowConfig,
     required this.nodeRootId,
@@ -22,6 +25,7 @@ class NodeWidget<T> extends StatefulWidget {
 
   final bool showCustomizationForRoot;
   final Color breadCrumbLineColor;
+  final int maxChildrenVisible;
   final Color elementsColor;
   final int nodeRootId;
 
@@ -50,6 +54,15 @@ class _NodeWidgetState<T> extends State<NodeWidget<T>> {
     setState(() {
       node = node.expanded ? node.close() : node.open();
     });
+  }
+
+  List<Node<NodeData<T>>> nodeChildrenVisible() {
+    final numberOfChildren = node.numberOfChildren;
+
+    return node.children!.sublist(
+      0,
+      min(widget.maxChildrenVisible, numberOfChildren),
+    );
   }
 
   @override
@@ -103,11 +116,12 @@ class _NodeWidgetState<T> extends State<NodeWidget<T>> {
             visible: node.expanded,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: node.children!.map((nodeChild) {
+              children: nodeChildrenVisible().map((nodeChild) {
                 return builder(
                   nodeChild,
                   showCustomizationForRoot: widget.showCustomizationForRoot,
                   breadCrumbLinesColor: widget.breadCrumbLineColor,
+                  maxChildrenVisible: widget.maxChildrenVisible,
                   nodeRowConfig: widget.nodeRowConfig,
                   elementsColor: widget.elementsColor,
                   nodeRootId: widget.nodeRootId,

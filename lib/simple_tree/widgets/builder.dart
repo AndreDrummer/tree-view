@@ -9,12 +9,14 @@ Widget builder<T>(
   required NodeRowConfig Function(T) nodeRowConfig,
   required bool showCustomizationForRoot,
   required Color breadCrumbLinesColor,
+  required int maxChildrenVisible,
   required Color elementsColor,
   required int nodeRootId,
 }) {
   return Nodes<T>(
     showCustomizationForRoot: showCustomizationForRoot,
     breadCrumbLinesColor: breadCrumbLinesColor,
+    maxChildrenVisible: maxChildrenVisible,
     nodeRowConfig: nodeRowConfig,
     elementsColor: elementsColor,
     nodeRootId: nodeRootId,

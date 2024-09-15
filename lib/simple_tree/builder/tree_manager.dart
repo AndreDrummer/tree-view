@@ -69,10 +69,10 @@ class TreeManager<T extends ParentProtocol> {
     if (shouldIncludeCurrentNode) {
       // Include the current node, but with the filtered children
       return Node<NodeData>(
-        expanded: filteredChildren.length <= 150,
         children: filteredChildren,
         parent: node.parent,
         value: node.value,
+        expanded: true,
         id: node.id,
       );
     }

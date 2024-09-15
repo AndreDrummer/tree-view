@@ -99,7 +99,7 @@ class AssetsController extends GetxController {
 
     treeManager = TreeManager(
       dataList: data,
-      initializeExpanded: data.length <= dataLengthThreshold,
+      initializeExpanded: true,
       rootData: NodeData<DataItem>(
         id: data.first.id,
         data: data.first,

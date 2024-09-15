@@ -9,6 +9,7 @@ class Nodes<T> extends StatelessWidget {
     super.key,
     required this.showCustomizationForRoot,
     required this.breadCrumbLinesColor,
+    required this.maxChildrenVisible,
     required this.nodeRowConfig,
     required this.elementsColor,
     required this.nodeRootId,
@@ -18,6 +19,7 @@ class Nodes<T> extends StatelessWidget {
   final NodeRowConfig Function(T) nodeRowConfig;
   final bool showCustomizationForRoot;
   final Color breadCrumbLinesColor;
+  final int maxChildrenVisible;
   final Node<NodeData<T>> node;
   final Color elementsColor;
   final int nodeRootId;
@@ -28,6 +30,7 @@ class Nodes<T> extends StatelessWidget {
       node,
       showCustomizationForRoot: showCustomizationForRoot,
       breadCrumbLineColor: breadCrumbLinesColor,
+      maxChildrenVisible: maxChildrenVisible,
       elementsColor: elementsColor,
       nodeRowConfig: nodeRowConfig,
       nodeRootId: nodeRootId,
