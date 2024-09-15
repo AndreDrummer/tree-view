@@ -4,7 +4,6 @@ import 'package:tree_view/simple_tree/utils/extensions.dart';
 import 'package:tree_view/simple_tree/builder/node.dart';
 import 'package:tree_view/simple_tree/utils/utils.dart';
 import 'package:flutter/foundation.dart';
-import 'dart:collection';
 
 enum BuildTreeMode {
   onMain,
@@ -37,8 +36,6 @@ class TreeManager<T extends ParentProtocol> {
 
   Node<NodeData<T>> get tree => _tree;
 
-  bool get treeIsNotEmpty => _tree.id != emptyTree.id;
-
   Node<NodeData<T>> nodeStart() {
     return Node(
       expanded: _initializeExpanded,
@@ -47,9 +44,45 @@ class TreeManager<T extends ParentProtocol> {
     );
   }
 
+  Node<NodeData>? filteredTree({
+    required bool Function(ParentProtocol) filterPredicate,
+    Node<NodeData>? node,
+  }) {
+    node ??= tree;
+    if (node.isEmpty) return null;
+
+    List<Node<NodeData>> filteredChildren = [];
+
+    for (var child in node.children!) {
+      var filteredChild = filteredTree(
+        filterPredicate: filterPredicate,
+        node: child,
+      );
+      if (filteredChild != null) {
+        filteredChildren.add(filteredChild);
+      }
+    }
+
+    bool shouldIncludeCurrentNode =
+        filterPredicate(node.value!.data) || filteredChildren.isNotEmpty;
+
+    if (shouldIncludeCurrentNode) {
+      // Include the current node, but with the filtered children
+      return Node<NodeData>(
+        expanded: filteredChildren.length <= 150,
+        children: filteredChildren,
+        parent: node.parent,
+        value: node.value,
+        id: node.id,
+      );
+    }
+
+    return null;
+  }
+
   void buildTree() {
     final startTime = Utils.startExecutionTime(methodName: "buildTree");
-    _tree = _referenceTree(BuildTreeMode.onMain);
+    _tree = _buildTree(BuildTreeMode.onMain);
     Utils.endExecutionTime(startTime, methodName: "buildTree");
   }
 
@@ -63,7 +96,7 @@ class TreeManager<T extends ParentProtocol> {
         );
 
         _semaphor = false;
-        _tree = await compute(_referenceTree, BuildTreeMode.onSpawnIsolate);
+        _tree = await compute(_buildTree, BuildTreeMode.onSpawnIsolate);
         _semaphor = true;
         Utils.endExecutionTime(startTime, methodName: "buildTreeOnIsolate");
       }
@@ -75,39 +108,32 @@ class TreeManager<T extends ParentProtocol> {
     }
   }
 
-  void _updateTree(Node<NodeData<T>> node) {
-    _tree = node;
-  }
-
-  void _resetTree() {
-    buildTreeOnIsolate();
-  }
-
   /// This is the initial tree mounted. It never changes.
-  Node<NodeData<T>> _referenceTree(
+  Node<NodeData<T>> _buildTree(
     BuildTreeMode? buildTreeMode,
   ) {
     debugPrint("BuildTree Mode: ${buildTreeMode ?? BuildTreeMode.onMain}.");
     debugPrint("Data Length: ${_dataList.length} items.");
     final List<NodeData<T>> nodeDataList = _dataList.toNodeDataList();
+    final Map<String, Node<NodeData<T>>> nodeMap =
+        <String, Node<NodeData<T>>>{};
 
     final startNode = nodeStart();
 
+    nodeMap[startNode.value?.data?.id] = startNode;
+
     for (final nodeData in nodeDataList) {
+      if (nodeData.data == null) continue;
+
       Node<NodeData<T>> node = Node<NodeData<T>>(
         expanded: _initializeExpanded,
         id: nodeData.id,
         value: nodeData,
       );
 
-      if (node.value?.data == null) continue;
+      nodeMap[node.value?.data?.id] = node;
 
-      Node<NodeData<T>>? nodeParent = bfsTraversal(
-        startNoode: startNode,
-        predicate: (innerNode) {
-          return innerNode.value?.data?.id == nodeData.data?.parentId;
-        },
-      );
+      Node<NodeData<T>>? nodeParent = nodeMap[nodeData.data?.parentId];
 
       if (nodeParent != null) {
         nodeParent.children!.addChild(node);
@@ -119,167 +145,5 @@ class TreeManager<T extends ParentProtocol> {
     }
 
     return startNode;
-  }
-
-  void toogleNodeView(Node<NodeData<T>> node, {bool shouldResetTree = false}) {
-    if (shouldResetTree) _resetTree();
-
-    final updatedNode = node.expanded ? node.close() : node.open();
-
-    final newNode = tree.toggleNode(updatedNode);
-
-    if (node.id == tree.id) _updateTree(newNode ?? emptyTree);
-  }
-
-  Node<NodeData<T>>? bfsTraversal({
-    bool Function(Node<NodeData<T>>)? predicate,
-    void Function(Node<NodeData<T>>)? process,
-    required Node<NodeData<T>> startNoode,
-  }) {
-    // Initialize a queue and add the root node
-    Queue<Node<NodeData<T>>> queue = Queue<Node<NodeData<T>>>();
-
-    queue.add(startNoode);
-
-    // Traverse while there are nodes in the queue
-    while (queue.isNotEmpty) {
-      // Dequeue the front node
-      Node<NodeData<T>> current = queue.removeFirst();
-
-      // If process is not null, process the current node
-      if (current.value != null) process?.call(current);
-
-      // If a predicate function is past, runs it agains the currentNode and returns appropriately
-      if (predicate != null && predicate(current)) return current;
-
-      // Enqueue all children of the current node
-      for (var child in current.children!) {
-        queue.add(child);
-      }
-    }
-
-    return null;
-  }
-
-  void rebuild(bool Function(T) predicate, {bool shouldResetTree = false}) {
-    List<Node<NodeData<T>>> nodes = [];
-
-    if (shouldResetTree) _resetTree();
-
-    bfsTraversal(
-      process: (node) {
-        final extractedData = node.value?.data;
-
-        if (extractedData != null && predicate(extractedData)) {
-          nodes.add(node);
-        }
-      },
-      startNoode: _tree,
-    );
-
-    List<NodePath> pathsToEachNode = _nodePathList(nodes);
-
-    if (pathsToEachNode.isEmpty) _updateTree(emptyTree);
-
-    Node<NodeData<T>> newTree = _tree.copyWith(children: [], expanded: true);
-
-    for (final path in pathsToEachNode) {
-      if (path.isNotEmpty) {
-        if (path.length == 1) {
-          newTree = _addNodeImmediateChildren(
-            predicate: predicate,
-            rootNode: newTree,
-            path: path,
-          );
-        } else {
-          newTree = _addNestedNodes(
-            predicate: predicate,
-            rootNode: newTree,
-            path: path,
-          );
-        }
-      }
-    }
-
-    _updateTree(newTree);
-  }
-
-  Node<NodeData<T>>? _findNodeByPath(NodePath ids) {
-    Node<NodeData<T>> current = _tree;
-
-    // Traverse until the second-to-last id to find the parent
-    for (int i = 0; i < ids.length; i++) {
-      int id = ids[i];
-
-      if (id >= current.children!.length) return null;
-      current = current.children![id];
-    }
-
-    return current;
-  }
-
-  List<NodePath> _nodePathList(List<Node<NodeData<T>>> nodes) {
-    return nodes
-        .map((node) => _tree.nodePath((innerNode) => innerNode.id == node.id))
-        .toList();
-  }
-
-  Node<NodeData<T>> _addNodeImmediateChildren({
-    required bool Function(T) predicate,
-    required Node<NodeData<T>> rootNode,
-    required NodePath path,
-  }) {
-    final currentChildren = rootNode.children;
-    Node<NodeData<T>>? newChildren = _findNodeByPath(path);
-
-    newChildren ??= _tree.children!.elementAt(path.last);
-
-    newChildren = newChildren.copyWith(
-      expanded: true,
-      children: [],
-    );
-
-    currentChildren!.addChild(
-      newChildren,
-      position: path.last,
-    );
-    rootNode.copyWith(children: currentChildren);
-    return rootNode;
-  }
-
-  Node<NodeData<T>> _addNestedNodes({
-    required bool Function(T) predicate,
-    required Node<NodeData<T>> rootNode,
-    required NodePath path,
-  }) {
-    Node<NodeData<T>> currentNode = rootNode;
-
-    for (int i = 0; i < path.length; i++) {
-      final childPosition = path[i];
-
-      final nodeFoundByPath = _findNodeByPath(path.sublist(0, i + 1))!;
-      final Node<NodeData<T>> node = nodeFoundByPath.copyWith(
-        expanded: true,
-        children: [],
-      );
-
-      if (node.parent?.id == currentNode.id) {
-        currentNode.children!.addChild(node, position: childPosition);
-
-        if (childPosition < currentNode.children!.length) {
-          currentNode = currentNode.children![childPosition];
-        } else {
-          final containsRecord = currentNode.children!.containsChild(node);
-          final indexInserted = containsRecord.$3;
-          final inserted = containsRecord.$1;
-
-          if (inserted) {
-            currentNode = currentNode.children![indexInserted!];
-          }
-        }
-      }
-    }
-
-    return rootNode;
   }
 }

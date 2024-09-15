@@ -1,7 +1,5 @@
-import 'package:tree_view/simple_tree/builder/node.dart';
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 import 'package:tree_view/simple_tree/builder/tree_manager.dart';
-import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/widgets/tree_view.dart';
 import 'package:flutter/material.dart';
@@ -87,39 +85,13 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
     );
   }
 
-  Node<NodeData>? filteredTree(Node<NodeData> node) {
-    if (node.isEmpty) return null;
-
-    List<Node<NodeData>> filteredChildren = [];
-
-    for (var child in node.children!) {
-      var filteredChild = filteredTree(child);
-      if (filteredChild != null) {
-        filteredChildren.add(filteredChild);
-      }
-    }
-
-    bool shouldIncludeCurrentNode =
-        widget.filterPredicate(node.value!.data) || filteredChildren.isNotEmpty;
-
-    if (shouldIncludeCurrentNode) {
-      // Include the current node, but with the filtered children
-      return Node<NodeData>(
-        expanded: filteredChildren.length <= 150,
-        children: filteredChildren,
-        parent: node.parent,
-        value: node.value,
-        id: node.id,
-      );
-    }
-
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final Node<NodeData> originalTree = treeManager.tree;
-    final root = filteredTree(originalTree) ?? treeManager.emptyTree;
+    final filteredTree = treeManager.filteredTree(
+      filterPredicate: widget.filterPredicate,
+    );
+
+    final root = filteredTree ?? treeManager.emptyTree;
 
     return Container(
       color: widget.backgroundColor,

@@ -26,57 +26,6 @@ class Node<T> {
   bool get isNotEmpty => id >= 0;
   bool get isEmpty => id == -1;
 
-  int get numberOfDescendentsShowingUp {
-    int value = expanded ? numberOfChildren : 0;
-
-    if (hasChildren) {
-      for (var child in children!) {
-        if (child.expanded) {
-          value += child.numberOfDescendentsShowingUp;
-        }
-      }
-    }
-
-    return value;
-  }
-
-  int get getHeightFromNodeToRoot {
-    int height = 0;
-    Node? current = this;
-
-    while (current?.parent != null) {
-      height++;
-      current = current?.parent;
-    }
-
-    return height;
-  }
-
-  int get getHeight {
-    final Node rootNode = this;
-
-    if (rootNode.children!.isEmpty) {
-      // If a node has no children, it's a leaf node, so its height is 0.
-      return 0;
-    } else {
-      // Compute the height of each child node and find the maximum.
-      int maxHeight = 0;
-      for (var child in rootNode.children!) {
-        int childHeight = child.getHeight;
-        if (childHeight > maxHeight) {
-          maxHeight = childHeight;
-        }
-      }
-      // The height of the current node is 1 (for the edge to its highest child)
-      // plus the height of the highest child.
-      return maxHeight + 1;
-    }
-  }
-
-  bool _findNodeByIdPredicate(Node innerNode, Node currentNode) {
-    return innerNode.id == currentNode.id;
-  }
-
   Node<T> close() {
     return copyWith(
       children: children!.map((c) => c.close()).toList(),
@@ -91,24 +40,16 @@ class Node<T> {
     );
   }
 
-  Node<T>? toggleNode(Node<T> updatedNode) {
-    List<int> pathToNode = nodePath(
-      (node) {
-        return _findNodeByIdPredicate(node, updatedNode);
-      },
-    );
+  int get getHeightFromNodeToRoot {
+    int height = 0;
+    Node? current = this;
 
-    Node<T>? parent = _findParent(pathToNode);
-
-    if (parent != null && pathToNode.isNotEmpty) {
-      int nodeIndex = pathToNode.last;
-
-      parent.children![nodeIndex] = updatedNode;
-    } else {
-      return updatedNode;
+    while (current?.parent != null) {
+      height++;
+      current = current?.parent;
     }
 
-    return parent;
+    return height;
   }
 
   Node<T> copyWith({
@@ -124,86 +65,6 @@ class Node<T> {
       id: id ?? this.id,
       parent: parent,
     );
-  }
-
-  List<int> nodePath(bool Function(Node<T>) predicate) {
-    List<int> idList = _findPath(predicate) ?? [];
-
-    // skip the root node
-    return _convertIDListToPosList(idList.sublist(1));
-  }
-
-  List<int> _convertIDListToPosList(List<int> ids) {
-    Node<T> currentNode = this;
-    List<int> pos = [];
-
-    for (final id in ids) {
-      currentNode = currentNode.children!.where((el) {
-        if (el.id == id) {
-          pos.add(currentNode.children!.indexOf(el));
-          return true;
-        } else {
-          return false;
-        }
-      }).toList()[0];
-    }
-
-    return pos;
-  }
-
-  /// Why do not use the [parent] property?
-  ///
-  /// This property only holds the same data as the
-  /// current node parent. It does not carry the
-  /// state of the tree. So, if you use [parent]
-  /// instead, the tree will not get updated properly.
-  Node<T>? _findParent(NodePath nodePath) {
-    Node<T>? current = this;
-
-    // Traverse until the second-to-last id to find the parent
-    if (nodePath.isNotEmpty) {
-      for (int i = 0; i < nodePath.length - 1; i++) {
-        int id = nodePath[i];
-        if (current == null || id >= current.children!.length) {
-          return null; // ParentProtocol not found
-        }
-        current = current.children![id];
-      }
-
-      return current;
-    }
-
-    return null;
-  }
-
-// DFS function to find the path from start to target
-  List<int>? _findPath(
-    bool Function(Node<T>) predicate, {
-    List<int>? map,
-  }) {
-    Node<T> startNode = this;
-
-    // Initialize the path if not set
-    map ??= [startNode.id];
-
-    // If the current Node<T> is the target, return the path
-    if (predicate(startNode)) {
-      return map;
-    }
-
-    // Recursively search through each child
-    for (Node<T> child in (this).children!) {
-      map.addIfAbsent(child.id);
-      List<int>? result = child._findPath(predicate, map: map);
-      if (result != null) {
-        return result; // Return if the path is found
-      }
-
-      // Backtrack if not found in the current branch
-      map.remove(child.id);
-    }
-
-    return null; // Return null if no path found
   }
 
   @override
