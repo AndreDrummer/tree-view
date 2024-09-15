@@ -83,19 +83,25 @@ class NodeWidget<T> extends StatelessWidget {
         ),
         Visibility(
           visible: node.expanded,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: node.children!.map((nodeChild) {
-              return builder(
-                nodeChild,
-                showCustomizationForRoot: showCustomizationForRoot,
-                breadCrumbLinesColor: breadCrumbLineColor,
-                nodeRowConfig: nodeRowConfig,
-                elementsColor: elementsColor,
-                toggleNode: toggleNode,
-                nodeRootId: nodeRootId,
-              );
-            }).toList(),
+          child: SizedBox(
+            width: double.maxFinite,
+            height: node.children!.length * 49,
+            child: ListView.builder(
+              itemCount: node.children!.length,
+              itemBuilder: (context, index) {
+                final nodeChild = node.children![index];
+
+                return builder(
+                  nodeChild,
+                  showCustomizationForRoot: showCustomizationForRoot,
+                  breadCrumbLinesColor: breadCrumbLineColor,
+                  nodeRowConfig: nodeRowConfig,
+                  elementsColor: elementsColor,
+                  toggleNode: toggleNode,
+                  nodeRootId: nodeRootId,
+                );
+              },
+            ),
           ),
         ),
       ],

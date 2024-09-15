@@ -20,10 +20,11 @@ class TreeManager<T extends ParentProtocol> {
         _rootData = rootData,
         _dataList = dataList;
 
-  // Is is changed constantly to reflect the data dynamicity.
   final bool _initializeExpanded;
   final NodeData<T> _rootData;
   final List<T> _dataList;
+
+  bool _semaphor = true;
 
   /// This is representation of a empty tree.
   final Node<NodeData<T>> _emptyTree = Node<NodeData<T>>(
@@ -53,18 +54,25 @@ class TreeManager<T extends ParentProtocol> {
   }
 
   Future<void> buildTreeOnIsolate() async {
-    final startTime = Utils.startExecutionTime(
-      methodName: "buildTreeOnIsolate",
-    );
+    late DateTime startTime;
 
     try {
-      _tree = await compute(_referenceTree, BuildTreeMode.onSpawnIsolate);
+      if (_semaphor) {
+        startTime = Utils.startExecutionTime(
+          methodName: "buildTreeOnIsolate",
+        );
+
+        _semaphor = false;
+        _tree = await compute(_referenceTree, BuildTreeMode.onSpawnIsolate);
+        _semaphor = true;
+        Utils.endExecutionTime(startTime, methodName: "buildTreeOnIsolate");
+      }
     } catch (err, stack) {
       debugPrint("Error running buildTreeOnIsolate: $err");
       debugPrint("Stack Trace: $stack");
+      Utils.endExecutionTime(startTime, methodName: "buildTreeOnIsolate");
       rethrow;
     }
-    Utils.endExecutionTime(startTime, methodName: "buildTreeOnIsolate");
   }
 
   void _updateTree(Node<NodeData<T>> node) {
@@ -91,6 +99,8 @@ class TreeManager<T extends ParentProtocol> {
         id: nodeData.id,
         value: nodeData,
       );
+
+      if (node.value?.data == null) continue;
 
       Node<NodeData<T>>? nodeParent = bfsTraversal(
         startNoode: startNode,
@@ -123,8 +133,8 @@ class TreeManager<T extends ParentProtocol> {
 
   Node<NodeData<T>>? bfsTraversal({
     bool Function(Node<NodeData<T>>)? predicate,
-    required Node<NodeData<T>> startNoode,
     void Function(Node<NodeData<T>>)? process,
+    required Node<NodeData<T>> startNoode,
   }) {
     // Initialize a queue and add the root node
     Queue<Node<NodeData<T>>> queue = Queue<Node<NodeData<T>>>();
