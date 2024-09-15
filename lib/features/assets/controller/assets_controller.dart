@@ -83,6 +83,7 @@ class AssetsController extends GetxController {
 
   bool Function(DataItem) get filterPredicate {
     return (DataItem item) {
+      if (_predicateFilterMap.entries.isEmpty) return true;
       // Combine all predicates using AND logic
       for (var predicate in _predicateFilterMap.entries) {
         if (!predicate.value(item)) {
@@ -100,8 +101,8 @@ class AssetsController extends GetxController {
       dataList: data,
       initializeExpanded: data.length <= dataLengthThreshold,
       rootData: NodeData<DataItem>(
-        data: data.first,
         id: data.first.id,
+        data: data.first,
       ),
     );
 
@@ -119,8 +120,9 @@ class AssetsController extends GetxController {
     setLoading();
     await _loadCompanyLocations();
     await _loadCompanyAssets();
-    final sample = DataItem.fromList([..._locations, ..._assets]);
-    _data(sample);
+
+    _data(DataItem.fromList([..._locations, ..._assets]));
+
     _feedbackText('Data map mounting ...');
     await _updateTreeManager();
     resetLoading();

@@ -27,7 +27,7 @@ class TreeManager<T extends ParentProtocol> {
   bool _semaphor = true;
 
   /// This is representation of a empty tree.
-  final Node<NodeData<T>> _emptyTree = Node<NodeData<T>>(
+  final Node<NodeData<T>> emptyTree = Node<NodeData<T>>(
     value: NodeData(id: -1),
     expanded: false,
     id: -1,
@@ -37,7 +37,7 @@ class TreeManager<T extends ParentProtocol> {
 
   Node<NodeData<T>> get tree => _tree;
 
-  bool get treeIsNotEmpty => _tree.id != _emptyTree.id;
+  bool get treeIsNotEmpty => _tree.id != emptyTree.id;
 
   Node<NodeData<T>> nodeStart() {
     return Node(
@@ -128,7 +128,7 @@ class TreeManager<T extends ParentProtocol> {
 
     final newNode = tree.toggleNode(updatedNode);
 
-    if (node.id == tree.id) _updateTree(newNode ?? _emptyTree);
+    if (node.id == tree.id) _updateTree(newNode ?? emptyTree);
   }
 
   Node<NodeData<T>>? bfsTraversal({
@@ -138,20 +138,19 @@ class TreeManager<T extends ParentProtocol> {
   }) {
     // Initialize a queue and add the root node
     Queue<Node<NodeData<T>>> queue = Queue<Node<NodeData<T>>>();
-    Node<NodeData<T>> currentNode = startNoode;
+
     queue.add(startNoode);
 
     // Traverse while there are nodes in the queue
     while (queue.isNotEmpty) {
       // Dequeue the front node
       Node<NodeData<T>> current = queue.removeFirst();
-      currentNode = current;
 
       // If process is not null, process the current node
       if (current.value != null) process?.call(current);
 
       // If a predicate function is past, runs it agains the currentNode and returns appropriately
-      if (predicate != null && predicate(current)) return currentNode;
+      if (predicate != null && predicate(current)) return current;
 
       // Enqueue all children of the current node
       for (var child in current.children!) {
@@ -180,7 +179,7 @@ class TreeManager<T extends ParentProtocol> {
 
     List<NodePath> pathsToEachNode = _nodePathList(nodes);
 
-    if (pathsToEachNode.isEmpty) _updateTree(_emptyTree);
+    if (pathsToEachNode.isEmpty) _updateTree(emptyTree);
 
     Node<NodeData<T>> newTree = _tree.copyWith(children: [], expanded: true);
 

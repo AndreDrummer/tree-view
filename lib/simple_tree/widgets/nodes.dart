@@ -12,12 +12,10 @@ class Nodes<T> extends StatelessWidget {
     required this.nodeRowConfig,
     required this.elementsColor,
     required this.nodeRootId,
-    required this.toggleNode,
     required this.node,
   });
 
   final NodeRowConfig Function(T) nodeRowConfig;
-  final Function(Node<NodeData<T>>) toggleNode;
   final bool showCustomizationForRoot;
   final Color breadCrumbLinesColor;
   final Node<NodeData<T>> node;
@@ -33,7 +31,6 @@ class Nodes<T> extends StatelessWidget {
       elementsColor: elementsColor,
       nodeRowConfig: nodeRowConfig,
       nodeRootId: nodeRootId,
-      toggleNode: toggleNode,
     );
   }
 }

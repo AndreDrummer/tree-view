@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 Widget builder<T>(
   Node<NodeData<T>> node, {
   required NodeRowConfig Function(T) nodeRowConfig,
-  required Function(Node<NodeData<T>>) toggleNode,
   required bool showCustomizationForRoot,
   required Color breadCrumbLinesColor,
   required Color elementsColor,
@@ -18,9 +17,8 @@ Widget builder<T>(
     breadCrumbLinesColor: breadCrumbLinesColor,
     nodeRowConfig: nodeRowConfig,
     elementsColor: elementsColor,
-    key: Key(node.id.toString()),
-    toggleNode: toggleNode,
     nodeRootId: nodeRootId,
+    key: UniqueKey(),
     node: node,
   );
 }

@@ -23,6 +23,8 @@ class Node<T> {
 
   bool get hasChildren => children!.isNotEmpty;
   int get numberOfChildren => children!.length;
+  bool get isNotEmpty => id >= 0;
+  bool get isEmpty => id == -1;
 
   int get numberOfDescendentsShowingUp {
     int value = expanded ? numberOfChildren : 0;

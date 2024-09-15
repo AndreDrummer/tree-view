@@ -3,10 +3,10 @@ import 'package:tree_view/features/assets/widgets/search_header.dart';
 import 'package:tree_view/features/home/widgets/loading_widget.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/core/appearence/theme/app_theme.dart';
+import 'package:tree_view/simple_tree/widgets/tree_widget.dart';
 import 'package:tree_view/core/constants/graphic_assets.dart';
 import 'package:tree_view/core/widgets/dark_mode_button.dart';
 import 'package:tree_view/core/widgets/screen_blur.dart';
-import 'package:tree_view/simple_tree/widget_tree.dart';
 import 'package:tree_view/core/models/data_item.dart';
 import 'package:tree_view/core/models/enums.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +65,7 @@ class _AssetsViewState extends State<AssetsView> {
 
     bool predicate(data) => assetsController.filterPredicate(data);
 
-    return WidgetTree<DataItem>(
+    return TreeWidget<DataItem>(
       elementsColor: Get.isDarkMode ? AppTheme.light : AppTheme.primaryColor,
       backTopButtonBackgroundColor:
           Get.isDarkMode ? AppTheme.secondaryColor : AppTheme.primaryColor,
@@ -76,6 +76,7 @@ class _AssetsViewState extends State<AssetsView> {
       verticalScrollController: verticalScrollController,
       treeManager: assetsController.treeManager,
       backTopButtonIconColor: AppTheme.light,
+      showCustomizationForRoot: true,
       filterPredicate: predicate,
       showBackTopButton: true,
     );

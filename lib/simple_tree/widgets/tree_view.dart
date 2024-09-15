@@ -17,10 +17,8 @@ class TreeView<T> extends StatefulWidget {
     required this.nodeRowConfig,
     required this.elementsColor,
     required this.nodeRootId,
-    required this.toggleNode,
   });
 
-  final Function(Node<NodeData<T>>) toggleNode;
   final ScrollController horizontalController;
   final Color? backTopButtonBackgroundColor;
   final ScrollController verticalController;
@@ -68,7 +66,7 @@ class _TreeBuilderState<T> extends State<TreeView<T>> {
     return Stack(
       children: [
         SizedBox(
-          height: MediaQuery.sizeOf(context).height * .76,
+          height: MediaQuery.sizeOf(context).height * .8,
           width: MediaQuery.sizeOf(context).height,
           child: SingleChildScrollView(
             controller: verticalController,
@@ -82,7 +80,6 @@ class _TreeBuilderState<T> extends State<TreeView<T>> {
                 nodeRowConfig: widget.nodeRowConfig,
                 elementsColor: widget.elementsColor,
                 nodeRootId: widget.nodeRootId,
-                toggleNode: widget.toggleNode,
               ),
             ),
           ),

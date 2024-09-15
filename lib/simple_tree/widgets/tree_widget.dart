@@ -1,5 +1,7 @@
+import 'package:tree_view/simple_tree/builder/node.dart';
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 import 'package:tree_view/simple_tree/builder/tree_manager.dart';
+import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/widgets/tree_view.dart';
 import 'package:flutter/material.dart';
@@ -14,17 +16,17 @@ class TreeWidget<T> extends StatefulWidget {
     this.backTopButtonBackgroundColor,
     this.initializeExpanded = true,
     this.showBackTopButton = true,
+    required this.filterPredicate,
     this.backTopButtonIconColor,
     required this.elementsColor,
     required this.treeManager,
     this.resetOnFilter = true,
     required this.nodeConfig,
     this.nothingFoundText,
-    this.filterPredicate,
     this.backgroundColor,
   });
 
-  final bool Function(ParentProtocol)? filterPredicate;
+  final bool Function(ParentProtocol) filterPredicate;
   final bool showCustomizationForRoot;
 
   final String? nothingFoundText;
@@ -68,26 +70,11 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
     super.initState();
   }
 
-  @override
-  void didUpdateWidget(TreeWidget<T> oldWidget) {
-    treeManager.rebuild(
-      shouldResetTree: widget.resetOnFilter,
-      widget.filterPredicate!,
-    );
-    super.didUpdateWidget(oldWidget);
-  }
-
   NodeRowConfig nodeConfig(data) {
     return widget.nodeConfig(data as T);
   }
 
-  void toggleNode(node) {
-    setState(() {
-      treeManager.toogleNodeView(node);
-    });
-  }
-
-  Widget emptyTreeWidget() {
+  Widget emptyTreeView() {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: MediaQuery.sizeOf(context).height / 6,
@@ -100,29 +87,56 @@ class _TreeWidgetState<T> extends State<TreeWidget<T>> {
     );
   }
 
-  bool showCustomizationForRoot() {
-    return widget.showCustomizationForRoot;
+  Node<NodeData>? filteredTree(Node<NodeData> node) {
+    if (node.isEmpty) return null;
+
+    List<Node<NodeData>> filteredChildren = [];
+
+    for (var child in node.children!) {
+      var filteredChild = filteredTree(child);
+      if (filteredChild != null) {
+        filteredChildren.add(filteredChild);
+      }
+    }
+
+    bool shouldIncludeCurrentNode =
+        widget.filterPredicate(node.value!.data) || filteredChildren.isNotEmpty;
+
+    if (shouldIncludeCurrentNode) {
+      // Include the current node, but with the filtered children
+      return Node<NodeData>(
+        expanded: filteredChildren.length <= 150,
+        children: filteredChildren,
+        parent: node.parent,
+        value: node.value,
+        id: node.id,
+      );
+    }
+
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    final Node<NodeData> originalTree = treeManager.tree;
+    final root = filteredTree(originalTree) ?? treeManager.emptyTree;
+
     return Container(
       color: widget.backgroundColor,
       child: Visibility(
-        visible: treeManager.tree.id > -1,
-        replacement: emptyTreeWidget(),
+        visible: root.isNotEmpty,
+        replacement: emptyTreeView(),
         child: TreeView(
-          treeManager.tree,
+          root,
           backTopButtonBackgroundColor: widget.backTopButtonBackgroundColor,
+          showCustomizationForRoot: widget.showCustomizationForRoot,
           backTopButtonIconColor: widget.backTopButtonIconColor,
-          showCustomizationForRoot: showCustomizationForRoot(),
           breadCrumbLinesColor: widget.breadCrumbLinesColor,
           horizontalController: horizontalScrollController,
           verticalController: verticalScrollController,
           nodeRootId: treeManager.nodeStart().id,
           elementsColor: widget.elementsColor,
           nodeRowConfig: nodeConfig,
-          toggleNode: toggleNode,
         ),
       ),
     );
