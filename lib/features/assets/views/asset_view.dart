@@ -126,37 +126,43 @@ class _AssetsViewState extends State<AssetsView> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(),
-          title: const Text(
-            "Assets",
-            style: TextStyle(color: AppTheme.light),
-          ),
-          actions: const [DarkModeButton()],
-          centerTitle: true,
-        ),
-        body: Stack(
-          children: [
-            ListView(
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                searchHeader(),
-                Visibility(
-                  visible: dataViewIsReady,
-                  child: tree(),
-                ),
-              ],
+      return PopScope(
+        canPop: true,
+        onPopInvokedWithResult: (value, any) {
+          Get.find<AssetsController>().resetFilters();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: const BackButton(),
+            title: const Text(
+              "Assets",
+              style: TextStyle(color: AppTheme.light),
             ),
-            Visibility(
-              visible: !dataViewIsReady,
-              child: const ScreenBlur(
-                child: LoadingWidget(
-                  feedbackText: "Montando visualização de dados!",
-                ),
+            actions: const [DarkModeButton()],
+            centerTitle: true,
+          ),
+          body: Stack(
+            children: [
+              ListView(
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  searchHeader(),
+                  Visibility(
+                    visible: dataViewIsReady,
+                    child: tree(),
+                  ),
+                ],
               ),
-            )
-          ],
+              Visibility(
+                visible: !dataViewIsReady,
+                child: const ScreenBlur(
+                  child: LoadingWidget(
+                    feedbackText: "Montando visualização de dados!",
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       );
     });

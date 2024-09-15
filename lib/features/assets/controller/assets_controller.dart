@@ -20,7 +20,7 @@ enum FilterType {
 class AssetsController extends GetxController {
   // final rootData = DataItem(kind: ItemKind.location, name: "", id: "");
 
-  Rx<AssetFilter> itemFilter = AssetFilter.none.obs;
+  final Rx<AssetFilter> _itemFilter = AssetFilter.none.obs;
 
   static List<Location> _locations = <Location>[];
   static List<Asset> _assets = <Asset>[];
@@ -66,9 +66,9 @@ class AssetsController extends GetxController {
   }
 
   // Getters
-  bool get isFilteringByVibration => itemFilter.value == vibration;
+  bool get isFilteringByVibration => _itemFilter.value == vibration;
   bool get isFilteringByAny => _predicateFilterMap.isNotEmpty;
-  bool get isFilteringByEnergy => itemFilter.value == energy;
+  bool get isFilteringByEnergy => _itemFilter.value == energy;
   AssetFilter get vibration => AssetFilter.vibration;
   String get feedbackText => _feedbackText.value;
   String get textToSearch => _textToSearch.value;
@@ -115,6 +115,11 @@ class AssetsController extends GetxController {
 
   void _resetPredicates() => _predicateFilterMap.clear();
 
+  void resetFilters() {
+    _resetPredicates();
+    _itemFilter(none);
+  }
+
   Future loadCompanyItems(Company company) async {
     _companyToSearch = company;
     setLoading();
@@ -156,19 +161,19 @@ class AssetsController extends GetxController {
   }
 
   void filterByEnergy() {
-    if (itemFilter.value == energy) {
-      itemFilter(none);
+    if (_itemFilter.value == energy) {
+      _itemFilter(none);
     } else {
-      itemFilter(energy);
+      _itemFilter(energy);
     }
     _filterBySensor();
   }
 
   void filterByVibration() {
-    if (itemFilter.value == vibration) {
-      itemFilter(none);
+    if (_itemFilter.value == vibration) {
+      _itemFilter(none);
     } else {
-      itemFilter(vibration);
+      _itemFilter(vibration);
     }
     _filterBySensor();
   }
@@ -214,10 +219,11 @@ class AssetsController extends GetxController {
   void _filterBySensor() {
     _clearSearchText();
 
-    if (itemFilter.value == none) {
+    if (_itemFilter.value == none) {
       _resetPredicates();
     } else {
-      bool predicate(DataItem item) => item.sensorType == itemFilter.value.name;
+      bool predicate(DataItem item) =>
+          item.sensorType == _itemFilter.value.name;
 
       _predicateFilterMap.putIfAbsent(FilterType.sensorType, () => predicate);
 
