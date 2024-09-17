@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AppearenceController extends GetxController {
@@ -10,7 +10,9 @@ class AppearenceController extends GetxController {
 
   void toggleAppearenceMode() {
     Get.changeTheme(Get.isDarkMode ? AppTheme.lightMode : AppTheme.darkMode);
-    Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.light);
+
+    Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+
     Get.isDarkMode ? _isDarkModeON(false) : _isDarkModeON(true);
   }
 

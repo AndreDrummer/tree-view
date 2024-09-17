@@ -16,13 +16,13 @@ enum DataItemEnum {
 }
 
 class DataItem extends ParentProtocol {
-  final String? gatewayId; // Nullable
-  final String? sensorType; // Nullable
-  final String? locationId; // Nullable
-  final String? sensorId; // Nullable
+  final String? gatewayId;
+  final String? sensorType;
+  final String? locationId;
+  final String? sensorId;
   @override
-  final String? parentId; // Nullable
-  final String? status; // Nullable
+  final String? parentId;
+  final String? status;
   final ItemKind kind;
   final String name;
   @override
@@ -75,7 +75,6 @@ class DataItem extends ParentProtocol {
     return dataItem;
   }
 
-  // Method to convert a DataItem to JSON
   Map<String, dynamic> toJson() {
     return {
       DataItemEnum.sensorType.name: sensorType,

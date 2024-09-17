@@ -1,5 +1,5 @@
-import 'package:tree_view/core/constants/graphic_assets.dart';
 import 'package:tree_view/core/appearence/theme/app_theme.dart';
+import 'package:tree_view/core/constants/graphic_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';

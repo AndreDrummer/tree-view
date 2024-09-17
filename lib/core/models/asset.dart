@@ -1,5 +1,5 @@
-import 'package:tree_view/core/models/enums.dart';
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
+import 'package:tree_view/core/models/enums.dart';
 
 enum AssetEnum {
   sensorType,
@@ -14,13 +14,13 @@ enum AssetEnum {
 }
 
 class Asset extends ParentProtocol {
-  final String? gatewayId; // Nullable
-  final String? sensorType; // Nullable
-  final String? locationId; // Nullable
-  final String? sensorId; // Nullable
+  final String? gatewayId;
+  final String? sensorType;
+  final String? locationId;
+  final String? sensorId;
   @override
-  final String? parentId; // Nullable
-  final String? status; // Nullable
+  final String? parentId;
+  final String? status;
   final ItemKind kind;
   final String name;
   @override
@@ -38,7 +38,6 @@ class Asset extends ParentProtocol {
     this.status,
   });
 
-  // Factory method to create a Asset from JSON
   factory Asset.fromJson(Map<String, dynamic> json) {
     return Asset(
       locationId: json[AssetEnum.locationId.name],
@@ -59,7 +58,6 @@ class Asset extends ParentProtocol {
     return list.map((json) => Asset.fromJson(json)).toList();
   }
 
-  // Method to convert a Asset to JSON
   Map<String, dynamic> toJson() {
     return {
       AssetEnum.sensorType.name: sensorType,

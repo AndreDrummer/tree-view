@@ -5,14 +5,14 @@ import 'package:get/get.dart';
 
 class SearchHeader extends StatelessWidget {
   const SearchHeader({
-    super.key,
-    this.scrollFunction,
-    this.onFilterByEnergy,
-    this.onFilterByVibration,
-    this.isFilteringByEnergy = false,
     this.isFilteringByVibration = false,
-    required this.onFilterByText,
+    this.isFilteringByEnergy = false,
     required this.textInitialValue,
+    required this.onFilterByText,
+    this.onFilterByVibration,
+    this.onFilterByEnergy,
+    this.scrollFunction,
+    super.key,
   });
   final Function(String text) onFilterByText;
   final Function()? onFilterByVibration;

@@ -10,7 +10,7 @@ enum LocationEnum {
 
 class Location extends ParentProtocol {
   @override
-  final String? parentId; // Nullable
+  final String? parentId;
 
   final ItemKind kind;
   final String name;
@@ -25,7 +25,6 @@ class Location extends ParentProtocol {
     this.parentId,
   });
 
-  // Factory method to create a Location from JSON
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
       parentId: json[LocationEnum.parentId.name],
@@ -40,7 +39,6 @@ class Location extends ParentProtocol {
     return list.map((json) => Location.fromJson(json)).toList();
   }
 
-  // Method to convert a Location to JSON
   Map<String, dynamic> toJson() {
     return {
       LocationEnum.parentId.name: parentId,

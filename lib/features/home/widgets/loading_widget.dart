@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:tree_view/core/appearence/theme/app_theme.dart';
-import 'package:get/get.dart';
 import 'package:tree_view/core/widgets/progress_loading.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({super.key, this.feedbackText});
@@ -20,8 +20,8 @@ class LoadingWidget extends StatelessWidget {
             style: context.theme.textTheme.bodySmall?.copyWith(
               color: AppTheme.light,
             ),
-            feedbackText!,
             textAlign: TextAlign.center,
+            feedbackText!,
           ),
       ],
     );

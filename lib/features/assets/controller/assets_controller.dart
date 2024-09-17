@@ -18,31 +18,22 @@ enum FilterType {
 }
 
 class AssetsController extends GetxController {
-  // final rootData = DataItem(kind: ItemKind.location, name: "", id: "");
-
   final Rx<AssetFilter> _itemFilter = AssetFilter.none.obs;
 
+  static final RxList<DataItem> _data = <DataItem>[].obs;
   static List<Location> _locations = <Location>[];
   static List<Asset> _assets = <Asset>[];
 
-  static final RxList<DataItem> _data = <DataItem>[].obs;
-
   final RxString _textToSearch = ''.obs;
-
   final RxString _feedbackText = ''.obs;
-  final RxBool _isLoading = false.obs;
 
-  late HttpProvider _httpProvider;
   final RxBool _hasConnectionError = false.obs;
   final RxBool _hasServerError = false.obs;
+  final RxBool _isLoading = false.obs;
   final RxBool _hasError = false.obs;
 
-  bool get hasConnectionError => _hasConnectionError.value;
-  bool get hasServerError => _hasServerError.value;
-  bool get hasError => _hasError.value;
-
+  late HttpProvider _httpProvider;
   late Company _companyToSearch;
-
   late TreeManager treeManager;
 
   @override
@@ -69,14 +60,24 @@ class AssetsController extends GetxController {
   bool get isFilteringByVibration => _itemFilter.value == vibration;
   bool get isFilteringByAny => _predicateFilterMap.isNotEmpty;
   bool get isFilteringByEnergy => _itemFilter.value == energy;
+
+  bool get hasConnectionError => _hasConnectionError.value;
+  bool get hasServerError => _hasServerError.value;
+  bool get hasError => _hasError.value;
+
   AssetFilter get vibration => AssetFilter.vibration;
-  String get feedbackText => _feedbackText.value;
-  String get textToSearch => _textToSearch.value;
   AssetFilter get energy => AssetFilter.energy;
   AssetFilter get none => AssetFilter.none;
+
+  String get feedbackText => _feedbackText.value;
+  String get textToSearch => _textToSearch.value;
+
   bool get isLoading => _isLoading.value;
-  List<DataItem> get data => _data;
   bool get resetDataOnFilter => false;
+
+  List<DataItem> get data => _data;
+
+  Company get companyToSearch => _companyToSearch;
 
   final RxMap<FilterType, Predicate<DataItem>> _predicateFilterMap =
       <FilterType, Predicate<DataItem>>{}.obs;
@@ -84,13 +85,12 @@ class AssetsController extends GetxController {
   bool Function(DataItem) get filterPredicate {
     return (DataItem item) {
       if (_predicateFilterMap.entries.isEmpty) return true;
-      // Combine all predicates using AND logic
       for (var predicate in _predicateFilterMap.entries) {
         if (!predicate.value(item)) {
-          return false; // If any predicate returns false, the result is false
+          return false;
         }
       }
-      return true; // All predicates passed
+      return true;
     };
   }
 
@@ -121,8 +121,10 @@ class AssetsController extends GetxController {
   }
 
   Future loadCompanyItems(Company company) async {
-    _companyToSearch = company;
     setLoading();
+
+    _companyToSearch = company;
+
     await _loadCompanyLocations();
     await _loadCompanyAssets();
 
@@ -130,6 +132,7 @@ class AssetsController extends GetxController {
 
     _feedbackText('Data map mounting ...');
     await _updateTreeManager();
+
     resetLoading();
   }
 
@@ -138,14 +141,12 @@ class AssetsController extends GetxController {
     searchByText();
   }
 
-  void _clearSearchText() {
-    _textToSearch("");
-  }
+  void _clearSearchText() => _textToSearch("");
 
   void searchByText() {
     final String finalText = textToSearch.removeAccents().trim().toLowerCase();
-    _predicateFilterMap.value = {..._predicateFilterMap}
-      ..remove(FilterType.text);
+
+    _predicateFilterMap.removeWhere((k, v) => k == FilterType.text);
 
     if (finalText.length >= 3) {
       bool predicate(DataItem item) {
@@ -153,10 +154,7 @@ class AssetsController extends GetxController {
         return nameToCompare.contains(finalText);
       }
 
-      _predicateFilterMap.value = {
-        ..._predicateFilterMap,
-        FilterType.text: predicate
-      };
+      _predicateFilterMap.putIfAbsent(FilterType.text, () => predicate);
     }
   }
 

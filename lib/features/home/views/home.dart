@@ -1,12 +1,12 @@
 import 'package:tree_view/core/appearence/controller/appearence_controller.dart';
-import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:tree_view/features/assets/controller/assets_controller.dart';
 import 'package:tree_view/features/home/controller/home_controller.dart';
 import 'package:tree_view/features/home/widgets/loading_widget.dart';
 import 'package:tree_view/features/home/widgets/company_tile.dart';
 import 'package:tree_view/core/widgets/simple_error_widget.dart';
-import 'package:tree_view/core/widgets/dark_mode_button.dart';
+import 'package:tree_view/core/appearence/theme/app_theme.dart';
 import 'package:tree_view/core/constants/graphic_assets.dart';
+import 'package:tree_view/core/widgets/dark_mode_button.dart';
 import 'package:tree_view/core/widgets/screen_blur.dart';
 import 'package:tree_view/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -31,30 +31,14 @@ class Home extends StatelessWidget {
           child: Center(
             child: Obx(
               () {
-                final AppearenceController appearenceController = Get.find();
                 final AssetsController assetsController = Get.find();
                 final HomeController homeController = Get.find();
+
                 return Stack(
                   children: [
                     Visibility(
                       visible: homeController.companies.isNotEmpty,
-                      replacement: SimpleErrorWidget(
-                        retryAction: () {
-                          Get.offNamedUntil(
-                            Routes.root,
-                            ModalRoute.withName(Routes.root),
-                          );
-                        },
-                        errorMessage: "Oh, looks like there's nothing here.",
-                        retryMessage: "Restart",
-                        iconColor: appearenceController.isDarkModeON
-                            ? AppTheme.light
-                            : AppTheme.primaryColor,
-                        textColor: appearenceController.isDarkModeON
-                            ? AppTheme.light
-                            : AppTheme.primaryColor,
-                        icon: Icons.air,
-                      ),
+                      replacement: _errorWidget(),
                       child: ListView(
                         children: homeController.companies.map(
                           (company) {
@@ -86,5 +70,28 @@ class Home extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _errorWidget() {
+    return Obx(() {
+      final AppearenceController appearenceController = Get.find();
+      return SimpleErrorWidget(
+        retryAction: () {
+          Get.offNamedUntil(
+            Routes.root,
+            ModalRoute.withName(Routes.root),
+          );
+        },
+        errorMessage: "Oh, looks like there's nothing here.",
+        retryMessage: "Restart",
+        iconColor: appearenceController.isDarkModeON
+            ? AppTheme.light
+            : AppTheme.primaryColor,
+        textColor: appearenceController.isDarkModeON
+            ? AppTheme.light
+            : AppTheme.primaryColor,
+        icon: Icons.air,
+      );
+    });
   }
 }

@@ -104,3 +104,7 @@ For simplicity, this project poorly handles the HTTP states. It can sharpened by
 #### Testings Overall
 
 Until the date of publishing, this project does not have any piece of testing code of kind unity or integration.
+
+#### Internationalization
+
+To target a global public, it's fundamental to have an application that speaks to them in their mother language. The ability to communicate is one of the most valuable in a so fast-paced world and a company that does it well is in a head start over its competitors.

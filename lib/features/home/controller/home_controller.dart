@@ -1,7 +1,7 @@
-import 'package:get/get.dart';
-import 'package:tree_view/core/http/endpoints.dart';
 import 'package:tree_view/core/http/http_provider.dart';
+import 'package:tree_view/core/http/endpoints.dart';
 import 'package:tree_view/core/models/company.dart';
+import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   final RxList<Company> _companies = <Company>[].obs;

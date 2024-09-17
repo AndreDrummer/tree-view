@@ -9,8 +9,8 @@ class ScreenBlur extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: Container(
-        alignment: Alignment.center,
         color: Colors.black.withOpacity(.65),
+        alignment: Alignment.center,
         child: child,
       ),
     );

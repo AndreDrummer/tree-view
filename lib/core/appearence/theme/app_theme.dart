@@ -121,17 +121,4 @@ class AppTheme {
     brightness: Brightness.dark,
     useMaterial3: true,
   );
-
-  static Color getAccentVariant(Color color) {
-    // Convert the color to HSL to manipulate lightness
-    HSLColor hsl = HSLColor.fromColor(color);
-
-    // Create an accent variant by increasing lightness and/or saturation
-    HSLColor accentHSL =
-        hsl.withLightness((hsl.lightness + 0.3).clamp(0.0, 1.0));
-    // hsl.withSaturation((hsl.lightness + 0.3).clamp(0.0, 1.0));
-
-    // Convert back to Color
-    return accentHSL.toColor();
-  }
 }
