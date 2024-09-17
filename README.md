@@ -1,16 +1,43 @@
-# tree-view
+# Tractian Challenge - Tree View App
 
-A new Flutter project.
+A new Flutter project designed to render companies' assets disposition in a tree view structure interface.
 
-## Getting Started
+The difference here is that the app does not use ANY external library but nevertheless values the performance and user experience.
 
-This project is a starting point for a Flutter application.
+## Table of Contents
 
-A few resources to get you started if this is your first Flutter project:
+- [Screenshots](#screenshots)
+- [What could be better?](#what-could-be-better)
+- [Installation](#installation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Screenshots
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<table>
+  <tr>
+    <td align="center" colspan="4">Splashscreen</td>
+  </tr>
+  <tr>
+    <td align="center" colspan="4">Rounded loading states</td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/splash-wait.png" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/splash-lets-get-started.png" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/splash-is-great.png" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/splash-continue.png" alt="Splashscreen" width="200"/></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="4">Error states</td>
+  </tr>
+  <tr>    
+    <td align="center"><img src="screenshots/connection-error.jpeg" alt="Splashscreen" width="200"/></td>
+    <td align="center"><img src="screenshots/server-error.jpeg" alt="Splashscreen" width="200"/></td>
+    <td align="center"><img src="screenshots/unexpected-error.jpeg" alt="Splashscreen" width="200"/></td>           
+    <td align="center"><img src="screenshots/unexpected-error.jpeg" alt="Splashscreen" width="200"/></td>           
+  </tr>
+</table>
+
+
+## What could be better?
