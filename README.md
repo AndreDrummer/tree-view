@@ -9,10 +9,7 @@ The difference here is that the app does not use ANY external library but nevert
 - [Presenting Video](#presenting-video)
 - [Screenshots](#screenshots)
 - [What could be better?](#what-could-be-better)
-- [Installation](#installation)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
+
 
 ## Presenting Video
 
@@ -53,3 +50,5 @@ The difference here is that the app does not use ANY external library but nevert
 
 
 ## What could be better?
+
+// Draft
