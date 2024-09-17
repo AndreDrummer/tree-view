@@ -26,6 +26,18 @@ class Node<T> {
   bool get isNotEmpty => id >= 0;
   bool get isEmpty => id == -1;
 
+  int get getHeightFromNodeToRoot {
+    int height = 0;
+    Node? current = this;
+
+    while (current?.parent != null) {
+      height++;
+      current = current?.parent;
+    }
+
+    return height;
+  }
+
   Node<T> close() {
     return copyWith(
       children: children!.map((c) => c.close()).toList(),
@@ -38,18 +50,6 @@ class Node<T> {
       children: children,
       expanded: true,
     );
-  }
-
-  int get getHeightFromNodeToRoot {
-    int height = 0;
-    Node? current = this;
-
-    while (current?.parent != null) {
-      height++;
-      current = current?.parent;
-    }
-
-    return height;
   }
 
   Node<T> copyWith({

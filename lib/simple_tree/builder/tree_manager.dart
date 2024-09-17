@@ -44,42 +44,6 @@ class TreeManager<T extends ParentProtocol> {
     );
   }
 
-  Node<NodeData>? filteredTree({
-    required bool Function(ParentProtocol) filterPredicate,
-    Node<NodeData>? node,
-  }) {
-    node ??= tree;
-    if (node.isEmpty) return null;
-
-    List<Node<NodeData>> filteredChildren = [];
-
-    for (var child in node.children!) {
-      var filteredChild = filteredTree(
-        filterPredicate: filterPredicate,
-        node: child,
-      );
-      if (filteredChild != null) {
-        filteredChildren.add(filteredChild);
-      }
-    }
-
-    bool shouldIncludeCurrentNode =
-        filterPredicate(node.value!.data) || filteredChildren.isNotEmpty;
-
-    if (shouldIncludeCurrentNode) {
-      // Include the current node, but with the filtered children
-      return Node<NodeData>(
-        children: filteredChildren,
-        parent: node.parent,
-        value: node.value,
-        expanded: true,
-        id: node.id,
-      );
-    }
-
-    return null;
-  }
-
   void buildTree() {
     final startTime = Utils.startExecutionTime(methodName: "buildTree");
     _tree = _buildTree(BuildTreeMode.onMain);
@@ -98,11 +62,13 @@ class TreeManager<T extends ParentProtocol> {
         _semaphor = false;
         _tree = await compute(_buildTree, BuildTreeMode.onSpawnIsolate);
         _semaphor = true;
+
         Utils.endExecutionTime(startTime, methodName: "buildTreeOnIsolate");
       }
     } catch (err, stack) {
       debugPrint("Error running buildTreeOnIsolate: $err");
       debugPrint("Stack Trace: $stack");
+
       Utils.endExecutionTime(startTime, methodName: "buildTreeOnIsolate");
       rethrow;
     }
@@ -114,7 +80,9 @@ class TreeManager<T extends ParentProtocol> {
   ) {
     debugPrint("BuildTree Mode: ${buildTreeMode ?? BuildTreeMode.onMain}.");
     debugPrint("Data Length: ${_dataList.length} items.");
+
     final List<NodeData<T>> nodeDataList = _dataList.toNodeDataList();
+
     final Map<String, Node<NodeData<T>>> nodeMap =
         <String, Node<NodeData<T>>>{};
 
@@ -145,5 +113,41 @@ class TreeManager<T extends ParentProtocol> {
     }
 
     return startNode;
+  }
+
+  Node<NodeData>? filteredTree({
+    required bool Function(ParentProtocol) filterPredicate,
+    Node<NodeData>? node,
+  }) {
+    node ??= tree;
+
+    if (node.isEmpty) return null;
+
+    List<Node<NodeData>> filteredChildren = [];
+
+    for (var child in node.children!) {
+      var filteredChild = filteredTree(
+        filterPredicate: filterPredicate,
+        node: child,
+      );
+      if (filteredChild != null) {
+        filteredChildren.add(filteredChild);
+      }
+    }
+
+    bool shouldIncludeCurrentNode =
+        filterPredicate(node.value!.data) || filteredChildren.isNotEmpty;
+
+    if (shouldIncludeCurrentNode) {
+      return Node<NodeData>(
+        children: filteredChildren,
+        parent: node.parent,
+        value: node.value,
+        expanded: true,
+        id: node.id,
+      );
+    }
+
+    return null;
   }
 }

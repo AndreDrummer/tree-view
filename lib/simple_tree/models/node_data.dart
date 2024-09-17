@@ -1,12 +1,12 @@
 import 'package:tree_view/simple_tree/models/abstract_parent_class.dart';
 
 class NodeData<T> {
-  final T? data;
   final dynamic id;
+  final T? data;
 
   NodeData({
-    this.data,
     required this.id,
+    this.data,
   });
 
   @override

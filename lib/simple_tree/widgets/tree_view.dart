@@ -1,15 +1,13 @@
-import 'dart:math';
-
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/widgets/builder.dart';
 import 'package:flutter/material.dart';
 import '../builder/node.dart';
+import 'dart:math';
 
 class TreeView<T> extends StatefulWidget {
   const TreeView(
     this.node, {
-    super.key,
     required this.showCustomizationForRoot,
     required this.breadCrumbLinesColor,
     required this.horizontalController,
@@ -19,6 +17,7 @@ class TreeView<T> extends StatefulWidget {
     required this.nodeRowConfig,
     required this.elementsColor,
     required this.nodeRootId,
+    super.key,
   });
 
   final ScrollController horizontalController;

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:tree_view/simple_tree/models/node_row_dto.dart';
 import 'package:tree_view/simple_tree/models/node_data.dart';
 import 'package:tree_view/simple_tree/widgets/builder.dart';
@@ -7,6 +5,7 @@ import 'package:tree_view/simple_tree/builder/node.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'dart:math';
 
 class NodeWidget<T> extends StatefulWidget {
   const NodeWidget(
@@ -85,12 +84,12 @@ class _NodeWidgetState<T> extends State<NodeWidget<T>> {
               height: 48,
             ),
             Visibility(
-              visible: node.hasChildren,
               replacement: Container(
                 color: widget.breadCrumbLineColor,
                 width: 48,
                 height: 1,
               ),
+              visible: node.hasChildren,
               child: IconButton(
                 onPressed: toggleNode,
                 icon: Icon(

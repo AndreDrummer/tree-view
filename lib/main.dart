@@ -32,9 +32,9 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: RouterGenerator.onGenerateRoute,
       themeMode:
           apprearenceController.isDarkModeON ? ThemeMode.dark : ThemeMode.light,
+      debugShowCheckedModeBanner: false,
       darkTheme: AppTheme.darkMode,
       theme: AppTheme.lightMode,
-      debugShowCheckedModeBanner: false,
     );
   }
 }
