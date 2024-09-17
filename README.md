@@ -8,7 +8,7 @@ The difference here is that the app does not use ANY external library but nevert
 
 - [Presenting Video](#presenting-video)
 - [Screenshots](#screenshots)
-- [What could be better?](#what-could-be-better)
+- [Next steps](#next-steps)
 
 
 ## Presenting Video
@@ -29,7 +29,7 @@ The difference here is that the app does not use ANY external library but nevert
     <td align="center" colspan="4">Splashscreen</td>
   </tr>
   <tr>
-    <td align="center" colspan="4">Rounded loading states</td>
+    <td align="center" colspan="4">Loading states</td>
   </tr>
   <tr>
     <td><img src="screenshots/splash-wait.png" alt="Splashscreen" width="200"/></td>
@@ -48,7 +48,56 @@ The difference here is that the app does not use ANY external library but nevert
   </tr>
 </table>
 
+<table>
+  <tr>
+    <td align="center" colspan="4">Home</td>
+  </tr>
+  <tr>
+    <td align="center" colspan="4">Company List Screen</td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/home-light.jpeg" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/error-home-light.jpeg" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/home-dark.jpeg" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/error-home-dark.jpeg" alt="Splashscreen" width="200"/></td>  
+  </tr> 
+</table>
 
-## What could be better?
+<table>
+  <tr>
+    <td align="center" colspan="4">Assets View</td>
+  </tr>
+  <tr>
+    <td align="center" colspan="4">Light Mode</td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/no-filter-light.jpeg" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/energy-filter-light.jpeg" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/critical-filter-light.jpeg" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/text-filter-light.jpeg" alt="Splashscreen" width="200"/></td>  
+  </tr> 
+  <tr>
+    <td align="center" colspan="4">Dark Mode</td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/no-filter-dark.jpeg" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/energy-filter-dark.jpeg" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/critical-filter-dark.jpeg" alt="Splashscreen" width="200"/></td>
+    <td><img src="screenshots/text-filter-dark.jpeg" alt="Splashscreen" width="200"/></td>  
+  </tr> 
+</table>
 
-// Draft
+
+## Next Steps
+
+#### Caching Mechanisim
+
+It would be great to have a mechanism to cache the downloaded company data to live during a pre-established time. Today, the time to pull down this data is not a problem, but it would allow the offline use of the app.
+
+#### Better management device connection state
+
+For simplicity, this project poorly handles the HTTP states. It can sharpened by manipulating the state of the device's internet connection so that when it doesn't have a connection, not even try to pull data.
+
+#### Testings Overall
+
+Until the date of publishing, this project does not have any piece of testing code of kind unity or integration.
