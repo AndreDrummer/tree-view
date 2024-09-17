@@ -15,7 +15,7 @@ The app does not use ANY external library to build the tree but nevertheless est
 
 <div align="center">
   <a href="https://www.youtube.com/watch?v=0psuA54bVgQ" target="_blank">
-    <img src="screenshots/youtube.png" alt="Watch the video" width="560"/>
+    <img src="screenshots/youtube-thumbnail.png" alt="Watch the video" width="560"/>
   </a>
   <p><strong>Building a Custom Tree View for Asset Management | Mobile Software Engineer Challenge</strong></p>
 </div>
