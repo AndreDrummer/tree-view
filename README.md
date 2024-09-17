@@ -6,7 +6,7 @@ The difference here is that the app does not use ANY external library but nevert
 
 ## Table of Contents
 
-- [Building a Custom Tree View for Asset Management](#building-a-custom-tree-view-for-asset-management)
+- [Presenting Video](#presenting-video)
 - [Screenshots](#screenshots)
 - [What could be better?](#what-could-be-better)
 - [Installation](#installation)
@@ -14,9 +14,16 @@ The difference here is that the app does not use ANY external library but nevert
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
-## Building a Custom Tree View for Asset Management
+## Presenting Video
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/0psuA54bVgQ" frameborder="0" allowfullscreen></iframe>
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=0psuA54bVgQ" target="_blank">
+    <img src="https://img.youtube.com/vi/0psuA54bVgQ/hqdefault.jpg" alt="Watch the video" width="560"/>
+  </a>
+  <p><strong>Building a Custom Tree View for Asset Management | Mobile Software Engineer Challenge</strong></p>
+</div>
+
+
 
 ## Screenshots
 
