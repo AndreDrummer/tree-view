@@ -14,12 +14,13 @@ The app does not use ANY external library to build the tree but nevertheless est
 ## Presenting Video
 
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=0psuA54bVgQ" target="_blank" style="position: relative; display: inline-block;">
-    <img src="https://img.youtube.com/vi/0psuA54bVgQ/hqdefault.jpg" alt="Watch the video" width="560" style="border: none;"/>
-    <img src="screenshots/youtube.png" alt="Play" width="100" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"/>
+  <a href="https://www.youtube.com/watch?v=0psuA54bVgQ" target="_blank">
+    <img src="screenshots/youtube.png" alt="Watch the video" width="560"/>
   </a>
   <p><strong>Building a Custom Tree View for Asset Management | Mobile Software Engineer Challenge</strong></p>
 </div>
+
+
 
 
 
