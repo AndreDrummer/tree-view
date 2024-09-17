@@ -6,12 +6,17 @@ The difference here is that the app does not use ANY external library but nevert
 
 ## Table of Contents
 
+- [Building a Custom Tree View for Asset Management](#building-a-custom-tree-view-for-asset-management)
 - [Screenshots](#screenshots)
 - [What could be better?](#what-could-be-better)
 - [Installation](#installation)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
+
+## Building a Custom Tree View for Asset Management
+
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=0psuA54bVgQ" frameborder="0" allowfullscreen></iframe>
 
 ## Screenshots
 
