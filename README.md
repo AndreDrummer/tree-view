@@ -1,6 +1,6 @@
 # Tractian Challenge - Tree View App
 
-**Choose your language**: 🇧🇷 <a href="">Brazilian Portuguese</a> | 🇺🇸 <a href="">American English</a>
+**Choose your language**: 🇧🇷 <a href="https://github.com/AndreDrummer/tree-view/blob/main/PTREADME.md">Brazilian Portuguese</a> | 🇺🇸 <a href="https://github.com/AndreDrummer/tree-view/blob/main/README.md">American English</a>
 
 A new Flutter project designed to render companies' assets disposition in a tree view structure interface.
 
