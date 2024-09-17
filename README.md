@@ -16,7 +16,7 @@ The difference here is that the app does not use ANY external library but nevert
 
 ## Building a Custom Tree View for Asset Management
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=0psuA54bVgQ" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0psuA54bVgQ" frameborder="0" allowfullscreen></iframe>
 
 ## Screenshots
 
