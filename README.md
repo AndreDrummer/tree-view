@@ -2,7 +2,7 @@
 
 A new Flutter project designed to render companies' assets disposition in a tree view structure interface.
 
-The difference here is that the app does not use ANY external library but nevertheless values the performance and user experience.
+The app does not use ANY external library to build the tree but nevertheless esteems the performance and user experience.
 
 ## Table of Contents
 
@@ -14,11 +14,13 @@ The difference here is that the app does not use ANY external library but nevert
 ## Presenting Video
 
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=0psuA54bVgQ" target="_blank">
-    <img src="https://img.youtube.com/vi/0psuA54bVgQ/hqdefault.jpg" alt="Watch the video" width="560"/>
+  <a href="https://www.youtube.com/watch?v=0psuA54bVgQ" target="_blank" style="position: relative; display: inline-block;">
+    <img src="https://img.youtube.com/vi/0psuA54bVgQ/hqdefault.jpg" alt="Watch the video" width="560" style="border: none;"/>
+    <img src="screenshots/youtube.png" alt="Play" width="100" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"/>
   </a>
   <p><strong>Building a Custom Tree View for Asset Management | Mobile Software Engineer Challenge</strong></p>
 </div>
+
 
 
 
