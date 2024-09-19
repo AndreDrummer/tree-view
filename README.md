@@ -110,3 +110,7 @@ Until the date of publishing, this project does not have any piece of testing co
 #### Internationalization
 
 To target a global public, it's fundamental to have an application that speaks to them in their mother language. The ability to communicate is one of the most valuable in a so fast-paced world and a company that does it well is in a head start over its competitors.
+
+#### Memoization
+
+To speed up the tree mout time, memoization could be used by passing as argument the company id to trigger the cache. This way, the code would not even enter into the Isolation step making the assets visualization view to be presented more radpidly.

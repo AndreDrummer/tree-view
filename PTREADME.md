@@ -106,3 +106,7 @@ Até a data de publicação, este projeto não possui nenhum código de teste, s
 #### Internacionalização
 
 Para alcançar um público global, é fundamental ter um aplicativo que fale com eles em sua língua materna. A capacidade de se comunicar é uma das mais valiosas em um mundo tão acelerado, e uma empresa que faz isso bem está à frente de seus concorrentes.
+
+#### Memoização
+
+Para acelerar o tempo de montagem da árvore, a memoização poderia ser usada passando como argumento o id da empresa para disparar o cache. Dessa forma, o código nem entraria na etapa de Isolamento, fazendo com que a visualização dos ativos fosse apresentada de forma mais rápida.
