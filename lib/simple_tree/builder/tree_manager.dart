@@ -11,17 +11,37 @@ enum BuildTreeMode {
 }
 
 class TreeManager<T extends ParentProtocol> {
-  TreeManager({
-    required bool initializeExpanded,
-    required NodeData<T> rootData,
-    required List<T> dataList,
-  })  : _initializeExpanded = initializeExpanded,
+  TreeManager._(
+    bool initializeExpanded,
+    NodeData<T> rootData,
+    List<T> dataList,
+  )   : _initializeExpanded = initializeExpanded,
         _rootData = rootData,
         _dataList = dataList;
 
   final bool _initializeExpanded;
   final NodeData<T> _rootData;
   final List<T> _dataList;
+
+  static TreeManager? _instance;
+
+  static TreeManager get instance {
+    if (_instance == null) {
+      throw Exception(
+          'TreeManager is not initialized yet. Call TreeManager.initialize() first.');
+    }
+
+    return _instance!;
+  }
+
+  factory TreeManager.initialize({
+    required bool initializeExpanded,
+    required NodeData<T> rootData,
+    required List<T> dataList,
+  }) {
+    _instance ??= TreeManager._(initializeExpanded, rootData, dataList);
+    return _instance! as TreeManager<T>;
+  }
 
   bool _semaphor = true;
 

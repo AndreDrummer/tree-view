@@ -97,7 +97,7 @@ class AssetsController extends GetxController {
   Future<void> _updateTreeManager() async {
     const dataLengthThreshold = 150;
 
-    treeManager = TreeManager(
+    treeManager = TreeManager.initialize(
       dataList: data,
       initializeExpanded: true,
       rootData: NodeData<DataItem>(
