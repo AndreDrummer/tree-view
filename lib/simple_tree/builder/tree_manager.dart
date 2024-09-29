@@ -12,35 +12,21 @@ enum BuildTreeMode {
 
 class TreeManager<T extends ParentProtocol> {
   TreeManager._(
-    bool initializeExpanded,
-    NodeData<T> rootData,
-    List<T> dataList,
-  )   : _initializeExpanded = initializeExpanded,
-        _rootData = rootData,
-        _dataList = dataList;
+    this._initializeExpanded,
+    this._rootData,
+    this._dataList,
+  );
 
   final bool _initializeExpanded;
   final NodeData<T> _rootData;
   final List<T> _dataList;
-
-  static TreeManager? _instance;
-
-  static TreeManager get instance {
-    if (_instance == null) {
-      throw Exception(
-          'TreeManager is not initialized yet. Call TreeManager.initialize() first.');
-    }
-
-    return _instance!;
-  }
 
   factory TreeManager.initialize({
     required bool initializeExpanded,
     required NodeData<T> rootData,
     required List<T> dataList,
   }) {
-    _instance ??= TreeManager._(initializeExpanded, rootData, dataList);
-    return _instance! as TreeManager<T>;
+    return TreeManager._(initializeExpanded, rootData, dataList);
   }
 
   bool _semaphor = true;
@@ -103,8 +89,7 @@ class TreeManager<T extends ParentProtocol> {
 
     final List<NodeData<T>> nodeDataList = _dataList.toNodeDataList();
 
-    final Map<String, Node<NodeData<T>>> nodeMap =
-        <String, Node<NodeData<T>>>{};
+    final Map<String, Node<NodeData<T>>> nodeMap = <String, Node<NodeData<T>>>{};
 
     final startNode = nodeStart();
 
@@ -155,8 +140,7 @@ class TreeManager<T extends ParentProtocol> {
       }
     }
 
-    bool shouldIncludeCurrentNode =
-        filterPredicate(node.value!.data) || filteredChildren.isNotEmpty;
+    bool shouldIncludeCurrentNode = filterPredicate(node.value!.data) || filteredChildren.isNotEmpty;
 
     if (shouldIncludeCurrentNode) {
       return Node<NodeData>(
